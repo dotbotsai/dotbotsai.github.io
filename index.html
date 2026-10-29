@@ -374,6 +374,10 @@ tbody th .dot { display: flex; width: fit-content; }
 .hero h1 em { font-style: normal; }
 .hero__sub { font: var(--type-lede); max-width: 34ch; }
 .hero__meta { font-size: var(--size-small); color: var(--hero-text-muted); }
+.x-count { display: grid; gap: 4px; margin-top: 16px; justify-items: start; }
+.x-count__label, .x-count__date { font-size: var(--size-small); color: var(--hero-text-muted); }
+.x-count__time { font: var(--type-lede); font-variant-numeric: tabular-nums; font-weight: 700; letter-spacing: 0.02em; }
+.x-count .btn { margin-top: 8px; }
 .hero__credit {
   position: absolute;
   right: clamp(20px, 3vw, 32px);
@@ -815,6 +819,12 @@ tr.is-highlight > :last-child { box-shadow: 12px 0 var(--fill-tertiary); }
             <h1>dotBots</h1>
             <p class="hero__sub" data-zh="每个 .ai Agent ID 只能铸造唯一一个机器人，胸前印着它的名号。图像与元数据 100% 存储在 BNB 链上。">Every .ai Agent ID can mint exactly one bot, with its handle printed on its chest. Art and metadata 100% on-chain on BNB Chain.</p>
             <p class="hero__meta" data-zh="最多 2,222 个 · 起价 $1.50 · 持有者共享每次公开铸造的 10%">2,222 bots max · from $1.50 · holders share 10% of every public mint</p>
+            <div class="x-count" id="mintCount" aria-live="polite">
+              <p class="x-count__label" id="mintCountLabel">Public mint opens in</p>
+              <p class="x-count__time" id="mintCountTime">&nbsp;</p>
+              <p class="x-count__date" id="mintCountDate">Sat 7 Nov 2026, 10PM (GMT+7)</p>
+              <a class="btn" data-zh="如何铸造" href="#mint">How to mint</a>
+            </div>
           </div>
           <aside class="callout" aria-label="Mint">
             <p class="callout__head"><span data-zh="铸造">Mint</span></p>
@@ -1335,6 +1345,29 @@ tr.is-highlight > :last-child { box-shadow: 12px 0 var(--fill-tertiary); }
           document.querySelectorAll(".x-lang button").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.lang === l)); });
         }
         document.querySelectorAll(".x-lang button").forEach(function (b) { b.addEventListener("click", function () { applyLang(b.dataset.lang); }); });
+
+        /* ---------- mint countdown ---------- */
+        (function () {
+          var OPEN = Date.UTC(2026, 10, 7, 15, 0, 0); // Sat 7 Nov 2026 22:00 GMT+7
+          function pad(n) { return n < 10 ? "0" + n : String(n); }
+          function tick() {
+            var lab = $("mintCountLabel"), tm = $("mintCountTime"), dt = $("mintCountDate");
+            if (!lab) return;
+            var ms = OPEN - Date.now();
+            dt.textContent = T("Sat 7 Nov 2026, 10PM (GMT+7)", "2026 年 11 月 7 日（周六）22:00（GMT+7）");
+            if (ms <= 0) {
+              lab.textContent = T("Public mint is live", "公开铸造已开始");
+              tm.textContent = T("Mint now", "立即铸造");
+              return true;
+            }
+            var t = Math.floor(ms / 1000), d = Math.floor(t / 86400), h = Math.floor(t % 86400 / 3600), m = Math.floor(t % 3600 / 60), sec = t % 60;
+            lab.textContent = T("Public mint opens in", "公开铸造倒计时");
+            tm.textContent = lang === "zh" ? d + " 天 " + pad(h) + " 时 " + pad(m) + " 分 " + pad(sec) + " 秒" : d + "d " + pad(h) + "h " + pad(m) + "m " + pad(sec) + "s";
+          }
+          tick();
+          var iv = setInterval(function () { if (tick()) clearInterval(iv); }, 1000);
+          document.querySelectorAll(".x-lang button").forEach(function (b) { b.addEventListener("click", function () { setTimeout(tick, 0); }); });
+        })();
 
         /* ---------- copy ---------- */
         function copyText(t) {
