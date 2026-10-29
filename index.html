@@ -868,7 +868,7 @@ tr.is-highlight > :last-child { box-shadow: 12px 0 var(--fill-tertiary); }
           </div>
           <div class="x-box" id="earlyRefund">
             <h3 data-zh="早期铸造者返还承诺">Early minter refund pledge</h3>
-            <p class="head__sub" data-zh="100 个团队机器人也会分到每次铸造的 10% 持有人奖励，这会稀释最早的铸造者。我们会把这部分还回去：在 $1.50 档（公开机器人 #1–1,000）期间，团队持有的机器人赚到的全部持有人奖励，由团队领取后以 BNB 空投给这 1,000 个公开机器人的持有人，按每个机器人已赚到的持有人奖励比例分配。空投在第 1,000 个公开机器人铸造后 7 天内发出。这是团队承诺，不由合约强制执行；每笔交易都会在 X 上公布，随时可在链上核对。">Our 100 team bots also earn the 10% holder share of every mint, which dilutes the first minters. We give it back: everything team-held bots earn from the holder share during the $1.50 tier (public bots #1–1,000) is claimed by the team and airdropped in BNB to the holders of those 1,000 public bots, in proportion to the holder rewards each bot has earned. The airdrop goes out within 7 days after public bot #1,000 is minted. This is a team pledge, not enforced by the contract; every transaction is posted on X so you can check it on-chain.</p>
+            <p class="head__sub" data-zh="100 个团队机器人也会分到每次铸造的 10% 持有人奖励，这会稀释最早的铸造者。我们会把这部分还回去：在 $1.50 档（前 1,000 次公开铸造；Token ID 1–100 为团队机器人）期间，团队持有的机器人赚到的全部持有人奖励，由团队领取后以 BNB 空投给这 1,000 个公开机器人的持有人，按每个机器人已赚到的持有人奖励比例分配。空投在第 1,000 次公开铸造后 7 天内发出。这是团队承诺，不由合约强制执行；每笔交易都会在 X 上公布，随时可在链上核对。">Our 100 team bots also earn the 10% holder share of every mint, which dilutes the first minters. We give it back: everything team-held bots earn from the holder share during the $1.50 tier (the first 1,000 public mints; token ids 1–100 are team bots) is claimed by the team and airdropped in BNB to the holders of those 1,000 public bots, in proportion to the holder rewards each bot has earned. The airdrop goes out within 7 days after the 1,000th public mint. This is a team pledge, not enforced by the contract; every transaction is posted on X so you can check it on-chain.</p>
           </div>
           <div class="steps">
             <article class="step">
@@ -960,7 +960,7 @@ tr.is-highlight > :last-child { box-shadow: 12px 0 var(--fill-tertiary); }
           <p class="fineprint" data-zh="价格在链上以美元设定（所有者可调整，上限 $10），并按 Chainlink BNB/USD 汇率以 BNB 支付。表中价格为合约实时数值，如有出入以合约为准。高亮行为当前阶梯。">Prices are set in USD on-chain (owner can change them, hard cap $10) and paid in BNB at the Chainlink BNB/USD rate. The table reads them live; if they differ from this page, the contract wins. The highlighted row is the current step.</p>
           <div class="table-wrap">
             <table>
-              <caption data-zh="稀有度在铸造时根据链上区块数据决定">Rarity is rolled on-chain at mint, from block data</caption>
+              <caption data-zh="稀有度在铸造时根据链上区块数据决定（伪随机，不是 Chainlink VRF 这类可验证随机数）">Rarity is rolled on-chain at mint, from block data (pseudo-random, not a verifiable random function like Chainlink VRF)</caption>
               <thead>
                 <tr>
                   <th scope="col" data-zh="等级">Tier</th>
@@ -993,6 +993,7 @@ tr.is-highlight > :last-child { box-shadow: 12px 0 var(--fill-tertiary); }
               <p data-zh="销毁你的 3 个机器人并支付 $1 手续费（以 BNB 支付），即可得到 1 个新机器人，稀有度更高：至少为优秀，概率见上方表格。">Burn 3 of your bots and pay a $1 fee in BNB for 1 new bot with better odds: Uncommon or higher, with the odds in the table above.</p>
               <p><span data-zh="当前手续费：">Fee right now:</span> <b id="fFee">—</b> <span class="pill x-mono" id="fFeeBnb">— BNB</span></p>
               <p data-zh="新机器人沿用第一个机器人（A）的名号。供应量只会减少。">The new bot keeps the handle of the first bot (A). Supply only goes down.</p>
+              <p data-zh="融合在公开铸造开始之前保持关闭。融合前请注意：新机器人保留 A 的名号；B 和 C 的名号将永久作废，无法再次铸造。输入机器人的稀有度不影响结果：三个史诗也可能融合出优秀。公开铸造前团队不会融合团队机器人。">Fusion is closed until after public mint opens. Before you fuse: the new bot keeps the handle of bot A; the handles of B and C are used up for good and can never mint again. The inputs' rarity does not count: three Epics can still give an Uncommon. The team will not fuse team bots before public mint.</p>
             </div>
           </div>
           <div class="x-box x-tool">
@@ -1038,7 +1039,7 @@ tr.is-highlight > :last-child { box-shadow: 12px 0 var(--fill-tertiary); }
             </div>
             <div class="x-tool">
               <h3 data-zh="礼物机器人">Gift bots</h3>
-              <p data-zh="47 位早期支持者各有一个已分配的免费普通礼物机器人。请在铸造&lt;strong&gt;之前&lt;/strong&gt;用 claimGift 领取（只需 Gas）：每个 Agent ID 只能一个机器人，先铸造会用掉你的 Agent ID。&lt;br&gt;&lt;br&gt;&lt;strong&gt;7 天领取期限：&lt;/strong&gt;从我们在 X 上通知你获得礼物起，你有 7 天时间领取。47 个礼物机器人中，7 天内未领取的将收回到开发者钱包，用作未来的奖励。礼物机器人在你领取之前产生的持有人奖励归团队；领取之后，奖励归你并随 NFT 转移。">47 early supporters have a free Common gift bot assigned. Claim it with claimGift (gas only) <strong>before</strong> you mint: one bot per Agent ID, so minting first uses up your Agent ID.<br><br><strong>7-day claim window:</strong> you have 7 days to claim from the moment we notify you on X. Any of the 47 gift bots not claimed within 7 days goes back to the dev wallet and is used for future rewards. Holder rewards a gift bot earns before you claim it go to the team; from your claim on, they are yours and travel with the NFT.</p>
+              <p data-zh="47 个礼物机器人已分配给早期测试版本（v1 和 v2）的持有者，感谢大家迁移到 V3.2。请在铸造&lt;strong&gt;之前&lt;/strong&gt;用 claimGift 领取（只需 Gas）：每个 Agent ID 只能拥有一个机器人，先铸造会用掉你的 Agent ID，领取就会失败。&lt;br&gt;&lt;br&gt;&lt;strong&gt;领取截止：2026 年 11 月 6 日（周五）晚上 10 点（GMT+7）&lt;/strong&gt;，即公开铸造前一天。届时未领取的礼物将在链上取消，机器人留在团队，用于之后的赠送和活动。礼物机器人在你领取之前产生的持有人奖励归团队；领取之后，奖励归你并随 NFT 转移。">47 gift bots are assigned to holders of our earlier test versions (v1 and v2) as a thank-you for moving to V3.2. Claim it with claimGift (gas only) <strong>before</strong> you mint: one bot per Agent ID, so minting first uses up your Agent ID and the claim will fail.<br><br><strong>Claim deadline: Fri 6 Nov 2026, 10PM (GMT+7)</strong>, one day before public mint. Gifts not claimed by then are cancelled on-chain and the bots stay with the team for future giveaways and events. Holder rewards a gift bot earns before you claim it go to the team; from your claim on, they are yours and travel with the NFT.</p>
               <label class="x-field"><span data-zh="礼物 Token ID">Gift token id</span><input class="x-input" id="gId" type="number" min="1" inputmode="numeric"/></label>
               <code class="x-code" id="gCd">—</code>
               <p class="x-code" id="gPrompt">—</p>
@@ -1051,6 +1052,12 @@ tr.is-highlight > :last-child { box-shadow: 12px 0 var(--fill-tertiary); }
           <div class="head">
             <p class="head__eyebrow" data-zh="信任">Trust</p>
             <h2 data-zh="合约公开，你可以自己核实。">The contract is public; check it yourself.</h2>
+          </div>
+          <div class="x-box" id="official">
+            <h3 data-zh="官方合约">Official contract</h3>
+            <p class="head__sub" data-zh="dotBots V3.2，BNB 链：&lt;span class=&quot;x-mono&quot;&gt;0x4123F0f5ca048780C0c91aBC0c7ac12c77a0bF69&lt;/span&gt;。早期测试版本使用相同名称“dotBots / DOTBOT”，已永久关闭：v1 &lt;span class=&quot;x-mono&quot;&gt;0x365d95E25384e3AAA5E07aee32eC15C59213f41e&lt;/span&gt;、v2 &lt;span class=&quot;x-mono&quot;&gt;0x91591bE77FEAB8e961ae26f5d0F2Efd93177595F&lt;/span&gt;、V3.0 &lt;span class=&quot;x-mono&quot;&gt;0x2df728fF596DAE50A7Fd3f367E7BaA460fF444E2&lt;/span&gt;、V3.1 &lt;span class=&quot;x-mono&quot;&gt;0x2262f8c1E5Ff5d808084c74db41d349Af094f9EF&lt;/span&gt;。它们是旧版本：不再铸造、没有奖励、不再维护。在市场上请务必核对合约地址。">dotBots V3.2 on BNB Chain: <span class="x-mono">0x4123F0f5ca048780C0c91aBC0c7ac12c77a0bF69</span>. Earlier test versions use the same name "dotBots / DOTBOT" and are closed for good: v1 <span class="x-mono">0x365d95E25384e3AAA5E07aee32eC15C59213f41e</span>, v2 <span class="x-mono">0x91591bE77FEAB8e961ae26f5d0F2Efd93177595F</span>, V3.0 <span class="x-mono">0x2df728fF596DAE50A7Fd3f367E7BaA460fF444E2</span>, V3.1 <span class="x-mono">0x2262f8c1E5Ff5d808084c74db41d349Af094f9EF</span>. They are legacy: no mint, no rewards, no support. On a marketplace, always check the contract address.</p>
+            <h3 data-zh="所有者权限">What the owner can and can't do</h3>
+            <p class="head__sub" data-zh="可以：开关铸造与融合；在 $10 上限内调整价格与融合费；分配团队礼物机器人；更换金库；两步转让所有权。不能：增发机器人、动用持有者或推荐奖励、更改图像或稀有度概率、冻结或收回任何人的机器人、升级合约。">Can: open or close mint and fusion; change prices and the fusion fee within the $10 cap; assign team gift bots; change the treasury; transfer ownership in two steps. Can't: mint more bots, touch holder or referral rewards, change the art or rarity odds, freeze or take back anyone's bot, or upgrade the contract.</p>
           </div>
           <div class="links">
             <a class="btn" data-zh="Sourcify 已验证源码" href="https://repo.sourcify.dev/56/0x4123F0f5ca048780C0c91aBC0c7ac12c77a0bF69" rel="noopener" target="_blank">Source on Sourcify</a>
