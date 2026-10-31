@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>dotBots OG gifts: claim your free bot</title>
+<meta name="description" content="Minted dotBots v1 or v2? A free V3.2 bot is assigned to your wallet. Claim it: gas only, no approve. Deadline 22:00 Fri 6/11 (GMT+7).">
+<style>
+:root{color-scheme:light dark;--bg:light-dark(#f5f5f7,#111113);--card:light-dark(#fff,#1c1c1f);--tx:light-dark(#1d1d1f,#f5f5f7);--tx2:light-dark(#636366,#a1a1a6);--line:light-dark(#1d1d1f1a,#f5f5f71a);--acc:#f0b90b;--ok:#00a665;--bad:light-dark(#da2f35,#f1555b)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif}
+a{color:inherit}
+.wrap{max-width:720px;margin:0 auto;padding:20px 16px 60px}
+nav{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:22px}
+nav .brand{font-weight:800;font-size:20px;text-decoration:none}
+nav .r{display:flex;gap:8px;align-items:center}
+.pill{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 12px;font-size:14px;cursor:pointer;color:var(--tx);text-decoration:none}
+h1{font-size:34px;line-height:1.15;margin:0 0 10px;letter-spacing:-.02em}
+.lead{color:var(--tx2);margin:0 0 18px}
+.facts{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+.facts>span{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:14px}
+.cd{font-variant-numeric:tabular-nums;font-weight:700}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px;margin-bottom:16px}
+.card h2{font-size:19px;margin:0 0 12px}
+.step{display:inline-flex;width:26px;height:26px;border-radius:50%;background:var(--tx);color:var(--bg);align-items:center;justify-content:center;font-size:14px;font-weight:700;margin-right:8px}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+input,textarea{width:100%;font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:11px 12px}
+textarea{min-height:150px;resize:vertical;font-size:15px}
+input{flex:1;min-width:220px;font-family:ui-monospace,Menlo,monospace;font-size:14px}
+.btn{font:inherit;font-weight:700;border:0;border-radius:12px;padding:11px 16px;cursor:pointer;background:var(--tx);color:var(--bg)}
+.btn.acc{background:var(--acc);color:#111}
+.btn.ghost{background:transparent;color:var(--tx);border:1px solid var(--line)}
+.btn:disabled{opacity:.4;cursor:default}
+.msg{margin:12px 0 0;color:var(--tx2);font-size:15px;word-break:break-word}
+.msg.ok{color:var(--ok)}.msg.bad{color:var(--bad)}
+.gift{display:none;gap:18px;align-items:center;margin-top:16px}
+.gift.on{display:flex}
+.gift img{width:140px;height:140px;border-radius:16px;background:var(--bg);flex:none}
+.gift b{font-size:22px;display:block}
+.gift .h{font-family:ui-monospace,Menlo,monospace;font-size:17px}
+.hide{display:none!important}
+#shareCard{width:100%;border-radius:16px;border:1px solid var(--line);display:block;margin:4px 0 14px}
+.small{font-size:13px;color:var(--tx2)}
+.mono{font-family:ui-monospace,Menlo,monospace;word-break:break-all}
+details{margin-top:6px}
+summary{cursor:pointer;font-weight:600}
+pre{white-space:pre-wrap;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px;font-size:13px}
+ul.safe{margin:0;padding-left:20px}
+ul.safe li{margin:4px 0}
+@media(max-width:520px){h1{font-size:28px}.gift{flex-direction:column;align-items:flex-start}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav>
+  <a class="brand" href="./">dotBots</a>
+  <div class="r">
+    <button class="pill" id="langBtn" type="button">中文</button>
+    <a class="pill" href="./" data-zh="主页">Main site</a>
+  </div>
+</nav>
+
+<h1 data-zh="🎁 47 个 OG dotBots 等你领取">🎁 47 OG dotBots are waiting</h1>
+<p class="lead" data-zh="铸造过 dotBots v1 或 v2？你的钱包已被分配一个免费的 V3.2 机器人。领取后，它会印上你的 .ai 名字。">Minted dotBots v1 or v2? A free V3.2 bot is already assigned to your wallet. Claim it and your .ai name gets printed on its chest.</p>
+<div class="facts">
+  <span data-zh="只需 Gas">Gas only</span>
+  <span data-zh="无需授权">No approve</span>
+  <span data-zh="BNB Chain">BNB Chain</span>
+  <span><span data-zh="截止 11/6（周五）22:00 GMT+7">Deadline 22:00 Fri 6/11 (GMT+7)</span> · <span class="cd" id="cd">…</span></span>
+</div>
+
+<div class="card">
+  <h2><span class="step">1</span><span data-zh="查找你的礼物">Find your gift</span></h2>
+  <div class="row">
+    <input id="addr" placeholder="0x… your wallet address" autocomplete="off" spellcheck="false">
+    <button class="btn ghost" id="checkBtn" type="button" data-zh="查询">Check</button>
+    <button class="btn" id="connectBtn" type="button" data-zh="连接钱包">Connect wallet</button>
+  </div>
+  <p class="msg" id="findMsg" aria-live="polite"></p>
+  <div class="gift" id="gift">
+    <img id="giftImg" alt="">
+    <div>
+      <b id="giftTitle"></b>
+      <div class="h" id="giftHandle"></div>
+      <div class="small" id="giftNote"></div>
+    </div>
+  </div>
+</div>
+
+<div class="card hide" id="claimCard">
+  <h2><span class="step">2</span><span data-zh="领取">Claim</span></h2>
+  <p class="small" style="margin-top:0" data-zh="你的钱包会弹出一笔 claimGift 交易：金额 0 BNB，只付 Gas。不需要任何授权或签名消息。">Your wallet opens one claimGift transaction: 0 BNB value, you only pay gas. No approval and no message signing.</p>
+  <button class="btn acc" id="claimBtn" type="button" data-zh="用钱包领取">Claim with wallet</button>
+  <p class="msg" id="claimMsg" aria-live="polite"></p>
+  <details>
+    <summary data-zh="用的是 Agent 钱包（不能连接网页）？">Using an agent wallet that can't connect to sites?</summary>
+    <p class="small" data-zh="把下面的提示词复制给你的 Agent。">Copy this prompt to your agent.</p>
+    <pre id="prompt"></pre>
+    <button class="btn ghost" id="copyPrompt" type="button" data-zh="复制提示词">Copy prompt</button>
+  </details>
+</div>
+
+<div class="card hide" id="shareBox">
+  <h2><span class="step">3</span><span data-zh="晒到 X">Show it on X</span></h2>
+  <canvas id="shareCard" width="1200" height="675"></canvas>
+  <textarea id="postText"></textarea>
+  <div class="row" style="margin-top:10px">
+    <button class="btn acc" id="shareBtn" type="button" data-zh="发到 X">Post on X</button>
+    <button class="btn ghost" id="dlBtn" type="button" data-zh="下载图片">Download image</button>
+  </div>
+  <p class="small" id="shareHint" data-zh="手机上会直接带图打开分享。电脑上图片会先下载，在 X 发帖框里附上即可。">On phones the image goes straight into the share sheet. On desktop the image downloads first: attach it in the X post box.</p>
+</div>
+
+<div class="card">
+  <h2 data-zh="安全须知">Stay safe</h2>
+  <ul class="safe">
+    <li data-zh="官方合约只有一个：dotBots V3.2">One official contract: dotBots V3.2</li>
+    <li class="mono">0x4123F0f5ca048780C0c91aBC0c7ac12c77a0bF69</li>
+    <li data-zh="领取只调用 claimGift，金额 0。任何要求你授权（approve / setApprovalForAll）或转账的页面都不是我们。">Claiming only calls claimGift with 0 value. Any page asking you to approve, setApprovalForAll or send funds is not us.</li>
+    <li data-zh="v1、v2、V3.0、V3.1 是已关闭的测试合约，不是正式系列。">v1, v2, V3.0 and V3.1 were test contracts, now closed. They are not the official collection.</li>
+    <li data-zh="11/6 22:00（GMT+7）后未领取的礼物将在链上取消，机器人回到 Safe 的团队基金，用于赠送和活动。">After 22:00 Fri 6/11 (GMT+7), unclaimed gifts are cancelled on-chain and the bots return to the team fund in the Safe for giveaways and events.</li>
+  </ul>
+</div>
+<p class="small" style="text-align:center"><a href="https://x.com/dotBots_ai" target="_blank" rel="noopener">@dotBots_ai</a> · <a href="./">dotbotsai.github.io</a></p>
+</div>
+
+<script>
+(function(){
+var C="0x4123F0f5ca048780C0c91aBC0c7ac12c77a0bF69";
+var REG="0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F";
+var RPCS=["https://bsc-dataseed.bnbchain.org","https://bsc-dataseed1.defibit.io","https://bsc-rpc.publicnode.com"];
+var SEL={giftTo:"0xb8aa0748",claimGift:"0x78cbf86c",tokenURI:"0xc87b56dd",ownerOf:"0x6352211e",handleOf:"0xc50a1514",handleOfToken:"0xb621b266"};
+var OG={"0xed161865f49b23d5bb826606eff8cae97beb494c": [1, "rizeonchain"], "0x38580c1be94cd23169170738746492e8ad3c87f0": [4, "joejiejoep"], "0xb213a1be0c098668a915c54db8eaddf44695ac43": [5, "ohhhyyyy"], "0x54906b011f61c9101469f1dd4b15e8a666acac78": [7, "noxen"], "0x0aab3263b2b76b91c67b342b7ebc8c335516652b": [8, "showmaker"], "0xefa9f890d57c634279f0389880b52f4117b8ad17": [10, "czbg"], "0x70c16ac5f99d771bc3832a7d56e4069ff3558657": [11, "dereks"], "0x2787307622f8606a28fa74864787a96d8a918176": [12, "capricorn"], "0xd12d23707aaa04afa05c5a243d720212e8435be9": [14, "virgin"], "0x86a49a9e391c5dc143d2d8b2e8bb77e8bb61ede9": [15, "wy98"], "0x81554661ef5bd25516917487293536b0034ff3dd": [17, "zaijin"], "0x7c7a1b45dc1c13af632a36ba97d626d2b8bdc017": [18, "6156"], "0xe24b7a152189fb413e22ced266097e260e2b0f4c": [19, "0xnaodai"], "0xb2bfd2e1743943398a5d16589756968f46fe4902": [21, "zuoyi"], "0x2cdcd777d28fdab7bb2def2d5f15e94b77a70c7d": [23, "artii"], "0xfa04c4f0896ed206fc2e414fbedade1cdc46877e": [25, "hieuhoang"], "0x1d5e8620c9ebd8ac607b47e95cf63daaba579f2a": [26, "yasir8859"], "0x7bacb6ee3e6a50d04b421a6ab7b3c3d3186ab6c7": [28, "yilinlin"], "0xef10d85a37c6047b69ce2c4c80315f01b21d35cc": [29, "jinrongyoung"], "0xa2fb09a2349316521ab13f4bdff87443b71d473b": [30, "jinhan001"], "0x2aef76e08941c842211ef24d7cee18cba6301459": [33, "jesus"], "0xf1df76abdabf27262e5808471f168b99793bbd5b": [34, "stunt"], "0xc91cede47e656277fc855461af40546d83d799fc": [37, "0x99999"], "0x8e6e0e35727ba2bbe9797d4e580f7bb10ad94ccb": [39, "defrul"], "0xbcc460dfe036ec6ab19ad7c0058d2c0c223ab650": [40, "conq"], "0xd9da92175124976f1044586fd3ca07e5e08d0f66": [42, "8886s"], "0x1914da12bec48d5cc22dc99e75a27b8778b105fa": [43, "hzj888"], "0x9205af4c73e83949d2008832193efeb3711d9c12": [44, "yun95"], "0xec65b491b79f1dace41203f83cb6d8b924c7bd29": [46, "hali"], "0xac36961b7d0f46a742d9dc471baf0f8428ac7c0b": [47, "lmml"], "0xdec81a75220e097a2d6ada353db93bdb92ab7ffb": [49, "pareto"], "0x3e5736caa55c3180f96b2ac15f8f98232d9bcb85": [50, "faker917"], "0x28b352677a20e57f637aebf7f6b54417c901d9f2": [51, "3ruuzz"], "0x0501874b96a586559e82287825e26dfcdee8bc8e": [52, "fishball"], "0x390e83d599fab36c08fac63f5bbc1769f856c98a": [53, "ggstarlord"], "0xda3bf8fc880602443cb15d084f98f1c5059f0315": [54, "mnsnndnsn"], "0xdbaf55d2f4b69b5f76cc7c94be0797eb7e8f03f4": [56, "jhggh"], "0x639180801ff8be3b6dcc901043224f0d716f30fa": [57, "hhhhhj"], "0xb9c1287155f3fc14736f074da9f796092ee7c5ba": [60, "kadocay"], "0xcfd626f2c73ec84bdd7001210bc17d027276f2a0": [62, "elvinojr"], "0xc00cadc8c944105a9a70aca139c454e2f7ab4c9f": [66, "audentes"], "0xa4dc93669eeb632179fbeb0f784afd0972043d16": [67, "abyssalpha"], "0x44848c76dc69af38b18d546e9d5500e5e305720a": [70, "nodle"], "0x5a691e7cd510144f1d52ac4f96c01288739d28d9": [71, "zeus917"], "0x8d9a2781affeb6fb617e45ff150a90ffd7cdc189": [74, "dakpluto"], "0x248b610d504eed751034c77306cf1213be278507": [75, "saputra"], "0x5a4b671ab2e2687a9b43d15e28031ca871712664": [76, "unthenamed"]};
+var DEADLINE=Date.UTC(2026,10,6,15,0,0);
+var lang="en", state={addr:null,id:null,handle:null,claimed:false,img:null};
+var $=function(i){return document.getElementById(i)};
+function T(en,zh){return lang==="zh"?zh:en}
+function say(el,en,zh,cls){el.className="msg"+(cls?" "+cls:"");el.dataset.en=en;el.dataset.zh=zh;el.textContent=T(en,zh)}
+function u256(n){return BigInt(n).toString(16).padStart(64,"0")}
+function addrArg(a){return a.toLowerCase().replace(/^0x/,"").padStart(64,"0")}
+function isAddr(a){return /^0x[0-9a-fA-F]{40}$/.test(a)}
+async function rpc(method,params){
+  var last;
+  for(var i=0;i<RPCS.length;i++){
+    try{
+      var r=await fetch(RPCS[i],{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({jsonrpc:"2.0",id:1,method:method,params:params})});
+      var j=await r.json();
+      if(j.error){var e=new Error(j.error.message||"rpc error");e.revert=true;throw e}
+      return j.result;
+    }catch(e){last=e;if(e.revert)throw e}
+  }
+  throw last;
+}
+function call(to,data){return rpc("eth_call",[{to:to,data:data},"latest"])}
+function decStr(h){
+  h=h.replace(/^0x/,"");if(h.length<128)return "";
+  var len=parseInt(h.slice(64,128),16);var hex=h.slice(128,128+len*2);
+  var b=new Uint8Array(len);for(var i=0;i<len;i++)b[i]=parseInt(hex.substr(i*2,2),16);
+  return new TextDecoder().decode(b);
+}
+function b64utf8(s){var bin=atob(s),b=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++)b[i]=bin.charCodeAt(i);return new TextDecoder().decode(b)}
+async function meta(id){
+  var s=decStr(await call(C,SEL.tokenURI+u256(id)));
+  var json=s.indexOf("data:application/json;base64,")===0?b64utf8(s.slice(29)):s.indexOf("data:application/json,")===0?decodeURIComponent(s.slice(22)):s;
+  return JSON.parse(json);
+}
+function tierOf(m){var a=(m.attributes||[]).find(function(x){return String(x.trait_type).toLowerCase()==="tier"});return a?a.value:""}
+
+/* ---- language ---- */
+function applyLang(l){
+  lang=l;document.documentElement.lang=l==="zh"?"zh-CN":"en";
+  $("langBtn").textContent=l==="zh"?"English":"中文";
+  document.querySelectorAll("[data-zh]").forEach(function(el){
+    if(el.dataset.en===undefined)el.dataset.en=el.textContent;
+    el.textContent=l==="zh"?el.dataset.zh:el.dataset.en;
+  });
+  $("addr").placeholder=T("0x… your wallet address","0x… 你的钱包地址");
+  tick();
+  if(state.id)fillPrompt();
+}
+$("langBtn").onclick=function(){applyLang(lang==="zh"?"en":"zh")};
+
+/* ---- countdown ---- */
+function tick(){
+  var ms=DEADLINE-Date.now();
+  if(ms<=0){$("cd").textContent=T("closed","已截止");return}
+  var d=Math.floor(ms/864e5),h=Math.floor(ms%864e5/36e5),m=Math.floor(ms%36e5/6e4);
+  $("cd").textContent=T(d+"d "+h+"h "+m+"m left","剩 "+d+" 天 "+h+" 小时 "+m+" 分");
+}
+setInterval(tick,30000);
+
+/* ---- lookup ---- */
+async function lookup(a){
+  state={addr:a,id:null,handle:null,claimed:false,img:null};$("claimBtn").disabled=false;$("claimMsg").textContent="";$("postText").value="";
+  $("gift").classList.remove("on");$("claimCard").classList.add("hide");$("shareBox").classList.add("hide");
+  var hit=OG[a.toLowerCase()];
+  if(!hit){say($("findMsg"),"No OG gift for this wallet. OG gifts went to wallets that minted dotBots v1 or v2.","这个钱包没有 OG 礼物。OG 礼物只发给铸造过 dotBots v1 或 v2 的钱包。","bad");return}
+  var id=hit[0];state.id=id;
+  say($("findMsg"),"Reading the chain…","正在读取链上数据…");
+  try{
+    var reg=decStr(await call(REG,SEL.handleOf+addrArg(a)));
+    state.handle=(reg||hit[1])+".ai";
+    var to="0x"+(await call(C,SEL.giftTo+u256(id))).slice(-40);
+    var owner="0x"+(await call(C,SEL.ownerOf+u256(id))).slice(-40);
+    var m=await meta(id);state.img=m.image;
+    $("giftImg").src=m.image;$("giftImg").alt=m.name||("dotBot #"+id);
+    if(owner.toLowerCase()===a.toLowerCase()){
+      state.claimed=true;
+      setGift(id,m,"Claimed. It's yours.","已领取，归你了。");
+      say($("findMsg"),"You already claimed dotBot #"+id+". Show it off below.","你已领取 dotBot #"+id+"。下面可以晒到 X。","ok");
+      showShare();return;
+    }
+    if(to.toLowerCase()!==a.toLowerCase()){
+      setGift(id,m,"This gift was cancelled.","这个礼物已取消。");
+      say($("findMsg"),"OG gift #"+id+" is no longer open for this wallet.","OG 礼物 #"+id+" 已不再对这个钱包开放。","bad");return;
+    }
+    if(!reg){
+      setGift(id,m,"Gift waiting","礼物待领取");
+      say($("findMsg"),"Gift #"+id+" is assigned to this wallet, but it holds no .ai Agent ID right now. Move your Agent ID back to this wallet, then press Check again.","礼物 #"+id+" 已分配给这个钱包，但它现在没有 .ai Agent ID。请把 Agent ID 转回这个钱包，然后再点「查询」。","bad");
+      return;
+    }
+    setGift(id,m,"Gift waiting. After claim it carries "+state.handle+".","礼物待领取。领取后会印上 "+state.handle+"。");
+    say($("findMsg"),"🎁 Found it: OG dotBot #"+id+" for "+state.handle+".","🎁 找到了：OG dotBot #"+id+"，属于 "+state.handle+"。","ok");
+    $("claimCard").classList.remove("hide");fillPrompt();
+  }catch(e){say($("findMsg"),"Couldn't read the chain. Try again in a moment.","读取链上数据失败，请稍后再试。","bad")}
+}
+function setGift(id,m,en,zh){
+  $("giftTitle").textContent="OG dotBot #"+id;
+  $("giftHandle").textContent=state.handle||"";
+  var t=tierOf(m);
+  $("giftNote").dataset.en=en+(t?" · "+t:"");$("giftNote").dataset.zh=zh+(t?" · "+t:"");
+  $("giftNote").textContent=T($("giftNote").dataset.en,$("giftNote").dataset.zh);
+  $("gift").classList.add("on");
+}
+$("checkBtn").onclick=function(){var a=$("addr").value.trim();if(!isAddr(a)){say($("findMsg"),"Paste a full 0x wallet address.","请粘贴完整的 0x 钱包地址。","bad");return}lookup(a)};
+$("addr").addEventListener("keydown",function(e){if(e.key==="Enter")$("checkBtn").click()});
+
+/* ---- wallet ---- */
+async function connect(){
+  if(!window.ethereum){say($("findMsg"),"No browser wallet found. Paste your address, or open this page in your wallet app's browser.","未检测到浏览器钱包。请粘贴地址，或在钱包 App 内置浏览器中打开本页。","bad");return null}
+  var acc=(await window.ethereum.request({method:"eth_requestAccounts"}))[0];
+  $("addr").value=acc;return acc;
+}
+$("connectBtn").onclick=async function(){try{var a=await connect();if(a)lookup(a)}catch(e){say($("findMsg"),"Connection cancelled.","已取消连接。","bad")}};
+
+async function waitReceipt(tx){
+  for(var i=0;i<60;i++){
+    await new Promise(function(r){setTimeout(r,2000)});
+    var rc=await rpc("eth_getTransactionReceipt",[tx]).catch(function(){return null});
+    if(rc)return rc;
+  }
+  return null;
+}
+$("claimBtn").onclick=async function(){
+  var msg=$("claimMsg"),id=state.id;if(!id)return;
+  try{
+    var acc=await connect();if(!acc)return;
+    if(acc.toLowerCase()!==state.addr.toLowerCase()){say(msg,"Switch your wallet to "+state.addr+" (the gifted wallet).","请把钱包切换到 "+state.addr+"（获赠钱包）。","bad");return}
+    try{await window.ethereum.request({method:"wallet_switchEthereumChain",params:[{chainId:"0x38"}]})}catch(e){if(e&&e.code===4902){try{await window.ethereum.request({method:"wallet_addEthereumChain",params:[{chainId:"0x38",chainName:"BNB Smart Chain",nativeCurrency:{name:"BNB",symbol:"BNB",decimals:18},rpcUrls:["https://bsc-dataseed.bnbchain.org"],blockExplorerUrls:["https://bscscan.com"]}]})}catch(e2){}}}
+    var cid=await window.ethereum.request({method:"eth_chainId"});
+    if(cid!=="0x38"){say(msg,"Switch your wallet to BNB Chain first.","请先把钱包切换到 BNB Chain。","bad");return}
+    var data=SEL.claimGift+u256(id);
+    try{await rpc("eth_call",[{from:acc,to:C,data:data},"latest"])}
+    catch(e){say(msg,"The chain says this claim would fail right now: "+e.message,"链上预检显示领取会失败："+e.message,"bad");return}
+    $("claimBtn").disabled=true;
+    say(msg,"Confirm in your wallet: claimGift, value 0, gas only.","请在钱包中确认：claimGift，金额 0，只付 Gas。");
+    var tx=await window.ethereum.request({method:"eth_sendTransaction",params:[{from:acc,to:C,data:data,value:"0x0"}]});
+    say(msg,"Sent. Waiting for the block… "+tx,"已发送，等待出块… "+tx);
+    var rc=await waitReceipt(tx);
+    if(rc&&rc.status==="0x1"){
+      say(msg,"Done! dotBot #"+id+" is yours.","完成！dotBot #"+id+" 归你了。","ok");
+      var m=await meta(id);state.img=m.image;state.claimed=true;$("giftImg").src=m.image;
+      setGift(id,m,"Claimed. It's yours.","已领取，归你了。");
+      $("claimCard").classList.add("hide");showShare();
+    }else if(rc){say(msg,"The transaction failed on-chain. Nothing was claimed.","交易在链上失败，未领取。","bad");$("claimBtn").disabled=false}
+    else{say(msg,"Still pending. Check BscScan, then press Check again.","仍在确认中。请在 BscScan 查看，然后再点「查询」。");$("claimBtn").disabled=false}
+  }catch(e){say(msg,"Cancelled or failed: "+(e&&e.message?e.message:e),"已取消或失败："+(e&&e.message?e.message:e),"bad");$("claimBtn").disabled=false}
+};
+
+function fillPrompt(){
+  $("prompt").textContent=T(
+"On BNB Chain (chainId 56), call claimGift("+state.id+") on the dotBots V3.2 contract "+C+" from my wallet "+state.addr+". Function selector 0x78cbf86c, calldata "+SEL.claimGift+u256(state.id)+", value 0. Do not approve anything. Show me the gas cost before sending.",
+"在 BNB Chain（chainId 56）上，用我的钱包 "+state.addr+" 调用 dotBots V3.2 合约 "+C+" 的 claimGift("+state.id+")。函数选择器 0x78cbf86c，calldata "+SEL.claimGift+u256(state.id)+"，金额 0。不要做任何授权。发送前先告诉我 Gas 费用。");
+}
+$("copyPrompt").onclick=function(){navigator.clipboard.writeText($("prompt").textContent).then(function(){$("copyPrompt").textContent=T("Copied","已复制")})};
+
+/* ---- share card ---- */
+function loadImg(src){return new Promise(function(res,rej){var i=new Image();i.onload=function(){res(i)};i.onerror=rej;i.src=src})}
+async function drawCard(){
+  var c=$("shareCard"),x=c.getContext("2d"),W=1200,H=675;
+  var g=x.createLinearGradient(0,0,W,H);g.addColorStop(0,"#121216");g.addColorStop(1,"#26262c");
+  x.fillStyle=g;x.fillRect(0,0,W,H);
+  x.fillStyle="#f0b90b";x.fillRect(0,0,W,10);
+  try{var im=await loadImg(state.img);x.save();roundRect(x,60,90,495,495,36);x.clip();x.fillStyle="#fff";x.fillRect(60,90,495,495);x.drawImage(im,60,90,495,495);x.restore()}catch(e){}
+  var L=620;
+  x.fillStyle="#f0b90b";x.font="700 30px -apple-system,Segoe UI,Roboto,sans-serif";x.fillText("OG dotBot #"+state.id,L,170);
+  x.fillStyle="#ffffff";var hs=state.handle||"";var fs=84;
+  do{x.font="800 "+fs+"px -apple-system,Segoe UI,Roboto,sans-serif";fs-=4}while(x.measureText(hs).width>W-L-50&&fs>30);
+  x.fillText(hs,L,280);
+  x.fillStyle="#c7c7cc";x.font="400 32px -apple-system,Segoe UI,Roboto,sans-serif";
+  x.fillText("My .ai Agent ID has a face.",L,360);
+  x.fillText("Drawn 100% on-chain",L,410);
+  x.fillText("on BNB Chain.",L,455);
+  x.fillStyle="#ffffff";x.font="700 34px -apple-system,Segoe UI,Roboto,sans-serif";x.fillText("@dotBots_ai",L,560);
+  x.fillStyle="#8e8e93";x.font="400 26px -apple-system,Segoe UI,Roboto,sans-serif";x.fillText("dotbotsai.github.io",L,600);
+}
+function roundRect(x,a,b,w,h,r){x.beginPath();x.moveTo(a+r,b);x.arcTo(a+w,b,a+w,b+h,r);x.arcTo(a+w,b+h,a,b+h,r);x.arcTo(a,b+h,a,b,r);x.arcTo(a,b,a+w,b,r);x.closePath()}
+function postText(){
+  return "Just claimed my OG dotBot #"+state.id+" 🤖\n\n"+state.handle+" now has a face, drawn 100% on-chain on BNB Chain.\n\nOne bot per .ai Agent ID. Public mint: Sat 7/11, 10PM (GMT+7).\n\n@dotBots_ai\ndotbotsai.github.io";
+}
+async function showShare(){
+  $("shareBox").classList.remove("hide");
+  if(!$("postText").value)$("postText").value=postText();
+  await drawCard();
+}
+function cardBlob(){return new Promise(function(r){$("shareCard").toBlob(r,"image/png")})}
+function download(blob){var u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download="dotbot-"+state.id+".png";document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},4000)}
+$("dlBtn").onclick=async function(){download(await cardBlob())};
+$("shareBtn").onclick=async function(){
+  var text=$("postText").value,blob=await cardBlob();
+  var file=new File([blob],"dotbot-"+state.id+".png",{type:"image/png"});
+  if(navigator.canShare&&navigator.canShare({files:[file]})){
+    try{await navigator.share({files:[file],text:text});return}catch(e){if(e&&e.name==="AbortError")return}
+  }
+  download(blob);
+  window.open("https://x.com/intent/post?text="+encodeURIComponent(text),"_blank","noopener");
+};
+
+/* ---- start ---- */
+applyLang(/^zh/i.test(navigator.language||"")?"zh":"en");
+var q=new URLSearchParams(location.search).get("w");
+if(q&&isAddr(q)){$("addr").value=q;lookup(q)}
+})();
+</script>
+</body>
+</html>
