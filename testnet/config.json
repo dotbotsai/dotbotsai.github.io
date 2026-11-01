@@ -1,0 +1,16 @@
+{
+  "network": "BNB Smart Chain Testnet",
+  "chainId": 97,
+  "rpc": "https://bsc-testnet-rpc.publicnode.com",
+  "explorer": "https://testnet.bscscan.com",
+  "nativeSymbol": "tBNB",
+  "addresses": {
+    "collection": "0x1d85B71259e24A9132a7f492cC99a9d124272f78",
+    "market": "0xE644A6d469FfE16f2B8d8531DF4CcB3E1B887706",
+    "registry": "0x4bBd2183C41035167bd81E75F2eC01b74fB34131",
+    "feed": "0xc1601ac27EA70e0FD093bab1B1fd3E34bB191bFb"
+  },
+  "deployBlock": 140186543,
+  "rulesFile": "rules_v1.json",
+  "legacyMarkets": []
+}
