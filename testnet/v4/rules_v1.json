@@ -1,0 +1,93 @@
+{
+  "rulesVersion": "v1",
+  "title": "Rules v1",
+  "status": "testnet beta - balance may change in a later rules file",
+  "basedOn": "GDD v0.1 + demo balance tweaks (same numbers as the offline demo engine)",
+
+  "match": {
+    "hp": 100,
+    "energyMax": 10,
+    "energyStart": 6,
+    "energyRegen": 2,
+    "turnLimit": 40,
+    "turnTimerSec": 15,
+    "timeoutMove": "block",
+    "minDamage": 1,
+    "doubleKo": "faster antenna survives with 1 HP; same speed -> higher HP; same HP -> draw",
+    "turnLimitRule": "higher HP wins"
+  },
+
+  "tiers": ["Common", "Uncommon", "Rare", "Epic", "Legendary"],
+  "tierDmgBonusPerTier": 0.05,
+  "bonusCap": 0.40,
+
+  "typeTriangle": { "beats": { "Box": "Dome", "Dome": "Tall", "Tall": "Box" }, "bonus": 0.25 },
+  "speedByAntenna": { "None": 1, "Single": 2, "Double": 3, "Dish": 4 },
+  "armorByMouth": { "Open": 0, "Smile": 1, "Flat": 2, "Grill": 3 },
+
+  "underdogSpark": { "energyByTierGap": [0, 0, 1, 2, 3], "note": "lower-tier bot starts with extra energy, still capped at energyMax" },
+
+  "moves": {
+    "punch": { "name": "Punch", "cost": 1, "dmg": 8, "kind": "basic", "desc": "Beats Press" },
+    "kick": { "name": "Kick", "cost": 1, "dmg": 11, "kind": "basic", "desc": "Halves through Block" },
+    "block": { "name": "Block", "cost": 1, "dmg": 0, "kind": "guard", "desc": "Beats Punch; halves skills" },
+    "jump": { "name": "Jump", "cost": 2, "dmg": 0, "kind": "guard", "desc": "Dodges Signature/Ultimate" },
+    "press": { "name": "Press", "cost": 2, "dmg": 14, "kind": "basic", "desc": "Beats Block (+50%)" },
+    "rest": { "name": "Rest", "cost": 0, "dmg": 0, "kind": "rest", "desc": "+4 energy, take +50% dmg" }
+  },
+
+  "interactions": {
+    "punchIntoBlockDmg": 0,
+    "blockCounterDmg": 4,
+    "kickThroughBlock": 0.5,
+    "pressVsBlock": 1.5,
+    "skillVsBlock": 0.5,
+    "punchVsPress": 1.5,
+    "pressInterruptedByPunch": true,
+    "jumpDodgesSkills": true,
+    "restEnergyBonus": 4,
+    "restDmgTaken": 1.5
+  },
+
+  "signatureCooldown": 2,
+  "ultimateCooldown": 3,
+
+  "signatures": {
+    "Laser": { "name": "Laser Beam", "cost": 4, "dmg": 22, "fx": "laser", "desc": "High-damage beam" },
+    "Visor": { "name": "Lock-On", "cost": 3, "dmg": 16, "fx": "lock", "desc": "Next hit can't miss, ignores Block/Jump" },
+    "Big": { "name": "Water Jet", "cost": 3, "dmg": 15, "fx": "water", "desc": "Slow: enemy regen -1 next turn" },
+    "Dots": { "name": "Dot Burst", "cost": 3, "dmg": 6, "hits": 3, "fx": "burst", "desc": "3 small hits" },
+    "Sleepy": { "name": "Smoke Cloud", "cost": 3, "dmg": 13, "fx": "smoke", "desc": "Enemy's next move fails 50%" },
+    "Heart": { "name": "Lifesteal", "cost": 3, "dmg": 14, "fx": "heart", "desc": "Heal 50% of damage dealt" }
+  },
+  "effects": {
+    "slowRegenMinus": 1,
+    "smokeFailChance": 0.5,
+    "lifestealRatio": 0.5,
+    "burnDmg": 5,
+    "burnTurns": 3,
+    "counterReflectRatio": 0.6
+  },
+
+  "ultimates": {
+    "Headphones": { "name": "Sound Wave", "cost": 7, "dmg": 24, "fx": "sound", "desc": "Stun: enemy skips next turn" },
+    "Cap": { "name": "Flame Cap", "cost": 7, "dmg": 18, "fx": "fire", "desc": "Burn 5/turn for 3 turns" },
+    "Monocle": { "name": "Pierce Shot", "cost": 7, "dmg": 30, "fx": "pierce", "desc": "Ignores armor and Block" },
+    "Bow Tie": { "name": "Counter Bow", "cost": 7, "dmg": 14, "fx": "counter", "desc": "Reflects 60% of this turn's incoming hit" }
+  },
+
+  "overclock": {
+    "note": "bots with no accessory have no ultimate and get Overclock instead",
+    "name": "Overclock",
+    "regenBonus": 1,
+    "sigCostMinus": 1,
+    "sigCooldown": 1,
+    "sigDmgMult": 1.1
+  },
+
+  "practiceItems": {
+    "plasma": { "name": "Plasma Core", "desc": "+10% damage", "dmg": 0.10 },
+    "dragon": { "name": "Dragon Armor", "desc": "+2 armor", "armor": 2 },
+    "jet": { "name": "Jet Booster", "desc": "+1 energy regen", "regen": 1 }
+  }
+}
