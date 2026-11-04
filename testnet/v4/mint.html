@@ -765,6 +765,7 @@ button.btn:disabled{opacity:.45;cursor:not-allowed}
             <span class="x-tier" id="resTier">–</span>
             <dl id="resDl"></dl>
             <div class="links" id="resLinks"></div>
+            <p class="x-msg" id="shareMsg"></p>
           </div>
         </div>
       </div>
@@ -916,6 +917,21 @@ button.btn:disabled{opacity:.45;cursor:not-allowed}
     if ((!DB.account || S.handleTok === 0n) && S.resExisting) { $("#result").classList.add("x-hide"); S.lastMint = null; S.resExisting = false; }
   }
 
+  /* ---------- save on-chain SVG as PNG (to attach on X) */
+  function pngBlob(src) {
+    return new Promise((ok, bad) => { const im = new Image();
+      im.onload = () => { const c = document.createElement("canvas"); c.width = 1000; c.height = 1000;
+        c.getContext("2d").drawImage(im, 0, 0, 1000, 1000); c.toBlob((b) => b ? ok(b) : bad(new Error("no image")), "image/png"); };
+      im.onerror = bad; im.src = src; });
+  }
+  function savePng(src, name) {
+    const im = new Image();
+    im.onload = () => { const c = document.createElement("canvas"); c.width = 1000; c.height = 1000;
+      c.getContext("2d").drawImage(im, 0, 0, 1000, 1000);
+      c.toBlob((b) => { const a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); }, "image/png"); };
+    im.src = src;
+  }
+
   /* ---------- result card from tokenURI */
   async function showBot(id, txHash, existing) {
     try {
@@ -934,8 +950,22 @@ button.btn:disabled{opacity:.45;cursor:not-allowed}
       let links = "";
       if (txHash) links += '<a class="btn" target="_blank" rel="noopener" href="' + esc(DB.txUrl(txHash)) + '">Mint tx on BscScan</a>';
       links += '<a class="btn" target="_blank" rel="noopener" href="' + esc(DB.cfg.explorer.replace(/\/$/, "") + "/token/" + A.collection + "?a=" + id) + '">Token on BscScan</a>';
+      const shareText = "I just minted test dotBot #" + id + (tier !== "\u2013" ? " (" + tier + ")" : "") + " on BSC testnet \ud83e\udd16\n\nOne bot per .ai Agent ID, fully on-chain.\nMainnet mint: Sat 7/11, 10PM (GMT+7)\n\n@dotBots_ai";
+      const shareUrl = "https://x.com/intent/post?text=" + encodeURIComponent(shareText) + "&url=" + encodeURIComponent("https://dotbotsai.github.io");
+      links += '<a class="btn btn--solid" href="#" id="shareX">Share on X</a>';
+      links += '<a class="btn" href="#" id="saveImg">Save image</a>';
       links += '<a class="btn" href="market.html">Open market</a><a class="btn" href="battle.html">Battle</a>';
       $("#resLinks").innerHTML = links;
+      $("#saveImg").onclick = (ev) => { ev.preventDefault(); savePng(m.image, "dotbot-" + id + ".png"); };
+      let shareBlob = null; pngBlob(m.image).then((b) => { shareBlob = b; }).catch(() => {});
+      $("#shareX").onclick = async (ev) => { ev.preventDefault();
+        let copied = false;
+        try { if (!shareBlob) shareBlob = await pngBlob(m.image);
+          await navigator.clipboard.write([new ClipboardItem({ "image/png": shareBlob })]); copied = true; } catch (e) {}
+        if (!copied) savePng(m.image, "dotbot-" + id + ".png");
+        msg("#shareMsg", copied ? "Bot image copied. In the X post box press Ctrl+V (Cmd+V on Mac) to attach it." : "Bot image saved to your device. Attach it to the X post with the image button.", "good");
+        const w = window.open(shareUrl, "_blank"); if (w) w.opener = null; else window.location.href = shareUrl;
+      };
       $("#result").classList.remove("x-hide");
       S.lastMint = String(id); S.resExisting = !!existing;
       if (!existing) $("#result").scrollIntoView({ behavior: "smooth", block: "start" });
