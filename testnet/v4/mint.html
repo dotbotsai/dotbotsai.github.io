@@ -918,18 +918,28 @@ button.btn:disabled{opacity:.45;cursor:not-allowed}
   }
 
   /* ---------- save on-chain SVG as PNG (to attach on X) */
+  /* on-chain SVG is 240x280 with only a viewBox: give it a real size so every browser rasterises it, keep the 6:7 ratio */
+  const PW = 960, PH = 1120;
+  function sizedSvg(src) {
+    try {
+      const i = src.indexOf(",");
+      const head = src.slice(0, i), body = src.slice(i + 1);
+      if (!/^data:image\/svg\+xml/.test(head)) return src;
+      let svg = /;base64/.test(head) ? new TextDecoder().decode(Uint8Array.from(atob(body), c => c.charCodeAt(0))) : decodeURIComponent(body);
+      svg = svg.replace(/<svg\b(?![^>]*\swidth=)/, '<svg width="' + PW + '" height="' + PH + '"');
+      return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+    } catch (_) { return src; }
+  }
   function pngBlob(src) {
     return new Promise((ok, bad) => { const im = new Image();
-      im.onload = () => { const c = document.createElement("canvas"); c.width = 1000; c.height = 1000;
-        c.getContext("2d").drawImage(im, 0, 0, 1000, 1000); c.toBlob((b) => b ? ok(b) : bad(new Error("no image")), "image/png"); };
-      im.onerror = bad; im.src = src; });
+      im.onload = () => { const c = document.createElement("canvas"); c.width = PW; c.height = PH;
+        c.getContext("2d").drawImage(im, 0, 0, PW, PH); c.toBlob((b) => b ? ok(b) : bad(new Error("no image")), "image/png"); };
+      im.onerror = bad; im.src = sizedSvg(src); });
   }
   function savePng(src, name) {
-    const im = new Image();
-    im.onload = () => { const c = document.createElement("canvas"); c.width = 1000; c.height = 1000;
-      c.getContext("2d").drawImage(im, 0, 0, 1000, 1000);
-      c.toBlob((b) => { const a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); }, "image/png"); };
-    im.src = src;
+    pngBlob(src).then((b) => { const a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = name;
+      document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); })
+      .catch(() => msg("#shareMsg", "Could not make the image here. Right-click the bot image and save it instead.", "bad"));
   }
 
   /* ---------- result card from tokenURI */
@@ -950,7 +960,7 @@ button.btn:disabled{opacity:.45;cursor:not-allowed}
       let links = "";
       if (txHash) links += '<a class="btn" target="_blank" rel="noopener" href="' + esc(DB.txUrl(txHash)) + '">Mint tx on BscScan</a>';
       links += '<a class="btn" target="_blank" rel="noopener" href="' + esc(DB.cfg.explorer.replace(/\/$/, "") + "/token/" + A.collection + "?a=" + id) + '">Token on BscScan</a>';
-      const shareText = "I just minted test dotBot #" + id + (tier !== "\u2013" ? " (" + tier + ")" : "") + " on BSC testnet \ud83e\udd16\n\nOne bot per .ai Agent ID, fully on-chain.\nMainnet mint: Sat 7/11, 10PM (GMT+7)\n\n@dotBots_ai";
+      const shareText = (existing ? "My test dotBot #" : "I just minted test dotBot #") + id + (tier !== "\u2013" ? " (" + tier + ")" : "") + " on BSC testnet \ud83e\udd16\n\nOne bot per .ai Agent ID, fully on-chain.\nMainnet mint: Sat 7/11, 10PM (GMT+7)\n\n@dotBots_ai";
       const shareUrl = "https://x.com/intent/post?text=" + encodeURIComponent(shareText) + "&url=" + encodeURIComponent("https://dotbotsai.github.io");
       links += '<a class="btn btn--solid" href="#" id="shareX">Share on X</a>';
       links += '<a class="btn" href="#" id="saveImg">Save image</a>';
