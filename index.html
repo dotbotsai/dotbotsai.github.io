@@ -822,6 +822,8 @@ tr.is-highlight > :last-child { box-shadow: 12px 0 var(--fill-tertiary); }
 /* audit fixes 2026-11-01 */
 .x-box .head__sub { justify-self: stretch; text-align: left; max-width: none; }
 .x-box .x-mono, #official .x-mono { overflow-wrap: anywhere; word-break: break-all; }
+.cards p, .x-box p, .head__sub { overflow-wrap: anywhere; }
+.cards .x-mono { overflow-wrap: anywhere; word-break: break-all; }
 .band img { height: auto; aspect-ratio: 16 / 9; object-fit: contain; background: #14112b; }
 @media (max-width: 640px) {
   .hero__img { position: relative; inset: auto; width: 100%; height: auto; aspect-ratio: 890 / 235; object-fit: contain; z-index: 0; border-radius: 0; image-rendering: pixelated; background: #fff2cc; }
@@ -1125,7 +1127,7 @@ tr.is-highlight > :last-child { box-shadow: 12px 0 var(--fill-tertiary); }
           <div class="cards">
             <div>
               <h3 data-zh="合约">Contract</h3>
-              <p data-zh="唯一官方合约：dotBots V3.2，BNB 链，0x4123F0f5ca048780C0c91aBC0c7ac12c77a0bF69。早期测试版本同名，但已关闭。">The only official contract: dotBots V3.2 on BNB Chain, 0x4123F0f5ca048780C0c91aBC0c7ac12c77a0bF69. Early test versions share the name but are closed.</p>
+              <p data-zh="唯一官方合约：dotBots V3.2，BNB 链，&lt;span class=&quot;x-mono&quot;&gt;0x4123F0f5ca048780C0c91aBC0c7ac12c77a0bF69&lt;/span&gt;。早期测试版本同名，但已关闭。">The only official contract: dotBots V3.2 on BNB Chain, <span class="x-mono">0x4123F0f5ca048780C0c91aBC0c7ac12c77a0bF69</span>. Early test versions share the name but are closed.</p>
             </div>
             <div>
               <h3 data-zh="铸造">Mint</h3>
