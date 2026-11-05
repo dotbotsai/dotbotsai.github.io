@@ -7,7 +7,7 @@
 <link rel="icon" href="data:,">
 <title>dotBots Market (TESTNET)</title>
 <style>
-:root{--bg:#14141C;--panel:#1E1E2A;--line:#34344A;--gold:#FFC400;--txt:#E8E8F0;--dim:#8A8AA0;--red:#FF4D5E;--grn:#7CFF4F;--cyan:#00F0FF;
+:root{--bg:#1d1d1f;--panel:#2a2a2d;--line:#3a3a3e;--gold:#FFC400;--txt:#E8E8F0;--dim:#8A8AA0;--red:#FF4D5E;--grn:#7CFF4F;--cyan:#00F0FF;
 --t0:#B8B8C8;--t1:#7CFF4F;--t2:#4DA6FF;--t3:#C77DFF;--t4:#FFC400}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{background:var(--bg);color:var(--txt);font-family:ui-monospace,"SFMono-Regular",Menlo,Consolas,"Courier New",monospace;font-size:14px;line-height:1.4}
@@ -31,6 +31,7 @@ main{max-width:1180px;margin:0 auto;padding:12px}
 .note{color:var(--dim);font-size:12px}
 h2{font-size:14px;color:var(--gold);margin:4px 0 10px;text-transform:uppercase;letter-spacing:1px}
 .tabs{display:flex;gap:6px;margin:12px 0;flex-wrap:wrap}
+a.mintlink{display:inline-block;padding:7px 10px;border:2px solid #000;box-shadow:3px 3px 0 #000;text-decoration:none}
 .tab.on{background:var(--gold);color:#000;border-color:#000;font-weight:700}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px}
 .card{background:var(--panel);border:2px solid var(--line);box-shadow:4px 4px 0 #000;padding:8px;display:flex;flex-direction:column;gap:6px;min-width:0}
@@ -88,7 +89,7 @@ footer code{color:var(--txt)}
     <button class="tab on" data-t="browse">Browse</button>
     <button class="tab" data-t="mine">My bots</button>
     <button class="tab" data-t="listings">My listings</button>
-    <button class="tab" data-t="mint">Get a test bot</button>
+    <a class="btn-gold mintlink" href="mint.html">Mint a test bot →</a>
     <button id="refresh" style="margin-left:auto">↻ Refresh</button>
   </div>
 
@@ -96,15 +97,6 @@ footer code{color:var(--txt)}
   <section id="v-mine" hidden><div class="grid" id="mineGrid"></div></section>
   <section id="v-listings" hidden><div class="grid" id="listGrid"></div>
     <div id="legacyWrap" hidden><h2 style="margin-top:16px">In an older market version</h2><div class="grid" id="legacyGrid"></div></div></section>
-  <section id="v-mint" hidden>
-    <div class="panel" style="max-width:520px">
-      <h2>Get a test bot</h2>
-      <p class="note">Testnet only. The test registry lets anyone set a test handle for their wallet, then mint one bot for that handle with tBNB. To mint another, set a different handle.</p>
-      <div class="kv" style="margin:10px 0"><b>Your test handle</b><span id="myHandle">–</span><b>Mint price</b><span id="mintPrice">–</span></div>
-      <div class="row"><input id="handleIn" placeholder="new test handle, e.g. tester01" maxlength="32" style="flex:1"><button id="setHandle">Set handle</button></div>
-      <div class="row" style="margin-top:10px"><button class="btn-gold" id="mintBtn">Mint test bot</button></div>
-    </div>
-  </section>
 </main>
 
 <div class="overlay" id="modal"><div class="panel modal" id="modalBox"></div></div>
@@ -179,9 +171,7 @@ footer code{color:var(--txt)}
     S.legacy = legacy;
     $("#pendingBanner").classList.toggle("on", S.pending > 0n);
     $("#pendingAmt").textContent = DB.fmt(S.pending) + " " + sym();
-    try { $("#myHandle").textContent = (await DB.registry().handleOf(DB.account)) || "(none)"; } catch (_) {}
   }
-  async function loadMint() { try { $("#mintPrice").textContent = DB.fmt(await DB.bots().unitPrice()) + " " + sym(); } catch (e) { $("#mintPrice").textContent = "–"; } }
 
   function renderNet() {
     const pill = $("#netPill");
@@ -205,7 +195,7 @@ footer code{color:var(--txt)}
     // mine
     $("#mineGrid").innerHTML = !DB.account ? `<div class="empty">Connect your wallet to see your test bots.</div>` : S.mine.length ? S.mine.map(id =>
       cardHTML(S.cards[id], `<button class="btn-gold" data-act="list" data-id="${id}" ${S.paused ? "disabled" : ""}>List for sale</button>`)).join("")
-      : `<div class="empty">No test bots in this wallet. Use "Get a test bot".</div>`;
+      : `<div class="empty">No test bots in this wallet. Mint one on the <a href="mint.html">mint page</a>.</div>`;
     // my listings
     const mineL = me ? S.listings.filter(l => l.seller.toLowerCase() === me) : [];
     $("#listGrid").innerHTML = !DB.account ? `<div class="empty">Connect your wallet to see your listings.</div>` : mineL.length ? mineL.map(l =>
@@ -219,7 +209,7 @@ footer code{color:var(--txt)}
     document.querySelectorAll("[data-act]").forEach(b => b.onclick = () => ACT[b.dataset.act](+b.dataset.id, b.dataset.m));
   }
   async function refresh() {
-    try { await Promise.all([loadMarket(), loadMine(), loadMint()]); }
+    try { await Promise.all([loadMarket(), loadMine()]); }
     catch (e) { status("Could not read the chain: " + esc(DB.explain(e)), "err"); }
     renderAll();
   }
@@ -299,15 +289,13 @@ footer code{color:var(--txt)}
     },
   };
   $("#withdrawBtn").onclick = () => send("Withdraw", async () => DB.market(true).withdraw());
-  $("#setHandle").onclick = () => { const h = $("#handleIn").value.trim(); if (!h) return status("Type a test handle.", "err"); send("Set handle", async () => DB.registry(true).setHandle(h)); };
-  $("#mintBtn").onclick = () => send("Mint", async () => { const p = await DB.bots().unitPrice(); return DB.bots(true).mint({ value: p }); });
 
   $("#connect").onclick = async () => { try { await DB.connect(); } catch (e) { status(esc(DB.explain(e)), "err"); } renderNet(); refresh(); };
   $("#switchBtn").onclick = async () => { try { await DB.switchChain(); } catch (e) { status(esc(DB.explain(e)), "err"); } renderNet(); };
   $("#refresh").onclick = refresh;
   document.querySelectorAll(".tab").forEach(t => t.onclick = () => {
     S.tab = t.dataset.t; document.querySelectorAll(".tab").forEach(x => x.classList.toggle("on", x === t));
-    ["browse", "mine", "listings", "mint"].forEach(v => $("#v-" + v).hidden = v !== S.tab);
+    ["browse", "mine", "listings"].forEach(v => $("#v-" + v).hidden = v !== S.tab);
   });
   DB.on(() => { renderNet(); refresh(); });
   await refresh();
