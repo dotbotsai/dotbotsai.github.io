@@ -5,12 +5,12 @@
   "explorer": "https://testnet.bscscan.com",
   "nativeSymbol": "tBNB",
   "addresses": {
-    "collection": "0x9fAAeb733F979b65b2386845aDF91d3A42Db3193",
-    "market": "0x9c4079116F9b5Dfa5DA2a80894aF542Fe314415b",
-    "registry": "0xa58867982B8a2C32Bd185Af4859abb72E8B1D4f9",
-    "feed": "0x6DDf84f81E764521F771a67b6D2c716eD65104e3"
+    "collection": "0xc3797df035A8eE813C4241660B709a52C45a3365",
+    "market": "0x0C200671B9F95202aac8c37B4A1aF36e2A328b4f",
+    "registry": "0x21Dc7f22342754af4b1044DA7232bbdA9F16b9Bb",
+    "feed": "0x92Cd2DE67118674aB592106a4f354BAc43cb78CF"
   },
-  "deployBlock": 140343422,
+  "deployBlock": 140851723,
   "rulesFile": "rules_v1.json",
   "legacyMarkets": []
 }
