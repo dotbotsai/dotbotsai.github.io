@@ -246,12 +246,13 @@
     $("#cColl").textContent = S.coll.length || "";
     if (f != null) $("#stFloor").title = usd(f);
     // avatar + banner mosaic from real bots
-    if (S.ids.length && !S.mosaicDone) { S.mosaicDone = true;
-      const pick = [...S.ids].sort((a, b) => S.bots.get(a).rank - S.bots.get(b).rank)[0];
-      /* collection avatar = dotBots logo (avatar.png), same as X */
+    // collection avatar = dotBots logo (avatar.png), same as X; banner = mosaic of real bots.
+    // Rebuild on each refresh until at least one bot image has loaded (retry if RPC was slow).
+    if (S.ids.length && !S.mosaicOk) {
       const ms = S.ids.slice(0, 36);
-      $("#mosaic").innerHTML = Array.from({ length: 40 }, (_, i) => ms.length ? `<img data-img="${ms[i % ms.length]}" src="${BLANK}" alt="">` : "<div></div>").join("");
-      watchImgs($("#mosaic"));
+      $("#mosaic").innerHTML = Array.from({ length: 40 }, (_, i) => `<img data-img="${ms[i % ms.length]}" src="${BLANK}" alt="">`).join("");
+      $$("img[data-img]", $("#mosaic")).forEach(fillImg);
+      getImg(ms[0]).then(() => { S.mosaicOk = true; }).catch(() => {});
     }
   }
   function showNotice(kind, html, id) {
