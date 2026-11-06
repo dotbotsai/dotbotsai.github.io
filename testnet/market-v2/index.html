@@ -8,13 +8,13 @@
 <meta name="description" content="dotBots Market v2 on BNB Smart Chain Testnet: list, buy, sweep and make offers on dotBots. Everything is read from the chain.">
 <link rel="stylesheet" href="vendor/fonts.css">
 <link rel="stylesheet" href="style.css">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23ff4d00'/%3E%3Ccircle cx='16' cy='16' r='5' fill='white'/%3E%3C/svg%3E">
+<link rel="icon" type="image/png" href="favicon.png">
 </head>
 <body>
 <div class="tn-banner" id="tnBanner">TESTNET · BNB Smart Chain Testnet (chain 97) · test bots and test BNB only, <b>no real value</b></div>
 
 <header class="topbar">
-  <a class="brand" href="#" id="home"><span class="dot">•</span>dotBots <small>Market</small></a>
+  <a class="brand" href="#" id="home"><img class="logo" src="logo.png" width="28" height="28" alt="dotBots">dotBots <small>Market</small></a>
   <div class="search" id="searchBox">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
     <input id="search" type="search" placeholder="Search by handle or bot #" autocomplete="off" aria-label="Search bots">
@@ -30,7 +30,7 @@
 <section class="hero">
   <div class="banner" id="banner"><div class="banner-mosaic" id="mosaic"></div></div>
   <div class="hero-body">
-    <div class="avatar" id="avatar"><div class="skel" style="width:100%;height:100%;border-radius:0"></div></div>
+    <div class="avatar" id="avatar"><img src="avatar.png" alt="dotBots"></div>
     <div class="hero-title">
       <h1>dotBots <span class="chip orange">Testnet</span> <span class="chip" id="verChip">Market v2</span></h1>
       <p class="hero-sub">One bot per .ai Agent ID, drawn fully on-chain on BNB Chain. This page reads listings, offers and sales straight from the market contract. Market fee <b id="feeHero">5%</b>, taken from the seller's side of each sale.</p>
@@ -41,7 +41,7 @@
 
 <div class="statsbar" id="statsbar">
   <div class="statsbar-in">
-    <div class="mini-id"><img id="miniAvatar" alt=""><span>dotBots</span></div>
+    <div class="mini-id"><img id="miniAvatar" src="logo.png" alt=""><span>dotBots</span></div>
     <div class="stat"><div class="v" id="stFloor">—</div><div class="k">Floor price</div></div>
     <div class="stat"><div class="v" id="stBest">—</div><div class="k">Top offer</div></div>
     <div class="stat"><div class="v" id="stVol">—</div><div class="k">Total volume</div></div>

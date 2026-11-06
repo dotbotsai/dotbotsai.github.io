@@ -246,9 +246,9 @@
     $("#cColl").textContent = S.coll.length || "";
     if (f != null) $("#stFloor").title = usd(f);
     // avatar + banner mosaic from real bots
-    if (S.ids.length && !$("#avatar img")) {
+    if (S.ids.length && !S.mosaicDone) { S.mosaicDone = true;
       const pick = [...S.ids].sort((a, b) => S.bots.get(a).rank - S.bots.get(b).rank)[0];
-      getImg(pick).then(src => { $("#avatar").innerHTML = `<img src="${src}" alt="dotBots">`; $("#miniAvatar").src = src; }).catch(() => {});
+      /* collection avatar = dotBots logo (avatar.png), same as X */
       const ms = S.ids.slice(0, 36);
       $("#mosaic").innerHTML = Array.from({ length: 40 }, (_, i) => ms.length ? `<img data-img="${ms[i % ms.length]}" src="${BLANK}" alt="">` : "<div></div>").join("");
       watchImgs($("#mosaic"));

@@ -42,6 +42,7 @@ img { display: block; }
 .topbar { position: sticky; top: 0; z-index: 50; height: var(--top-h); display: flex; align-items: center; gap: 16px; padding: 0 24px; background: rgba(14, 15, 19, .86); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
 .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 700; font-size: 18px; letter-spacing: -.01em; white-space: nowrap; }
 .brand .dot { width: 28px; height: 28px; border-radius: 8px; background: var(--accent); display: grid; place-items: center; color: #fff; font-family: var(--mono); font-size: 15px; }
+.brand .logo { width: 28px; height: 28px; border-radius: 8px; display: block; }
 .brand small { font-weight: 500; color: var(--text-3); font-size: 13px; margin-left: 2px; }
 .search { flex: 1; max-width: 560px; position: relative; }
 .search input { width: 100%; height: 42px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg-2); padding: 0 14px 0 40px; outline: none; transition: border-color .15s, background .15s; }
