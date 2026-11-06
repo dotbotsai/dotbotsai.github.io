@@ -290,10 +290,10 @@
     const first = !$("#traitFilters").children.length;
     const order = ["Tier", "Type", "Head", "Eyes", "Antenna", "Mouth", "Accessory"];
     $("#traitFilters").innerHTML = order.map(k => {
-      const vals = Object.keys(S.traitCounts[k] || {}).sort((a, b) => k === "Tier" ? TIERS.indexOf(a) - TIERS.indexOf(b) : (S.traitCounts[k][b] - S.traitCounts[k][a]) || a.localeCompare(b));
+      const vals = (k === "Tier" ? TIERS.slice() : Object.keys(S.traitCounts[k] || {})).sort((a, b) => k === "Tier" ? TIERS.indexOf(a) - TIERS.indexOf(b) : (S.traitCounts[k][b] - S.traitCounts[k][a]) || a.localeCompare(b));
       const sel = S.filters.traits[k] || new Set();
       const isOpen = first ? k === "Tier" : open.has(k);
-      return `<div class="fgroup ${isOpen ? "open" : ""}" data-k="${k}"><button>${k === "Tier" ? "Rarity tier" : esc(k)} <span style="margin-left:auto;margin-right:8px" class="dim mono">${sel.size ? sel.size : ""}</span><svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></button><div class="fbody">${vals.map(v => `<label class="opt"><input type="checkbox" data-k="${k}" data-v="${esc(v)}" ${sel.has(v) ? "checked" : ""}><span>${esc(v)}</span><span class="n">${S.traitCounts[k][v]}</span></label>`).join("")}</div></div>`;
+      return `<div class="fgroup ${isOpen ? "open" : ""}" data-k="${k}"><button>${k === "Tier" ? "Rarity tier" : esc(k)} <span style="margin-left:auto;margin-right:8px" class="dim mono">${sel.size ? sel.size : ""}</span><svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></button><div class="fbody">${vals.map(v => `<label class="opt"><input type="checkbox" data-k="${k}" data-v="${esc(v)}" ${sel.has(v) ? "checked" : ""}><span>${esc(v)}</span><span class="n">${(S.traitCounts[k] || {})[v] || 0}</span></label>`).join("")}</div></div>`;
     }).join("");
     $$("#traitFilters input").forEach(i => i.onchange = () => {
       const k = i.dataset.k, v = i.dataset.v; const s = S.filters.traits[k] = S.filters.traits[k] || new Set();
@@ -347,7 +347,7 @@
     if (!S.loaded) { g.innerHTML = skeletons(12); return; }
     const list = filtered();
     $("#resultCount").textContent = `${list.length} ${list.length === 1 ? "bot" : "bots"}`;
-    if (!list.length) { g.innerHTML = `<div class="empty" style="grid-column:1/-1"><h3>No bots match</h3>Try removing a filter or clearing the search.</div>`; return; }
+    if (!list.length) { const zt = [...(S.filters.traits.Tier || [])].filter(v => !((S.traitCounts && S.traitCounts.Tier) || {})[v]); g.innerHTML = zt.length ? `<div class="empty" style="grid-column:1/-1"><h3>No ${esc(zt.join(" / "))} bots yet</h3>No bot of this tier has been minted yet.</div>` : `<div class="empty" style="grid-column:1/-1"><h3>No bots match</h3>Try removing a filter or clearing the search.</div>`; return; }
     g.innerHTML = list.map(id => card(id)).join("");
     watchImgs(g);
     const buyable = [...S.listings.entries()].filter(([, l]) => !isMe(l.seller)).length;
