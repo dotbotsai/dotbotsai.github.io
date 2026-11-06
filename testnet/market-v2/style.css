@@ -355,3 +355,5 @@ footer a { color: var(--text-2); }
 }
 @media (min-width: 901px) { .search-toggle { display: none !important; } .show-m { display: none !important; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+
+.rows.hist-scroll { max-height: 320px; overflow-y: auto; padding-right: 6px; overscroll-behavior: contain; }

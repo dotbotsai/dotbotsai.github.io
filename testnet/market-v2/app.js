@@ -236,7 +236,7 @@
     $("#stVol").innerHTML = v(S.stats.vol);
     $("#stSales").textContent = S.stats.sales != null ? String(S.stats.sales) : "—";
     const live = S.ids.length; const listed = S.listings.size;
-    $("#stListed").innerHTML = `${listed}<small>${live ? ((listed / live) * 100).toFixed(1) : "0"}%</small>`;
+    const lp = live ? ((listed / live) * 100).toFixed(1) : "0"; const stl = $("#stListed"); stl.innerHTML = `${listed}<small> · ${lp}%</small>`; stl.setAttribute("aria-label", `${listed} listed, ${lp}% of bots`);
     $("#stOwners").textContent = String(owners());
     $("#stSupply").textContent = String(live);
     $("#stFee").textContent = feePct();
@@ -578,7 +578,7 @@
         <div class="owner-line"><span>Owned by <a href="${esc(DB.addrUrl(holder) || "#")}" target="_blank" rel="noopener">${esc(mine ? "you" : DB.short(holder))}</a></span>${l ? `<span>Held in market escrow while listed</span>` : ""}</div>
         <div class="pricebox">${priceBlock}<div class="actions">${actions}</div><div class="feeline">${feeLine}</div></div>
         <div class="section-h">Offers</div><div class="rows">${collRow}${offerRows}</div>
-        <div class="section-h">Market history</div><div class="rows">${histRows}</div>
+        <div class="section-h">Market history</div><div class="rows hist-scroll">${histRows}</div>
       </div></div>`);
     watchImgs($("#mcontent"));
     const on = (sel, fn) => { const el = $(sel, $("#mcontent")); if (el) el.onclick = fn; };
@@ -601,7 +601,7 @@
   function openBuy(id) {
     const l = S.listings.get(id); if (!l) return toast("err", "Not listed", "This bot is not listed any more.", 6000);
     if (!DB.account) return connect().then(() => DB.account && openBuy(id));
-    openModal(miniHead(id, "Complete purchase") + `<div class="breakdown"><div><span>Price</span><span>${DB.fmt(l.price)} ${esc(sym())}</span></div><div><span class="dim">Market fee ${feePct()} (paid by the seller, included)</span><span class="dim">${DB.fmt((l.price * l.fee) / 10000n)}</span></div><div class="tot"><span>You pay</span><span>${DB.fmt(l.price)} ${esc(sym())} <span class="dim" style="font-weight:500">${esc(usd(l.price))}</span></span></div></div>
+    openModal(miniHead(id, "Complete purchase") + `<div class="breakdown"><div><span>Price</span><span>${DB.fmt(l.price)} ${esc(sym())}</span></div><div><span class="dim">Market fee ${feePct()} (taken from the seller, nothing extra for you)</span><span class="dim">${DB.fmt((l.price * l.fee) / 10000n)}</span></div><div class="tot"><span>You pay</span><span>${DB.fmt(l.price)} ${esc(sym())} <span class="dim" style="font-weight:500">${esc(usd(l.price))}</span></span></div></div>
       <div class="feeline">Plus network gas. The bot moves to your wallet in the same transaction.</div><div class="actions" style="display:flex;gap:10px;margin-top:16px">${backTo(id)}<button class="btn primary" style="flex:1" id="confirmBuy">Buy for ${DB.fmt(l.price)} ${esc(sym())}</button></div></div>`, true);
     watchImgs($("#mcontent")); wireBack();
     $("#confirmBuy").onclick = async () => { closeModal(); await runTx("Buy " + nameOf(S.bots.get(id)), async () => DB.market(true).buy(id, { value: l.price }), () => "The bot is in your wallet."); };
@@ -742,7 +742,7 @@
     $("#cartBody").innerHTML = n ? ids.map(id => { const l = S.listings.get(id), b = S.bots.get(id); const gone = !l || isMe(l.seller);
       return `<div class="cart-item ${gone ? "gone" : ""}" data-test="cart-item">${imgTag(id)}<div class="grow"><div class="nm">${esc(nameOf(b))}</div><div class="dim" style="font-size:12px">#${id} · ${esc(b.traits.Tier)}</div>${gone ? `<div style="font-size:12px;color:#ffa3a6">${l ? "Your own listing, will be skipped" : "No longer listed, will be skipped"}</div>` : ""}</div><div class="mono" style="text-align:right;font-weight:650">${l ? DB.fmt(l.price) : "—"}</div><button class="btn xs ghost" data-rm="${id}" aria-label="Remove">✕</button></div>`; }).join("")
       : `<div class="empty" style="margin-top:20px"><h3>Your cart is empty</h3>Add listed bots, or use the Sweep slider to pick the cheapest ones.</div>`;
-    $("#cartFoot").innerHTML = n ? `<div class="breakdown"><div><span>${live.length} bot${live.length === 1 ? "" : "s"} to buy</span><span>${DB.fmt(total)} ${esc(sym())}</span></div><div><span class="dim">Market fee ${feePct()} (paid by sellers, included)</span><span class="dim">${DB.fmt(feeOf(total))}</span></div><div class="tot"><span>You pay</span><span>${DB.fmt(total)} ${esc(sym())} <span class="dim" style="font-weight:500">${esc(usd(total))}</span></span></div></div>
+    $("#cartFoot").innerHTML = n ? `<div class="breakdown"><div><span>${live.length} bot${live.length === 1 ? "" : "s"} to buy</span><span>${DB.fmt(total)} ${esc(sym())}</span></div><div><span class="dim">Market fee ${feePct()} (taken from sellers, nothing extra for you)</span><span class="dim">${DB.fmt(feeOf(total))}</span></div><div class="tot"><span>You pay</span><span>${DB.fmt(total)} ${esc(sym())} <span class="dim" style="font-weight:500">${esc(usd(total))}</span></span></div></div>
       <div class="feeline">One transaction. Anything sold before it lands is skipped and its BNB comes back in the same transaction.</div><button class="btn primary block" style="margin-top:12px" id="sweepGo" ${live.length && !S.paused ? "" : "disabled"}>${S.paused ? "Trading paused" : `Buy ${live.length} item${live.length === 1 ? "" : "s"}`}</button>` : "";
     watchImgs($("#cartBody"));
     $$("[data-rm]", $("#cartBody")).forEach(b => b.onclick = () => toggleCart(Number(b.dataset.rm)));
