@@ -454,11 +454,11 @@
       prev = p;
     }
     if (prev && prev.f != null) d += ` H${X(t1).toFixed(1)}`;
-    const grid = [0, .25, .5, .75, 1].map(k => { const v = ymax * k; const y = Y(v); return `<line x1="${L}" x2="${W - R}" y1="${y}" y2="${y}" stroke="#2a2d37"/><text x="${L - 8}" y="${y + 4}" text-anchor="end" fill="#8b8e99" font-size="11" font-family="Geist Mono, monospace">${v.toPrecision(2)}</text>`; }).join("");
+    const grid = [0, .25, .5, .75, 1].map(k => { const v = ymax * k; const y = Y(v); return `<line x1="${L}" x2="${W - R}" y1="${y}" y2="${y}" style="stroke:var(--line)"/><text x="${L - 8}" y="${y + 4}" text-anchor="end" style="fill:var(--text-3)" font-size="11" font-family="Geist Mono, monospace">${v.toPrecision(2)}</text>`; }).join("");
     const fmtT = t => new Date(t * 1000).toLocaleString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit", hour12: false });
-    const xl = [t0, (t0 + t1) / 2, t1].map((t, i) => `<text x="${X(t)}" y="${H - 8}" text-anchor="${["start", "middle", "end"][i]}" fill="#8b8e99" font-size="11">${esc(fmtT(t))}</text>`).join("");
-    const dots = sales.map(s => `<circle cx="${X(s.t).toFixed(1)}" cy="${Y(Number(ethers.formatEther(s.p))).toFixed(1)}" r="5" fill="#22c27a" stroke="#0e0f13" stroke-width="2" data-tip="${esc(`Sale · ${nameOf(S.bots.get(s.id)) || "#" + s.id} · ${DB.fmt(s.p)} ${sym()} · ${fmtT(s.t)}`)}"></circle>`).join("");
-    box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="Floor price and sales chart">${grid}<text x="${L}" y="${T - 2}" fill="#8b8e99" font-size="11">${esc(sym())}</text><path d="${d}" fill="none" stroke="#ff4d00" stroke-width="2.5" vector-effect="non-scaling-stroke"/>${dots}${xl}</svg><div class="chart-tip" id="chartTip"></div>`;
+    const xl = [t0, (t0 + t1) / 2, t1].map((t, i) => `<text x="${X(t)}" y="${H - 8}" text-anchor="${["start", "middle", "end"][i]}" style="fill:var(--text-3)" font-size="11">${esc(fmtT(t))}</text>`).join("");
+    const dots = sales.map(s => `<circle cx="${X(s.t).toFixed(1)}" cy="${Y(Number(ethers.formatEther(s.p))).toFixed(1)}" r="5" fill="#22c27a" style="stroke:var(--bg)" stroke-width="2" data-tip="${esc(`Sale · ${nameOf(S.bots.get(s.id)) || "#" + s.id} · ${DB.fmt(s.p)} ${sym()} · ${fmtT(s.t)}`)}"></circle>`).join("");
+    box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="Floor price and sales chart">${grid}<text x="${L}" y="${T - 2}" style="fill:var(--text-3)" font-size="11">${esc(sym())}</text><path d="${d}" fill="none" stroke="#ff4d00" stroke-width="2.5" vector-effect="non-scaling-stroke"/>${dots}${xl}</svg><div class="chart-tip" id="chartTip"></div>`;
     const tip = $("#chartTip");
     $$("circle[data-tip]", box).forEach(c => {
       c.onmouseenter = () => { tip.textContent = c.dataset.tip; tip.style.opacity = 1; const r = c.getBoundingClientRect(), br = box.getBoundingClientRect(); tip.style.left = Math.min(br.width - 240, Math.max(0, r.left - br.left - 60)) + "px"; tip.style.top = (r.top - br.top - 36) + "px"; };
@@ -616,7 +616,7 @@
     const fl = floor();
     openModal(miniHead(id, reprice ? "Change price" : "List for sale") + `<div class="form">
       <label>Price<div class="input-suffix"><input class="input mono" id="priceIn" inputmode="decimal" placeholder="0.00" value="${reprice && l ? esc(ethers.formatEther(l.price)) : ""}"><span>${esc(sym())}</span></div></label>
-      ${fl != null ? `<div class="dim" style="font-size:13px">Floor right now: <span class="mono">${DB.fmt(fl)} ${esc(sym())}</span> · <a href="#" id="useFloor" style="color:#ffb08a">use floor</a></div>` : ""}
+      ${fl != null ? `<div class="dim" style="font-size:13px">Floor right now: <span class="mono">${DB.fmt(fl)} ${esc(sym())}</span> · <a href="#" id="useFloor" style="color:var(--link-warm)">use floor</a></div>` : ""}
       <div class="breakdown" id="lbd"></div>
       <div id="hsNote"></div>
       <div class="feeline">${reprice ? "Only the price changes; the bot stays in escrow." : "Your bot moves into the market contract (escrow) in one transaction. No token approval is requested. You can cancel any time, also while the market is paused."}</div>
@@ -740,7 +740,7 @@
     const live = ids.filter(id => S.listings.has(id) && !isMe(S.listings.get(id).seller));
     const total = live.reduce((s, id) => s + S.listings.get(id).price, 0n);
     $("#cartBody").innerHTML = n ? ids.map(id => { const l = S.listings.get(id), b = S.bots.get(id); const gone = !l || isMe(l.seller);
-      return `<div class="cart-item ${gone ? "gone" : ""}" data-test="cart-item">${imgTag(id)}<div class="grow"><div class="nm">${esc(nameOf(b))}</div><div class="dim" style="font-size:12px">#${id} · ${esc(b.traits.Tier)}</div>${gone ? `<div style="font-size:12px;color:#ffa3a6">${l ? "Your own listing, will be skipped" : "No longer listed, will be skipped"}</div>` : ""}</div><div class="mono" style="text-align:right;font-weight:650">${l ? DB.fmt(l.price) : "—"}</div><button class="btn xs ghost" data-rm="${id}" aria-label="Remove">✕</button></div>`; }).join("")
+      return `<div class="cart-item ${gone ? "gone" : ""}" data-test="cart-item">${imgTag(id)}<div class="grow"><div class="nm">${esc(nameOf(b))}</div><div class="dim" style="font-size:12px">#${id} · ${esc(b.traits.Tier)}</div>${gone ? `<div style="font-size:12px;color:var(--red-text)">${l ? "Your own listing, will be skipped" : "No longer listed, will be skipped"}</div>` : ""}</div><div class="mono" style="text-align:right;font-weight:650">${l ? DB.fmt(l.price) : "—"}</div><button class="btn xs ghost" data-rm="${id}" aria-label="Remove">✕</button></div>`; }).join("")
       : `<div class="empty" style="margin-top:20px"><h3>Your cart is empty</h3>Add listed bots, or use the Sweep slider to pick the cheapest ones.</div>`;
     $("#cartFoot").innerHTML = n ? `<div class="breakdown"><div><span>${live.length} bot${live.length === 1 ? "" : "s"} to buy</span><span>${DB.fmt(total)} ${esc(sym())}</span></div><div><span class="dim">Market fee ${feePct()} (taken from sellers, nothing extra for you)</span><span class="dim">${DB.fmt(feeOf(total))}</span></div><div class="tot"><span>You pay</span><span>${DB.fmt(total)} ${esc(sym())} <span class="dim" style="font-weight:500">${esc(usd(total))}</span></span></div></div>
       <div class="feeline">One transaction. Anything sold before it lands is skipped and its BNB comes back in the same transaction.</div><button class="btn primary block" style="margin-top:12px" id="sweepGo" ${live.length && !S.paused ? "" : "disabled"}>${S.paused ? "Trading paused" : `Buy ${live.length} item${live.length === 1 ? "" : "s"}`}</button>` : "";

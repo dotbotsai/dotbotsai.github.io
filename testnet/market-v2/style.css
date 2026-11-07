@@ -1,4 +1,4 @@
-/* dotBots Market v2 - dark theme in the dotBots palette (ink #1d1d1f, paper #f5f5f7, signal orange #ff4d00, navy #161f39) */
+/* dotBots Market v2 - dark + light theme in the dotBots palette (ink #1d1d1f, paper #f5f5f7, signal orange #ff4d00, navy #161f39) */
 :root {
   --bg: #0e0f13;
   --bg-2: #14161c;
@@ -22,6 +22,8 @@
   --sans: "Geist", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
   --top-h: 64px;
+  --link-warm: #ffb08a;
+  --red-text: #ffa3a6;
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
@@ -357,3 +359,70 @@ footer a { color: var(--text-2); }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 
 .rows.hist-scroll { max-height: 320px; overflow-y: auto; padding-right: 6px; overscroll-behavior: contain; }
+
+/* ---------------------------------------------------------------- theme toggle */
+.theme-btn .i-moon { display: none; }
+[data-theme="light"] .theme-btn .i-sun { display: none; }
+[data-theme="light"] .theme-btn .i-moon { display: block; }
+
+/* ---------------------------------------------------------------- light theme */
+[data-theme="light"] {
+  --bg: #f5f5f7;
+  --bg-2: #ffffff;
+  --card: #ffffff;
+  --card-2: #efeff2;
+  --line: #e2e2e7;
+  --line-2: #d0d0d7;
+  --text: #1d1d1f;
+  --text-2: #4b4d56;
+  --text-3: #6c6f7a;
+  --accent-wash: rgba(255, 77, 0, .10);
+  --green: #12925a;
+  --red: #d63c43;
+  --amber: #a86a00;
+  --shadow: 0 10px 30px rgba(20, 22, 30, .10);
+  --link-warm: #c93d00;
+  --red-text: #c0303a;
+  color-scheme: light;
+}
+[data-theme="light"] .tn-banner { background: repeating-linear-gradient(-45deg, #fff4dc, #fff4dc 12px, #ffecc4 12px, #ffecc4 24px); color: #8a5600; border-bottom-color: #f0d49a; }
+[data-theme="light"] .tn-banner b { color: #6b4200; }
+[data-theme="light"] .topbar { background: rgba(245, 245, 247, .88); }
+[data-theme="light"] .statsbar { background: rgba(245, 245, 247, .94); }
+[data-theme="light"] .btn:hover { background: #e4e4e9; }
+[data-theme="light"] .btn.primary:hover { background: var(--accent-2); }
+[data-theme="light"] .btn.danger { border-color: #f0c2c4; color: #c0303a; }
+[data-theme="light"] .pill.bad { border-color: #f0d49a; }
+[data-theme="light"] .banner { background: radial-gradient(1200px 300px at 20% 0%, #dfe4f2 0%, #eceef5 45%, #f5f5f7 100%); }
+[data-theme="light"] .banner-mosaic img, [data-theme="light"] .banner-mosaic div { background: rgba(0, 0, 0, .05); }
+[data-theme="light"] .banner::after { background: linear-gradient(180deg, rgba(245, 245, 247, .1) 0%, rgba(245, 245, 247, .55) 55%, rgba(245, 245, 247, 1) 100%); }
+[data-theme="light"] .chip.orange { color: #c93d00; }
+[data-theme="light"] .chip.green { color: #0e7a4b; }
+[data-theme="light"] .chip.amber { color: #8a5600; }
+[data-theme="light"] .chip.red { color: #c0303a; }
+[data-theme="light"] .notice.warn { border-color: #f0d49a; background: #fff6e2; color: #7a4d00; }
+[data-theme="light"] .notice.err { border-color: #f0c2c4; background: #fdeeee; color: #a5262e; }
+[data-theme="light"] .notice.ok { color: #0e7a4b; }
+[data-theme="light"] .table tr:hover td { background: rgba(0, 0, 0, .025); }
+[data-theme="light"] .scrim { background: rgba(20, 22, 30, .35); }
+[data-theme="light"] .drawer-scrim { background: rgba(20, 22, 30, .3); }
+[data-theme="light"] .modal { box-shadow: 0 30px 80px rgba(20, 22, 30, .18); }
+[data-theme="light"] .modal .x { background: rgba(255, 255, 255, .9); }
+[data-theme="light"] .toast .td a { color: #c93d00; }
+[data-theme="light"] .toast.wait .ic { background: rgba(0, 0, 0, .06); }
+[data-theme="light"] .spinner { border-color: rgba(0, 0, 0, .15); border-top-color: var(--accent); }
+[data-theme="light"] .btn.primary .spinner { border-color: rgba(255, 255, 255, .35); border-top-color: #fff; }
+[data-theme="light"] .drawer { box-shadow: none; }
+[data-theme="light"] .drawer.on { box-shadow: -20px 0 60px rgba(20, 22, 30, .15); }
+@media (max-width: 900px) {
+  [data-theme="light"] .sidebar { box-shadow: none; }
+  [data-theme="light"] .sidebar.on { box-shadow: 20px 0 60px rgba(20, 22, 30, .15); }
+}
+/* small phones: keep the theme button without pushing Connect off screen */
+@media (max-width: 480px) {
+  .top-actions { gap: 6px; }
+  .top-actions .btn.icon { width: 38px; height: 38px; }
+  #connect { height: 38px; padding: 0 12px; font-size: 14px; }
+  .brand { font-size: 0; gap: 0; }
+  .brand small { display: none; }
+}
