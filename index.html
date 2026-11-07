@@ -792,6 +792,8 @@ tr.is-highlight > :last-child { box-shadow: 12px 0 var(--fill-tertiary); }
         width: 100%; aspect-ratio: 1; object-fit: contain; border-radius: var(--r-s); image-rendering: pixelated; background: var(--fill-primary-on);
       }
       .x-bot__name { overflow-wrap: anywhere; }
+      .x-share { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+      .x-shareMsg { margin-top: 8px; }
       .x-team { font: var(--type-caption); color: var(--text-secondary); }
       .x-tier {
         --t: var(--text-secondary);
@@ -1635,13 +1637,71 @@ tr.is-highlight > :last-child { box-shadow: 12px 0 var(--fill-tertiary); }
             if (owner) rows += '<div class="row"><dt>' + L("Owner", "持有者") + '</dt><dd><a class="link x-mono" href="https://bscscan.com/address/' + owner + '" target="_blank" rel="noopener">' + shortAddr(owner) + "</a></dd></div>";
             out.innerHTML = '<div class="x-find"><img alt="' + esc(m.name || "dotBot #" + id) + '" /><div class="x-find__info"><h3>' + esc(m.name || "dotBot #" + id) + "</h3>" +
               tierTag(tierOf(m)) + (isTeam(m) ? L("dotBots team", "dotBots 团队", "x-team") : "") +
-              '<div class="breakdown"><dl>' + rows + "</dl></div></div></div>";
+              '<div class="breakdown"><dl>' + rows + "</dl></div>" +
+              '<div class="x-share"><a class="btn" href="#" data-act="share">' + L("Share on X", "分享到 X") + '</a><a class="btn" href="#" data-act="save">' + L("Save image", "保存图片") + "</a></div>" +
+              '<p class="x-msg x-shareMsg" hidden></p></div></div>';
             out.querySelector("img").src = m.image || "";
+            shareBind(out, id, m);
           } catch (e) {
             out.innerHTML = e instanceof Revert
               ? L("Bot #" + id + " doesn't exist, or was burned in a fusion.", "#" + id + " 不存在，或已在融合中销毁。", "x-msg is-bad", "p")
               : L("Chain read failed. Try again.", "链上读取失败，请重试。", "x-msg is-bad", "p");
           }
+        }
+        /* ---------- share a bot on X: on-chain SVG -> PNG ---------- */
+        function svgSize(src) {
+          var svg = "";
+          try {
+            var i = src.indexOf(","), head = src.slice(0, i), body = src.slice(i + 1);
+            if (!/^data:image\/svg\+xml/.test(head)) return null;
+            svg = /;base64/.test(head) ? b64utf8(body) : decodeURIComponent(body);
+          } catch (e) { return null; }
+          var vb = svg.match(/viewBox="\s*[-\d.]+[\s,]+[-\d.]+[\s,]+([\d.]+)[\s,]+([\d.]+)/);
+          var w = vb ? +vb[1] : 1, h = vb ? +vb[2] : 1, W = 960, H = Math.round(960 * h / w);
+          svg = svg.replace(/<svg\b(?![^>]*\swidth=)/, '<svg width="' + W + '" height="' + H + '"');
+          return { src: "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg), W: W, H: H };
+        }
+        function pngBlob(src) {
+          return new Promise(function (ok, bad) {
+            var z = svgSize(src) || { src: src, W: 960, H: 960 }, im = new Image();
+            im.onload = function () {
+              var c = document.createElement("canvas"), x;
+              c.width = z.W; c.height = z.H; x = c.getContext("2d"); x.imageSmoothingEnabled = false;
+              x.drawImage(im, 0, 0, z.W, z.H);
+              c.toBlob(function (b) { b ? ok(b) : bad(new Error("no image")); }, "image/png");
+            };
+            im.onerror = bad; im.src = z.src;
+          });
+        }
+        function saveBlob(b, name) {
+          var a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = name;
+          document.body.appendChild(a); a.click(); a.remove();
+          setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000);
+        }
+        function shareBind(out, id, m) {
+          var tier = tierOf(m), name = "dotbot-" + id + ".png", note = out.querySelector(".x-shareMsg"), blob = null;
+          var text = "My dotBot #" + id + (tier ? " (" + tier + ")" : "") + " \ud83e\udd16\n\nOne bot per .ai Agent ID, 100% on-chain on BNB Chain.\n\n@dotBots_ai #dotBots #AgentID #BNBChain #NFT";
+          var url = "https://x.com/intent/post?text=" + encodeURIComponent(text) + "&url=" + encodeURIComponent("https://dotbotsai.github.io");
+          function say(en, zh, bad) { note.hidden = false; note.className = "x-msg x-shareMsg" + (bad ? " is-bad" : ""); setT(note, en, zh); }
+          pngBlob(m.image || "").then(function (b) { blob = b; }).catch(function () {});
+          out.querySelector('[data-act="save"]').addEventListener("click", function (e) {
+            e.preventDefault();
+            (blob ? Promise.resolve(blob) : pngBlob(m.image || "")).then(function (b) { saveBlob(b, name); })
+              .catch(function () { say("Could not make the image here. Right-click the bot image and save it instead.", "无法在此生成图片。请右键点击机器人图片另存。", true); });
+          });
+          out.querySelector('[data-act="share"]').addEventListener("click", function (e) {
+            e.preventDefault();
+            var w = window.open("about:blank", "_blank");
+            (blob ? Promise.resolve(blob) : pngBlob(m.image || "")).then(function (b) {
+              blob = b;
+              return navigator.clipboard && window.ClipboardItem ? navigator.clipboard.write([new ClipboardItem({ "image/png": b })]).then(function () { return true; }) : false;
+            }).catch(function () { return false; }).then(function (copied) {
+              if (!copied && blob) saveBlob(blob, name);
+              if (copied) say("Bot image copied. In the X post box press Ctrl+V (Cmd+V on Mac) to attach it.", "机器人图片已复制。在 X 发帖框按 Ctrl+V（Mac 为 Cmd+V）即可添加。");
+              else say("Bot image saved to your device. Attach it to the X post with the image button.", "机器人图片已保存到你的设备。在 X 发帖时用图片按钮添加。");
+              if (w) { w.opener = null; w.location.href = url; } else window.location.href = url;
+            });
+          });
         }
         $("findBtn").addEventListener("click", findBot);
         $("findId").addEventListener("keydown", function (e) { if (e.key === "Enter") findBot(); });
