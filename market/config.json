@@ -1,0 +1,18 @@
+{
+  "network": "BNB Smart Chain",
+  "chainId": 56,
+  "rpc": "https://bsc-dataseed.bnbchain.org",
+  "explorer": "https://bscscan.com",
+  "nativeSymbol": "BNB",
+  "testnet": false,
+  "mintHelper": false,
+  "logChunk": 5000,
+  "pollSeconds": 30,
+  "addresses": {
+    "collection": "0x4123F0f5ca048780C0c91aBC0c7ac12c77a0bF69",
+    "market": "0x8F9ca488C7684CDc96D8499ca73479Dd72EA9Ac3",
+    "registry": "0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F",
+    "feed": "0x0567F2323251f0Aab15c8dFb1967E4e8A7D42aeE"
+  },
+  "deployBlock": 132209314
+}
