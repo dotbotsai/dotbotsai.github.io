@@ -14,5 +14,15 @@
     "registry": "0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F",
     "feed": "0x0567F2323251f0Aab15c8dFb1967E4e8A7D42aeE"
   },
-  "deployBlock": 132209314
+  "deployBlock": 132209314,
+  "rpcs": [
+    "https://bsc-dataseed.bnbchain.org",
+    "https://bsc-dataseed1.bnbchain.org",
+    "https://bsc-dataseed2.bnbchain.org"
+  ],
+  "logRpcs": [
+    "https://bsc-rpc.publicnode.com",
+    "https://bsc.publicnode.com"
+  ],
+  "batchMax": 10
 }

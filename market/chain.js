@@ -18,6 +18,37 @@
     56: { chainName: "BNB Smart Chain", nativeCurrency: { name: "BNB", symbol: "BNB", decimals: 18 },
       rpcUrls: ["https://bsc-dataseed.bnbchain.org"], blockExplorerUrls: ["https://bscscan.com"] },
   };
+  /* RPC_RETRY_BEGIN: public BSC nodes rate-limit bursts (code -32005, HTTP 429/403, dropped batch items).
+     Retry only the failed items, rotating through the configured URLs, so one busy node never blanks the page. */
+  const LIMIT_RE = /rate limit|limit exceeded|too many|triggered rate|capacity|busy/i;
+  class RetryProvider extends ethers.JsonRpcProvider {
+    constructor(urls, chainId, opts) { super(urls[0], chainId, opts); this.urls = urls; this.turn = 0; }
+    async _send(payload) {
+      const list = Array.isArray(payload) ? payload : [payload];
+      const done = new Map(); let todo = list; let last = null;
+      for (let t = 0; t < 7 && todo.length; t++) {
+        if (t) await new Promise(r => setTimeout(r, Math.min(4000, 350 * 2 ** (t - 1)) + Math.random() * 250));
+        const url = this.urls[(this.turn + t) % this.urls.length];
+        try {
+          const res = await fetch(url, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(todo.length === 1 ? todo[0] : todo) });
+          if (!res.ok) { last = new Error("HTTP " + res.status); continue; }
+          let body = await res.json(); if (!Array.isArray(body)) body = [body];
+          const byId = new Map(body.filter(r => r && r.id != null).map(r => [r.id, r]));
+          const lone = todo.length === 1 && body.length === 1 && body[0] && body[0].id == null ? body[0] : null;
+          const next = [];
+          for (const p of todo) {
+            const r = byId.get(p.id) || lone;
+            const lim = !r || (r.error && (r.error.code === -32005 || r.error.code === -32029 || LIMIT_RE.test(String(r.error.message || ""))));
+            if (lim) { next.push(p); last = r && r.error ? r.error : last; } else done.set(p.id, r);
+          }
+          todo = next;
+        } catch (e) { last = e; }
+      }
+      this.turn = (this.turn + 1) % this.urls.length;
+      return list.map(p => done.get(p.id)).filter(Boolean); // anything still missing surfaces as an error to its own caller only
+    }
+  }
+  /* RPC_RETRY_END */
   const coder = ethers.AbiCoder.defaultAbiCoder();
 
   const DB = {
@@ -31,7 +62,9 @@
       if (!/^[\w.-]+\.json$/.test(cfgFile)) throw new Error("bad config file name");
       const [cfg, abi] = await Promise.all([fetch(cfgFile, { cache: "no-store" }).then(r => r.json()), fetch("abi.json").then(r => r.json())]);
       this.cfg = cfg; this.abi = abi;
-      this.read = new ethers.JsonRpcProvider(cfg.rpc, cfg.chainId, { staticNetwork: true, cacheTimeout: -1, batchMaxCount: 40 });
+      const rpcs = cfg.rpcs && cfg.rpcs.length ? cfg.rpcs : [cfg.rpc];
+      this.read = new RetryProvider(rpcs, cfg.chainId, { staticNetwork: true, cacheTimeout: -1, batchMaxCount: Number(cfg.batchMax || 10) });
+      this.logs = new RetryProvider(cfg.logRpcs && cfg.logRpcs.length ? cfg.logRpcs : rpcs, cfg.chainId, { staticNetwork: true, batchMaxCount: 1 });
       if (window.ethereum && window.ethereum.on) {
         window.ethereum.on("accountsChanged", (a) => { this.account = a && a[0] ? ethers.getAddress(a[0]) : null; this.signer = null; this.emit("account"); });
         window.ethereum.on("chainChanged", (c) => { this.walletChainId = Number(c); this.signer = null; this.emit("chain"); });
@@ -193,7 +226,7 @@
       const iface = new ethers.Interface(this.abi.DotBotsMarketV2);
       const chunks = await this.pool(ranges, 3, async ([a, b]) => {
         for (let t = 0; t < 3; t++) {
-          try { return await this.read.getLogs({ address: this.cfg.addresses.market, fromBlock: a, toBlock: b }); }
+          try { return await this.logs.getLogs({ address: this.cfg.addresses.market, fromBlock: a, toBlock: b }); }
           catch (e) { await new Promise(r => setTimeout(r, 600 * (t + 1))); if (t === 2) throw e; }
         }
       });
