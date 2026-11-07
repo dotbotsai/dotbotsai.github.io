@@ -20,7 +20,7 @@
   };
   /* RPC_RETRY_BEGIN: public BSC nodes rate-limit bursts (code -32005, HTTP 429/403, dropped batch items).
      Retry only the failed items, rotating through the configured URLs, so one busy node never blanks the page. */
-  const LIMIT_RE = /rate limit|limit exceeded|too many|triggered rate|capacity|busy/i;
+  const LIMIT_RE = /rate limit|limit exceeded|too many|triggered rate|capacity|busy|header not found|missing trie node|timeout|timed out|unavailable|internal error/i;
   class RetryProvider extends ethers.JsonRpcProvider {
     constructor(urls, chainId, opts) { super(urls[0], chainId, opts); this.urls = urls; this.turn = 0; }
     async _send(payload) {

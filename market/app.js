@@ -216,7 +216,13 @@
   async function refresh() {
     if (refreshing) return refreshing;
     refreshing = (async () => {
-      try { await loadCore(); } catch (e) { console.warn(e); showNotice("err", "Could not read the chain right now (" + esc(DB.explain(e)) + "). Retrying in a moment…"); setTimeout(refresh, 5000); return; }
+      try { await loadCore(); S.fails = 0; } catch (e) {
+        console.warn(e); S.fails = (S.fails || 0) + 1;
+        // public RPCs hiccup often: retry quietly first, only show the red line after 3 misses in a row
+        if (S.fails >= 3 && !S.loaded) showNotice("err", "Could not read the chain right now (" + esc(DB.explain(e)) + "). Retrying in a moment…", "chainerr");
+        setTimeout(refresh, S.fails < 3 ? 1500 : 5000); return;
+      }
+      { const n = $("#n-chainerr"); if (n) n.remove(); }
       renderAll();
       try { await loadEvents(); } catch (e) { console.warn("events", e); }
       renderAll();
