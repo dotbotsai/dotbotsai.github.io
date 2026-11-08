@@ -1650,7 +1650,7 @@ tr.is-highlight > :last-child { box-shadow: 12px 0 var(--fill-tertiary); }
             out.innerHTML = '<div class="x-find"><img alt="' + esc(m.name || "dotBot #" + id) + '" /><div class="x-find__info"><h3>' + esc(m.name || "dotBot #" + id) + "</h3>" +
               tierTag(tierOf(m)) + (isTeam(m) ? L("dotBots team", "dotBots 团队", "x-team") : "") +
               '<div class="breakdown"><dl>' + rows + "</dl></div>" +
-              '<div class="x-share"><a class="btn" href="#" data-act="share">' + L("Share on X", "分享到 X") + '</a><a class="btn" href="#" data-act="save">' + L("Save image", "保存图片") + "</a></div>" +
+              '<div class="x-share"><a class="btn" href="#" target="_blank" rel="noopener" data-act="share">' + L("Share on X", "分享到 X") + '</a><a class="btn" href="#" data-act="save">' + L("Save image", "保存图片") + "</a></div>" +
               '<p class="x-msg x-shareMsg" hidden></p></div></div>';
             out.querySelector("img").src = m.image || "";
             shareBind(out, id, m);
@@ -1701,17 +1701,24 @@ tr.is-highlight > :last-child { box-shadow: 12px 0 var(--fill-tertiary); }
             (blob ? Promise.resolve(blob) : pngBlob(m.image || "")).then(function (b) { saveBlob(b, name); })
               .catch(function () { say("Could not make the image here. Right-click the bot image and save it instead.", "无法在此生成图片。请右键点击机器人图片另存。", true); });
           });
-          out.querySelector('[data-act="share"]').addEventListener("click", function (e) {
-            e.preventDefault();
-            var w = window.open("about:blank", "_blank");
-            (blob ? Promise.resolve(blob) : pngBlob(m.image || "")).then(function (b) {
-              blob = b;
-              return navigator.clipboard && window.ClipboardItem ? navigator.clipboard.write([new ClipboardItem({ "image/png": b })]).then(function () { return true; }) : false;
-            }).catch(function () { return false; }).then(function (copied) {
-              if (!copied && blob) saveBlob(blob, name);
-              if (copied) say("Bot image copied. In the X post box press Ctrl+V (Cmd+V on Mac) to attach it.", "机器人图片已复制。在 X 发帖框按 Ctrl+V（Mac 为 Cmd+V）即可添加。");
-              else say("Bot image saved to your device. Attach it to the X post with the image button.", "机器人图片已保存到你的设备。在 X 发帖时用图片按钮添加。");
-              if (w) { w.opener = null; w.location.href = url; } else window.location.href = url;
+          var sh = out.querySelector('[data-act="share"]');
+          sh.href = url;
+          sh.addEventListener("click", function () {
+            /* Copy first, inside the click, while this tab still has focus; the link then opens X itself. */
+            var p;
+            try {
+              if (!(navigator.clipboard && window.ClipboardItem)) throw 0;
+              p = navigator.clipboard.write([new ClipboardItem({ "image/png": blob ? blob : pngBlob(m.image || "") })]);
+            } catch (x) { p = Promise.reject(x); }
+            p.then(function () {
+              say("Bot image copied. In the X post box press Ctrl+V (Cmd+V on Mac) to attach it.", "机器人图片已复制。在 X 发帖框按 Ctrl+V（Mac 为 Cmd+V）即可添加。");
+            }, function () {
+              (blob ? Promise.resolve(blob) : pngBlob(m.image || "")).then(function (b) {
+                blob = b; saveBlob(b, name);
+                say("Bot image saved to your device. Attach it to the X post with the image button.", "机器人图片已保存到你的设备。在 X 发帖时用图片按钮添加。");
+              }).catch(function () {
+                say("Could not make the image here. Right-click the bot image and save it, then attach it on X.", "无法在此生成图片。请右键保存机器人图片，再在 X 上添加。", true);
+              });
             });
           });
         }
