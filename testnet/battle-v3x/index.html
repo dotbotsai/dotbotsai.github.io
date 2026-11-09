@@ -1845,6 +1845,9 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
     "The host has no plays left: the room closed for today.": "房主没有剩余次数：房间今天已关闭。", "The host closed the room.": "房主关闭了房间。", "Message not sent": "消息未发送",
     "OG bot": "OG 机器人", "Reach Lv30. Will be tied to the NFT later (reward to be announced)": "达到 Lv30。之后会与 NFT 绑定（奖励待公布）",
     "Lv30 ({0} seven-day streaks). Bound to this bot, not tradeable": "Lv30（{0} 次连续 7 天签到）。绑定这个机器人，不可交易",
+    /* user 2026-11-10 05:34: lite daily quests = X posts */
+    "· this week's @dotBots_ai posts on X": "· 本周 @dotBots_ai 的 X 帖子",
+    "Daily quests (signed in): follow @dotBots_ai, then Like, Repost and Comment on each @dotBots_ai post of this week. Open the link, do it on X, wait {0} s, then Claim. Each gives XP, max {1} XP per day, new posts every Monday {2} GMT+{3}. Offline practice keeps {4} battle quests.": "每日任务（登录后）：关注 @dotBots_ai，然后为本周每条 @dotBots_ai 帖子点赞、转发并评论。打开链接，在 X 上完成，等待 {0} 秒后领取。每项都给 XP，每天最多 {1} XP，每周一 GMT+{3} {2} 更新帖子。离线练习仍保留 {4} 个对战任务。",
     /* ---------------- fix list 2026-11-09 22:39 / 22:43: next match window, missed picks, sign out, crate, weekly X quests, XP curve */
     "Next match?": "下一场？", "Next match": "下一场", "Both press Continue to play again · 1 play each": "双方都按继续就再打一场 · 各消耗 1 场次数", "You pressed Continue · waiting for your opponent…": "你已按继续 · 等待对手…",
     "Your opponent pressed Continue": "对手已按继续", "Both ready: starting…": "双方都准备好了：开始…", "▶ Continue": "▶ 继续", "✓ Continue": "✓ 继续", "Continue": "继续",
@@ -5345,10 +5348,10 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
     const RW = S.V31.rewards, cost = RW.crateCost, st = S.meta.state, b = S.me, h = isHolder(b), rt = b ? roomsToday(b) : null, lvl = b ? S.meta.botLevel(b).level : 1;
     box.innerHTML = `<div class="pg-row"><div class="pg-k">Bolts</div><div class="pg-v"><b id="liteBolts">${st.bolts}</b> <span class="dim small">· ${b && b.online ? "saved on the server" : "same for every bot"}</span></div></div>
       <div class="pg-row" id="crateRow"><div class="pg-k">Part Crate</div><div class="pg-v"><div class="bar crate"><i style="width:${Math.min(100, st.bolts / cost * 100)}%"></i></div><span class="small">${fmtN(Math.min(st.bolts, cost))}/${fmtN(cost)} Bolts</span> <button class="btn tiny" id="crateSoon" disabled>Coming soon</button><div class="small crate-note" id="crateNote">📦 <b>${fmtN(cost)} Bolts opens 1 crate = 1 random item.</b> Items will be tradable later.</div></div></div>
-      <div class="pg-sub">Daily quests <span class="dim small">· new set at 07:00 GMT+7</span></div>
-      <ul class="quests" id="liteQuests">${S.meta.questsToday().map(q => `<li class="${q.done ? "done" : ""}"><span class="qn">${esc(q.name)}</span><span class="qp">${q.prog}/${q.target}</span><span class="qb">+${q.bolts}</span></li>`).join("")}</ul>
+      ${b && b.online ? `<div class="pg-sub">Daily quests <span class="dim small">· this week's @dotBots_ai posts on X</span></div><div id="liteXq"></div>` : `<div class="pg-sub">Daily quests <span class="dim small">· new set at 07:00 GMT+7</span></div>
+      <ul class="quests" id="liteQuests">${S.meta.questsToday().map(q => `<li class="${q.done ? "done" : ""}"><span class="qn">${esc(q.name)}</span><span class="qp">${q.prog}/${q.target}</span><span class="qb">+${q.bolts}</span></li>`).join("")}</ul>`}
       <button class="btn tiny ghost" data-rw-guide>Rewards guide</button>`;
-    renderRooms();
+    renderRooms(); if (b && b.online) renderQuests();
   }
   function roomBtn() {
     if (onBot(S.me)) return onlineRoom();
@@ -6251,7 +6254,7 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
       <li>Nothing here is a real payment. Nothing for money adds plays, XP or battle power.</li></ul></div>
     <div class="g-sec"><h2>10 · Badges</h2><p>Each bot collects badges on its profile card: First Win, win streaks of 5 / 10 / 20, first K.O. with your Special or Ultimate, Flawless, Comeback, Giant Slayer, World Tour (win on 6 different battlefields), Challenge Accepted, ranks reached, levels 10 / 20 / 30, Full Week, and Iron Will (Lv30, bound to the bot).</p></div>
     <div class="g-sec"><h2>11 · Challenge a friend (Challenge link)</h2><ol><li>Lock your 5 moves and press <b>⚔ Challenge a friend</b> (also on the result screen). Your 5 moves are saved in a link.</li><li>Press <b>Share on X</b> or <b>Copy link</b>.</li><li>Your friend opens the link and fights your 5 moves with their own bot. Their result screen gives them a line to share back with you.</li></ol><p class="dim small">The link carries a commit, so the moves can't be changed after you share it. Old one-move links from v3.2 no longer work.</p></div>
-    <div class="g-sec"><h2>12 · Daily quests and login streak</h2><p>3 quests per day (for example: win using your Special, win without Block, win on 3 battlefields). Check in each day for a 7-day streak: ${RW.loginStreakBolts.join(" / ")} Bolts (simulated, real-bot mode only).</p></div>
+    <div class="g-sec"><h2>12 · Daily quests and login streak</h2><p>Daily quests (signed in): follow @dotBots_ai, then Like, Repost and Comment on each @dotBots_ai post of this week. Open the link, do it on X, wait 10 s, then Claim. Each gives XP, max 50 XP per day, new posts every Monday 07:00 GMT+7. Offline practice keeps 3 battle quests.</p><p>Check in each day for a 7-day streak: ${RW.loginStreakBolts.join(" / ")} Bolts (simulated, real-bot mode only).</p></div>
     <div class="g-sec"><h2>13 · Testnet mode</h2><p>5-move battles on testnet use a BattleEntry contract (not switched on in this page yet): sign one entry transaction ($0.03 in test BNB + a hash of your 5 moves), get paired with another player, reveal automatically, watch the result. <b>Check-in is free</b> in every mode: no fee, no transaction (the paid check-in contract is not used). Test BNB has no value; fees go to the team test wallet; no prize, no payout.</p></div>
     <div class="g-sec"><h2>14 · Battlefields, background button and music</h2><p>There are 10 battlefields: ${DBArenas.LIST.map(a => esc(a.name)).join(", ")}. Press <b>Change background</b> (picture icon) (in the Battlefield card, on the battle screen, or the picture button at the top) to pick one, or <b>Random</b>. Your choice is saved on this device. <b>Rematch</b> always keeps the same battlefield; <b>New opponent</b> uses your choice (a new random one if you chose Random).</p><p>Each battlefield has its own background music, made in your browser (no audio files). Music is <b>off by default</b>: the ♪ button (top right) turns it on, the slider sets the volume, separate from sound effects.</p><p>During a battle the bottom-left tag shows your rank arena (for example <b>Silver Arena</b>) and <b>plays left today</b> with the time until 07:00 GMT+7.</p></div>
     <div class="g-sec" id="gProfile"><h2>15 · Profile &amp; match history, language and theme</h2><ul>
@@ -6648,8 +6651,10 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
   }
   function renderQuests() {
     const card = $("#xqCard"); if (!card) return;
-    const show = onUp() && !!ON.token && !!(S.me && S.me.online); card.classList.toggle("hidden", !show); if (!show) return;
-    const box = $("#xqBody"); if (!XQ.list) { box.innerHTML = `<div class="dim small">Loading…</div>`; return; }
+    // user 2026-11-10 05:34: in lite online the Daily quests slot of the Rewards card IS the X quests (old battle quests removed there)
+    const slot = LITE ? $("#liteXq") : null;
+    const show = onUp() && !!ON.token && !!(S.me && S.me.online); card.classList.toggle("hidden", !show || !!slot); if (!show) return;
+    const box = slot || $("#xqBody"); if (!XQ.list) { box.innerHTML = `<div class="dim small">Loading…</div>`; return; }
     const follow = XQ.list.filter(q => (q.kind || q.id) === "follow"), groups = [];
     for (const q of XQ.list) { if ((q.kind || q.id) === "follow") continue; const k = q.post ? q.post.url : q.url; let g = groups.find(x => x.url === k); if (!g) groups.push(g = { url: k, n: q.post ? q.post.n : groups.length + 1, fallback: !!(q.post && q.post.fallback), qs: [] }); g.qs.push(q); }
     const head = g => g.fallback ? (XQ.source === "pinned" ? "Pinned post" : "@dotBots_ai profile") + ` <span class="dim small">· no quest posts this week yet</span>` : `Post ${g.n} of this week`;
