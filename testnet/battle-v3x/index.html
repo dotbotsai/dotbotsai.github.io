@@ -881,8 +881,6 @@ html[data-theme="light"] .h-r { color: #0b6b3c; } html[data-theme="light"] .h-u 
 @media (max-width:560px){.net-chip{font-size:11px;padding:2px 6px}.net-chip .nc-t{display:none}}
 
 /* live room arena (2026-11-09) */
-.room-dlg { max-width: 720px; }
-.room-dlg .modal-b { max-height: 82vh; }
 .ra-stage { position: relative; border-radius: 12px; overflow: hidden; border: 2px solid #000; box-shadow: 0 0 0 2px var(--accent, #ff4d00) inset; background: #0b0820; }
 .ra-stage canvas { display: block; width: 100%; height: auto; aspect-ratio: 960 / 504; image-rendering: pixelated; }
 .ra-title { position: absolute; top: 4%; left: 0; right: 0; text-align: center; font: 900 clamp(22px, 6vw, 44px)/1 var(--mono, 'Geist Mono', monospace); letter-spacing: .08em; color: #ffd35c; text-shadow: 3px 3px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 0 0 18px rgba(255,77,0,.6); }
@@ -893,12 +891,48 @@ html[data-theme="light"] .h-r { color: #0b6b3c; } html[data-theme="light"] .h-u 
 .ra-tag span { font-family: var(--mono, monospace); font-size: .85em; color: #d7dae3; }
 .ra-pres { position: absolute; top: 3%; right: 2%; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: rgba(10,10,18,.85); color: #c9ccd6; border: 1px solid rgba(255,255,255,.2); }
 .ra-pres.on { color: #7cff4f; border-color: #22c55e; } .ra-pres.busy { color: #ffd35c; border-color: #ffb020; }
-@media (max-width: 520px) { .ra-pres { position: static; display: block; text-align: center; border-radius: 0; border-width: 1px 0 0; } }
 .ra-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 6px; margin: 10px 0 6px; }
 .ra-info > div { display: flex; flex-direction: column; padding: 6px 8px; border: 1px solid var(--line, #2a2f3a); border-radius: 8px; }
 .ra-last { margin: 4px 0 8px; } .ra-last .up { color: #7cff4f; } .ra-last .down { color: #ff7b7f; }
 .ra-act { flex-wrap: wrap; } .ra-note { margin-top: 8px; }
 .rm-top #roomCreate { margin-left: auto; }
+
+/* ARENA hero (user 2026-11-09 10:54): the room arena inline at the top of the lobby, full width; replaces the Rooms card + room modal */
+.arena-hero { margin: 0 0 16px; border-color: rgba(255,77,0,.55); box-shadow: 0 0 0 1px rgba(255,77,0,.25), 0 12px 40px rgba(255,77,0,.10); }
+.arena-hero > .card-h h2 { font-size: 18px; }
+.ah-main { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(260px, 1fr); gap: 16px; align-items: start; }
+.ah-main.state-load { display: block; }
+.ah-left, .ah-right { min-width: 0; }
+.ah-right { display: flex; flex-direction: column; gap: 2px; }
+.ah-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 16px; min-height: 28px; }
+.ah-head b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ah-left .ra-pres { position: static; display: block; text-align: center; margin-top: 8px; padding: 6px 10px; font-size: 13px; border-radius: 10px; white-space: normal; }
+.ah-right .ra-info { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 6px; }
+.ah-right .ra-info b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ah-right .ch-act.big.ra-act { display: flex; flex-direction: column; align-items: stretch; gap: 8px; }
+.ah-right .ra-act .btn { width: 100%; justify-content: center; }
+.ah-right .ra-act .btn.xl { box-shadow: 0 10px 30px rgba(255, 77, 0, .25); }
+.ah-strip-h { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: 16px 0 8px; padding-top: 12px; border-top: 1px solid var(--line, #2a2f3a); }
+.ah-strip-h #roomsRefresh { margin-left: auto; }
+.ah-strip { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(330px, 360px); gap: 8px; overflow-x: auto; padding-bottom: 6px; scroll-snap-type: x proximity; }
+.ah-strip .ah-empty { grid-column: 1 / -1; min-width: 240px; }
+.ah-room { display: flex; align-items: center; gap: 10px; padding: 8px; border: 1px solid var(--line, #2a2f3a); border-radius: 12px; background: rgba(255,255,255,.03); scroll-snap-align: start; min-width: 0; }
+.ah-room:not(.off):not(.mine):hover { border-color: #22c55e; }
+.ah-room.mine { border-style: dashed; border-color: var(--accent, #ff6a1a); }
+.ah-room.off { opacity: .55; }
+.ah-thumb { width: 76px; height: 54px; flex: none; border-radius: 8px; background: #0b0820 center / cover no-repeat; image-rendering: pixelated; display: flex; align-items: flex-end; justify-content: center; border: 1px solid #000; overflow: hidden; }
+.ah-thumb img { width: 40px; height: 40px; image-rendering: pixelated; border-radius: 6px; margin-bottom: 4px; box-shadow: 0 2px 0 rgba(0,0,0,.5); }
+.ah-thumb .rm-ph { width: 40px; height: 40px; }
+.ah-ri { flex: 1; min-width: 0; }
+.ah-ri .rm-meta, .ah-ri .rm-st { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ah-ra { display: flex; flex-direction: column; gap: 4px; flex: none; }
+.ah-away { margin-top: 8px; }
+.ah-away summary { cursor: pointer; font-size: 12.5px; color: var(--text-2, #aab); }
+.ah-away-list { display: flex; flex-direction: column; gap: 4px; margin-top: 6px; }
+.ah-away-row { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; font-size: 12.5px; padding: 6px 8px; border: 1px solid var(--line, #2a2f3a); border-radius: 8px; }
+.ah-away-row .btn { margin-left: auto; }
+@media (max-width: 860px) { .ah-main { grid-template-columns: 1fr; gap: 10px; } }
+@media (max-width: 600px) { .arena-hero { padding: 12px; } .ah-strip { grid-auto-columns: minmax(280px, 88%); } .ah-ri .rm-name .tier { display: none; } .ra-title { font-size: clamp(20px, 7vw, 34px); } }
 
 </style>
 <script>(function(){try{var q=new URLSearchParams(location.search),t=q.get("theme"),l=q.get("lang");if(t==="light"||t==="dark")localStorage.setItem("db34.theme",t);if(l==="zh"||l==="en")localStorage.setItem("db34.lang",l);t=localStorage.getItem("db34.theme");l=localStorage.getItem("db34.lang");}catch(e){}var d=document.documentElement;d.setAttribute("data-theme",t==="light"?"light":"dark");d.setAttribute("lang",l==="zh"?"zh-CN":"en");})();</script>
@@ -1114,10 +1148,6 @@ html[data-theme="light"] .h-r { color: #0b6b3c; } html[data-theme="light"] .h-u 
 <dialog class="modal" id="infoDlg">
   <div class="modal-h"><h2 id="infoTitle">Rewards guide</h2><button class="btn icon ghost" type="button" id="infoX" aria-label="Close">✕</button></div>
   <div class="modal-b" id="infoBody"></div>
-</dialog>
-<dialog class="modal room-dlg" id="roomDlg">
-  <div class="modal-h"><h2>⚔ Live room</h2><button class="btn icon ghost" type="button" id="roomX" aria-label="Close">✕</button></div>
-  <div class="modal-b" id="roomBody"></div>
 </dialog>
 <dialog class="modal" id="crateDlg">
   <div class="modal-h"><h2>Part Crate <span class="dim small">(simulated preview)</span></h2><button class="btn icon ghost" type="button" id="crateX" aria-label="Close">✕</button></div>
@@ -1459,7 +1489,7 @@ html[data-theme="light"] .h-r { color: #0b6b3c; } html[data-theme="light"] .h-u 
     "Championship floor": "冠军赛场", "Aurora summit, -{0}°": "极光山巅，-{0}°", "Molten forge floor": "熔炉车间", "Airship dock above the clouds": "云端飞艇码头", "Sunken bot garden": "沉没的机器人花园",
     "Challenge a friend": "挑战好友", "⚔ Challenge a friend": "⚔ 挑战好友", "Challenge a friend: share your {0} locked moves as a link": "挑战好友：把你锁定的 {0} 个招式分享为链接",
     "Your {0} locked moves are saved in this link.": "你锁定的 {0} 个招式已保存在这个链接中。", "Share it on X or copy the link.": "分享到 X 或复制链接。", "Your friend opens it and fights your bot": "好友打开链接后与你的机器人对战",
-    "with their own bot. Their result screen gives them a line to share back with you.": "（使用他们自己的机器人）。结算界面会给他们一段可以回复给你的文字。", "Share on X": "分享到 X", "Copy link": "复制链接", "Details": "详情", "Less": "收起",
+    "with their own bot. Their result screen gives them a line to share back with you.": "（使用他们自己的机器人）。结算界面会给他们一段可以回复给你的文字。", "Share on X": "分享到 X", "Download image": "下载图片", "Image saved: dotbots-room.png": "图片已保存：dotbots-room.png", "Open the image:": "打开图片：", "Copy link": "复制链接", "Details": "详情", "Less": "收起",
     "You opened this page as a local file, so the link points to this computer. Share it from the hosted page to reach friends.": "你是以本地文件打开本页的，所以链接指向这台电脑。请从线上页面分享给好友。",
     "commit keccak{0}(moves, salt, {1}) =": "commit keccak{0}(招式, salt, {1}) =",
     "The commit proves your moves were not changed after you shared the link. The moves sit inside the link, so a technical player could read them; the hidden version is the on-chain mode (commit first, reveal after both lock).": "commit 证明你的招式在分享链接后没有被改动。招式包含在链接里，懂技术的玩家可以读取；隐藏版本是链上模式（先提交 commit，双方锁定后再揭示）。",
@@ -1651,6 +1681,21 @@ html[data-theme="light"] .h-r { color: #0b6b3c; } html[data-theme="light"] .h-u 
     "Live rooms are not enabled on this server yet.": "这个服务器还没有开启实时房间。", "No live fight for you in this room.": "这个房间里没有你的实时对战。", "Couldn't connect to the live room. Check that you're signed in.": "无法连接实时房间，请确认已登录。",
     "closes in {0}h {1}m": "剩余 {0} 小时 {1} 分", "closes in {0}m": "剩余 {0} 分", "{0}h {1}m": "{0} 小时 {1} 分", "{0}m": "{0} 分", "{0} fights": "{0} 场对战", "{0} fight": "{0} 场对战",
     "· you can join": "· 可加入", "Room arena": "房间竞技场", "⚔ Rooms": "⚔ 房间", "Create room": "创建房间", "⚔ Create room": "⚔ 创建房间",
+    /* ---------------- arena hero (2026-11-09 10:54) */
+    "⚔ Arena · live rooms": "⚔ 竞技场 · 实时房间", "testnet: anyone can open": "测试网：任何人都能开房", "online · live rooms": "在线 · 实时房间", "offline · demo rooms": "离线 · 演示房间",
+    "Offline · demo rooms below": "离线 · 下方是演示房间", "○ You're away from your room · enter it to wait": "○ 你不在自己的房间 · 进入房间等待", "No room yet · create one and wait for a challenger": "还没有房间 · 创建一个并等待挑战者",
+    "Sign in to host a live room": "登录后可以开实时房间", "Enter my room": "进入我的房间", "Sign in to create a room": "登录后创建房间", "You": "你", "Create your dotBot": "创建你的 dotBot", "Your challenger": "你的挑战者",
+    "Host a live room": "开一个实时房间", "Rooms": "房间", "{0} per bot per day": "每个机器人每天 {0} 个", "Hosts waiting": "等待中的房主", "Demo rooms": "演示房间",
+    "and stay on this page: your room is live while you are here (● waiting). When a challenger enters, a {0} s countdown starts and you both pick {1} moves at the same time ({2} s). Share the link on X to bring challengers.": "并留在这个页面：你在这里时房间就是实时的（● 等待中）。挑战者进入后 {0} 秒倒计时，然后双方同时选 {1} 个招式（{2} 秒）。把链接分享到 X 吸引挑战者。",
+    "Offline: a room is a challenge link with {0} locked moves. Press": "离线时，房间是一个锁定了 {0} 个招式的挑战链接。点", ", lock {0} moves, then press": "，锁定 {0} 个招式，然后在对战画面点", "on the battle screen. Live rooms need the dotBots server.": "。实时房间需要 dotBots 服务器。",
+    "✓ Fought": "✓ 已对战", "● Open · 1 seat": "● 开放 · 1 个座位", "● waiting": "● 等待中", "🔒 Lv too far": "🔒 等级差太大", "● Waiting for a challenger": "● 等待挑战者", "⚔ fighting": "⚔ 对战中",
+    "Your bot Lv {0}": "你的机器人 Lv {0}", "you can join Lv {0}–{1}": "可加入 Lv {0}–{1}", "your bot Lv {0} can join Lv {1}–{2}": "你的机器人 Lv {0} 可加入 Lv {1}–{2}",
+    "Demo rooms are hosted by AI bots for this test. On mainnet this list shows real players' rooms, and opening a room is for dotBots holders.": "演示房间由 AI 机器人开设，仅用于测试。主网上这里显示真实玩家的房间，开房仅限 dotBots 持有者。",
+    "Your live room": "你的实时房间", "Your room": "你的房间", "Room": "房间", "← Back": "← 返回", "Live now": "正在等待", "{0} hosts waiting": "{0} 位房主在等待", "{0} host waiting": "{0} 位房主在等待",
+    "No host is waiting right now. Create a room and share it on X.": "现在没有房主在等待。创建一个房间并分享到 X。", "{0} rooms with the host away": "{0} 个房间房主不在", "{0} room with the host away": "{0} 个房间房主不在", "My room": "我的房间",
+    "Rooms offline": "离线房间", "Offline, a room is a challenge link with your {0} locked moves.": "离线时，房间是锁定了你 {0} 个招式的挑战链接。", "Lock {0} moves.": "锁定 {0} 个招式。",
+    "on the battle screen and share the link.": "（在对战画面）并分享链接。", "Live rooms (you wait in the room, both pick at the same time) need the dotBots server.": "实时房间（你在房间等待，双方同时选招）需要 dotBots 服务器。",
+    "Battlefield": "战场", "Can join": "可加入", "Holders: open a room and share the link on X": "持有者：开房并把链接分享到 X", "Press": "点",
   });
 })();
 
@@ -4154,9 +4199,11 @@ html[data-theme="light"] .h-r { color: #0b6b3c; } html[data-theme="light"] .h-u 
     const cr = $("#chResBtn"); if (cr) cr.textContent = "⚔ Create room";
     const arenaCard = $("#arenas") && $("#arenas").closest(".card"), stat = $("#statCard");
     [arenaCard, $("#energyLine"), $("#findBtn")].reverse().forEach(el => { if (el && stat) stat.after(el); });
-    const rc = document.createElement("div"); rc.className = "card rooms-card"; rc.id = "roomsCard"; rc.innerHTML = `<div class="card-h"><h2>⚔ Rooms</h2><span class="chip ok">testnet: anyone can open</span></div><div id="roomsBody"></div>`;
-    const fb = $("#findBtn"); if (fb) fb.after(rc);
-    const lb = document.createElement("div"); lb.className = "card lb-card hidden"; lb.id = "lbCard"; lb.innerHTML = `<div class="card-h"><h2>🏆 Leaderboard</h2><span class="chip ok">online</span></div><div id="lbBody"></div>`; rc.after(lb);
+    // ARENA hero (user 2026-11-09 10:54): the live room arena is the highlight of the lobby, inline near the top, full width (replaces the old ⚔ Rooms card + room modal)
+    const rc = document.createElement("div"); rc.className = "card arena-hero"; rc.id = "arenaHero"; rc.innerHTML = `<div class="card-h"><h2>⚔ Arena · live rooms</h2><span class="chip ok" id="arenaChip">testnet: anyone can open</span></div><div id="arenaBody"></div>`;
+    const lgrid = $("#lobby .lobby-grid"); if (lgrid) lgrid.before(rc);
+    const fb = $("#findBtn");
+    const lb = document.createElement("div"); lb.className = "card lb-card hidden"; lb.id = "lbCard"; lb.innerHTML = `<div class="card-h"><h2>🏆 Leaderboard</h2><span class="chip ok">online</span></div><div id="lbBody"></div>`; if (fb) fb.after(lb);
     const pg = $(".prog-grid"); if (pg && !pg.querySelector(".card:not(#progCard):not(#revCard)")) pg.classList.add("hidden");
   }
   /* ================================================================ v3.4 helpers: level / XP / charges */
@@ -5111,28 +5158,80 @@ html[data-theme="light"] .h-r { color: #0b6b3c; } html[data-theme="light"] .h-u 
     }
     return out;
   }
-  function renderRooms() {
-    const box = $("#roomsBody"); if (!box || !S.meta) return;
-    if (onUp()) { const ch = $("#roomsCard .chip"); if (ch) ch.textContent = "online · real rooms"; return renderRoomsOnline(box); }
-    const b = S.me, my = b ? S.meta.botLevel(b).level : 1, lo = Math.max(1, my - ROOM_BAND), hi = Math.min(30, my + ROOM_BAND), J = joinedRooms().ids, rt = b ? roomsToday(b) : { left: 0 };
-    const left = ms => { const h = Math.floor(ms / 36e5), m = Math.floor(ms % 36e5 / 6e4); return h ? `${h}h ${m}m` : `${m}m`; };
-    const tile = (r, kind) => {
-      const inBand = Math.abs(r.lv - my) <= ROOM_BAND, done = J.includes(r.id) || (kind === "link" && S.challenge && S.challenge.used), mine = kind === "mine";
-      const st = mine ? `<span class="rm-st wait">● Waiting for a challenger</span>` : done ? `<span class="rm-st done">✓ Fought</span>` : !inBand ? `<span class="rm-st lock">🔒 Lv too far</span>` : `<span class="rm-st open">● Open · 1 seat</span>`;
-      const act = mine ? `<a class="btn tiny x" href="${esc(r.x || "#")}" target="_blank" rel="noopener" data-rm-x>Share on X</a><button class="btn tiny" data-copy="${esc(r.url)}" data-copy-label="Room link">Copy link</button>`
-        : `<button class="btn tiny primary rm-go" data-rm-join="${esc(r.id)}" ${!b || done || !inBand ? "disabled" : ""}>⚔ Fight</button>`;
-      const img = r.bot ? `<img src="${thumbUrl(r.bot)}" alt="" style="background:${esc(DBArt.parseBot(r.bot.svg).bg || "#222")}">` : `<div class="rm-ph">⚔</div>`;
-      return `<div class="rm-tile ${mine ? "mine" : ""} ${!mine && (!inBand || done) ? "off" : ""}" data-rm="${esc(r.id)}">${img}<div class="rm-info"><div class="rm-name">${esc(r.name)}${r.bot ? ` <span class="tier ${esc(r.bot.traits.Tier)}">${esc(r.bot.traits.Tier)}</span>` : ""}</div><div class="rm-meta"><b>Lv ${r.lv}</b>${r.arena ? ` · ${esc(r.arena.name)}` : ""} · closes in ${left(r.exp - Date.now())}</div>${st}</div><div class="rm-act">${act}</div></div>`;
-    };
-    const ch = S.challenge && S.challenge.ok && S.challenge.room && !S.challenge.demo ? S.challenge : null, rooms = [];
-    if (ch) rooms.push(tile({ id: "link", name: ch.from, bot: ch.bot, lv: ch.room.lv, exp: ch.room.exp }, "link"));
-    for (const r of myRooms()) rooms.push(tile(Object.assign({}, r, { bot: S.me && S.me.key === r.key ? S.me : null }), "mine"));
-    S.demoRooms = demoRooms(my); for (const r of S.demoRooms) rooms.push(tile(r, "demo"));
-    box.innerHTML = `<div class="rm-top"><span class="small">Your bot <b>Lv ${my}</b> · you can join <b>Lv ${lo}–${hi}</b></span>${canOpenRoom(b) ? `<span class="small dim">Lock 5 moves, then <b>⚔ Create room</b> · ${rt.left}/${ROOMS_PER_DAY} left today</span>` : ""}</div>
-      <div class="rm-grid">${rooms.join("")}</div>
+  /* ---------------------------------------------------------------- ARENA HERO (user 2026-11-09 10:54)
+     The room arena is not a modal any more: it sits inline at the top of the lobby (#arenaHero), full width.
+       (a) hosting  -> my room's arena with live presence; the countdown / pick / result start from here (live match screen as before)
+       (b) idle     -> MY bot on the left, the '?' silhouette on the right, big "+ Create room"
+       (v) viewing  -> another host's room (room link, Fight or View from the strip): ⚔ Fight live + ← Back
+     Under it: a strip of rooms where a host is waiting (● waiting, ⚔ Fight); rooms with the host away are folded away.
+     Offline / no server: (b) with the old AI demo rooms in the strip (client-side, as before). Server API and caps unchanged. */
+  const ARENA_THUMB = {};
+  function arenaThumbUrl(id) { if (!id) return ""; if (ARENA_THUMB[id] == null) { try { ARENA_THUMB[id] = DBArenas.thumb(id, 192, 108, 1.6).toDataURL("image/png"); } catch (_) { ARENA_THUMB[id] = ""; } } return ARENA_THUMB[id]; }
+  const botBg = b => esc(DBArt.parseBot(b.svg).bg || "#222");
+  function stripTile(o) {
+    const bg = arenaThumbUrl(o.arena);
+    return `<div class="ah-room ${o.off ? "off" : ""} ${o.mine ? "mine" : ""}" data-rm="${esc(o.id)}"><div class="ah-thumb"${bg ? ` style="background-image:url(${bg})"` : ""}>${o.bot ? `<img src="${thumbUrl(o.bot)}" alt="" style="background:${botBg(o.bot)}">` : `<span class="rm-ph">⚔</span>`}</div>
+      <div class="ah-ri"><div class="rm-name">${esc(o.name)}${o.tier ? ` <span class="tier ${esc(o.tier)}">${esc(o.tier)}</span>` : ""}</div><div class="rm-meta"><b>Lv ${o.lv}</b>${o.arenaName ? ` · ${esc(o.arenaName)}` : ""}</div><span class="rm-st ${o.st[0]}">${o.st[1]}</span></div><div class="ah-ra">${o.act}</div></div>`;
+  }
+  function heroArenaId() { if (S.arenaPick && S.arenaPick !== "random") return S.arenaPick; const L = DBArenas.LIST, d = Math.floor(Date.now() / 864e5); return L[d % L.length].id; }
+  // (b) MY bot vs the '?' seat + Create room (online and offline)
+  function createViewHtml(up) {
+    const b = S.me, signed = up && !!(b && b.online), lv = b ? S.meta.botLevel(b).level : 1, lo = Math.max(1, lv - ROOM_BAND), hi = Math.min(30, lv + ROOM_BAND);
+    const mineOpen = up ? (ON.myRooms || []).filter(r => r.open) : [], waiting = up ? (ON.rooms || []).filter(r => r.hostOnline && !(ON.myRooms || []).some(m => m.id === r.id)).length : (S.demoRooms || []).length;
+    const pres = !up ? ["off", "Offline · demo rooms below"] : signed ? ["off", mineOpen.length ? "○ You're away from your room · enter it to wait" : "No room yet · create one and wait for a challenger"] : ["off", "Sign in to host a live room"];
+    let act;
+    if (signed) act = `<button class="btn primary xl" id="roomCreate">+ Create room</button>` + mineOpen.slice(0, 2).map(r => `<button class="btn" data-rm-open="${esc(r.id)}">Enter my room · Lv ${r.lv} · closes in ${fmtHM(r.expiresAt - Date.now())}</button>`).join("");
+    else if (up) act = `<button class="btn primary xl" id="roomSignIn">Sign in to create a room</button>`;
+    else act = `<button class="btn primary xl" id="roomCreate">+ Create room</button>`;
+    const arena = heroArenaId(), arenaTxt = S.arenaPick && S.arenaPick !== "random" ? roomArenaName(arena) : "Random";
+    return { arena, hostBot: b || SIL_BOT(), html: `<div class="ah-main state-idle" data-state="idle">
+      <div class="ah-left"><div class="ra-stage"><canvas id="raCanvas" width="960" height="504" aria-label="Room arena"></canvas>
+        <div class="ra-title">CHALLENGE</div>
+        <div class="ra-tag l">${b ? `<b>${esc(botName(b))}</b><span>Lv ${lv} · ${esc(b.traits.Tier || "")}</span>` : `<b>You</b><span>Create your dotBot</span>`}</div>
+        <div class="ra-tag r"><b>?</b><span>Your challenger</span></div></div>
+        <div class="ra-pres ${pres[0]}" id="raPres">${pres[1]}</div></div>
+      <div class="ah-right"><div class="ah-head"><b>Host a live room</b></div>
+        <div class="ra-info small"><div><span class="dim">Battlefield</span><b>${esc(arenaTxt)}</b></div><div><span class="dim">Rooms</span><b>${ROOMS_PER_DAY} per bot per day</b></div><div><span class="dim">Can join</span><b>Lv ${lo}–${hi}</b></div><div><span class="dim">${up ? "Hosts waiting" : "Demo rooms"}</span><b>${waiting}</b></div></div>
+        <div class="ch-act big ra-act">${act}</div>
+        <p class="dim small ra-note">${up ? `Press <b>+ Create room</b> and stay on this page: your room is live while you are here (● waiting). When a challenger enters, a 5 s countdown starts and you both pick 5 moves at the same time (${S.V2.pickSec} s). Share the link on X to bring challengers.` : `Offline: a room is a challenge link with 5 locked moves. Press <b>Find opponent</b>, lock 5 moves, then press <b>⚔ Create room</b> on the battle screen. Live rooms need the dotBots server.`}</p></div></div>` };
+  }
+  function offlineStrip() {
+    const b = S.me, my = b ? S.meta.botLevel(b).level : 1, J = joinedRooms().ids, tiles = [];
+    const ch = S.challenge && S.challenge.ok && S.challenge.room && !S.challenge.demo ? S.challenge : null;
+    const fight = (id, dis) => `<button class="btn tiny primary rm-go" data-rm-join="${esc(id)}" ${dis ? "disabled" : ""}>⚔ Fight</button>`;
+    if (ch) { const done = !!ch.used, inBand = Math.abs(ch.room.lv - my) <= ROOM_BAND; tiles.push(stripTile({ id: "link", bot: ch.bot, name: ch.from, tier: ch.bot && ch.bot.traits.Tier, lv: ch.room.lv, st: done ? ["done", "✓ Fought"] : !inBand ? ["lock", "🔒 Lv too far"] : ["open", "● Open · 1 seat"], act: fight("link", !b || done || !inBand), off: done || !inBand })); }
+    for (const r of myRooms()) { const bot = S.me && S.me.key === r.key ? S.me : null; tiles.push(stripTile({ id: r.id, bot, name: r.name, tier: bot && bot.traits.Tier, lv: r.lv, mine: true, st: ["wait", "● Waiting for a challenger"], act: `<a class="btn tiny x" href="${esc(r.x || "#")}" target="_blank" rel="noopener" data-rm-x>Share on X</a><button class="btn tiny" data-copy="${esc(r.url)}" data-copy-label="Room link">Copy link</button>` })); }
+    S.demoRooms = demoRooms(my);
+    for (const r of S.demoRooms) { const inBand = Math.abs(r.lv - my) <= ROOM_BAND, done = J.includes(r.id); tiles.push(stripTile({ id: r.id, bot: r.bot, name: r.name, tier: r.bot.traits.Tier, lv: r.lv, arena: r.arena && r.arena.id, arenaName: r.arena && r.arena.name, st: done ? ["done", "✓ Fought"] : !inBand ? ["lock", "🔒 Lv too far"] : ["open", "● waiting"], act: fight(r.id, !b || done || !inBand), off: done || !inBand })); }
+    return `<div class="ah-strip-h"><b>Demo rooms</b><span class="small dim">Your bot Lv ${my} · you can join Lv ${Math.max(1, my - ROOM_BAND)}–${Math.min(30, my + ROOM_BAND)}</span></div>
+      <div class="ah-strip">${tiles.join("")}</div>
       <p class="dim small rm-note">Demo rooms are hosted by AI bots for this test. On mainnet this list shows real players' rooms, and opening a room is for dotBots holders.</p>`;
+  }
+  function renderRooms() {
+    const box = $("#arenaBody"); if (!box || !S.meta) return;
+    const up = onUp(), chip = $("#arenaChip"); if (chip) chip.textContent = up ? "online · live rooms" : "offline · demo rooms";
+    if (up && !LV.open && hosting()) LV.open = LV.roomId; // (a) hosting: my room's arena
+    let main, strip;
+    if (up && LV.open) { main = roomViewHtml(LV.open); strip = onlineStrip(); }
+    else { strip = up ? onlineStrip() : offlineStrip(); main = createViewHtml(up); }
+    box.innerHTML = main.html + strip;
+    const cv = $("#raCanvas", box); if (cv && main.arena) drawRoomArena(cv, { arena: main.arena, hostBot: main.hostBot, recent: main.recent, showLast: !!main.recent });
+    bindArena(box, main);
+  }
+  function bindArena(box, main) {
     bindCopy(box);
     $$("[data-rm-join]", box).forEach(el => el.onclick = () => joinRoom(el.dataset.rmJoin));
+    $$("[data-rm-open]", box).forEach(el => el.onclick = () => openRoom(el.dataset.rmOpen));
+    const rf = $("#roomsRefresh", box); if (rf) rf.onclick = () => refreshLists();
+    const cr = $("#roomCreate", box); if (cr) cr.onclick = () => onUp() ? onlineRoom() : openInfo("Rooms offline", `<p>Offline, a room is a challenge link with your 5 locked moves.</p><ol><li>Press <b>Find opponent</b>.</li><li>Lock 5 moves.</li><li>Press <b>⚔ Create room</b> on the battle screen and share the link.</li></ol><p class="dim small">Live rooms (you wait in the room, both pick at the same time) need the dotBots server.</p>`);
+    const si = $("#roomSignIn", box); if (si) si.onclick = () => { const m = $("#mineBox"); if (m) m.scrollIntoView({ block: "center", behavior: REDUCED ? "auto" : "smooth" }); toast("Sign in and create your dotBot first"); };
+    const bk = $("#raBack", box); if (bk) bk.onclick = () => closeRoomView();
+    const sx = $("#raShareX", box); if (sx) sx.onclick = e => { const d = main.roomId && LV.detail[main.roomId]; if (d && d.lv) sx.href = roomShareX(d); return openIntent(e, sx.href, "#raFallback", "#raShareX"); }; // href re-built at click: language may have changed
+    const dl = $("#raDl", box); if (dl) dl.onclick = e => { e.preventDefault(); roomDownload(dl.dataset.dl, dl); };
+    const f = $("#raFight", box); if (f) f.onclick = () => liveFight();
+    const en = $("#raEnter", box); if (en && main.roomId) en.onclick = async () => { try { await liveConnect(main.roomId); } catch (e) { toast(errTxt(e)); } renderRooms(); };
+    const lv = $("#raLeave", box); if (lv) lv.onclick = () => { liveLeave("leave"); LV.open = null; renderRooms(); };
+    if (window.I18N && I18N.lang === "zh" && I18N.apply) try { I18N.apply(box); } catch (_) {}
   }
   function joinRoom(id) {
     if (onUp()) return onlineJoin(id);
@@ -5452,6 +5551,7 @@ html[data-theme="light"] .h-r { color: #0b6b3c; } html[data-theme="light"] .h-u 
     const jobs = [api("GET", "/rooms" + (lv ? "?lv=" + lv : ""), undefined, { auth: false }).then(j => { ON.rooms = j.rooms; }).catch(() => {}),
       api("GET", "/leaderboard?season=current&limit=20", undefined, { auth: false }).then(j => { ON.lb = j; }).catch(() => {})];
     if (ON.token) jobs.push(api("GET", "/rooms/mine").then(j => { ON.myRooms = j.rooms; }).catch(() => {}));
+    const openId = LV.open; if (openId) jobs.push(api("GET", "/rooms/" + openId, undefined, { auth: false }).then(j => { LV.detail[openId] = j; }).catch(() => {}));
     await Promise.all(jobs); renderRooms(); renderLeaderboard();
     if (S.roomLinkId && !S.roomLinkShown && ON.token && S.me && S.me.online) { S.roomLinkShown = true; openRoom(S.roomLinkId); } // room link: open it once signed in
   }
@@ -5478,7 +5578,7 @@ html[data-theme="light"] .h-r { color: #0b6b3c; } html[data-theme="light"] .h-u 
   function liveLeave(why) {
     LV.closing = true; const w = LV.ws; LV.ws = null; LV.roomId = null; LV.role = null; LV.hello = null; LV.presence = null; LV.wantFight = false; clearInterval(LV.beat);
     try { if (w) w.close(1000, why || "leave"); } catch (_) {}
-    renderRooms(); renderRoomDlg();
+    renderRooms();
   }
   function liveConnect(id) {
     if (LV.ws && LV.roomId === id && LV.hello) return Promise.resolve(LV.hello);
@@ -5495,13 +5595,13 @@ html[data-theme="light"] .h-r { color: #0b6b3c; } html[data-theme="light"] .h-u 
         const wasHost = LV.role === "host", inFight = isLive();
         LV.ws = null; LV.hello = null; LV.presence = null; clearInterval(LV.beat);
         if (!LV.closing) toast(inFight ? "Lost the live room connection: the server AUTO-fills your moves if you don't lock in time." : wasHost ? "You left your room (connection closed). Enter it again to wait for challengers." : "Live room connection closed.");
-        renderRooms(); renderRoomDlg();
+        renderRooms();
       };
       clearInterval(LV.beat); LV.beat = setInterval(() => liveSend({ t: "ping" }), 30000);
     });
   }
   function liveMsg(m) {
-    if (m.t === "hello" || m.t === "presence") { LV.presence = m; renderRoomDlg(); renderRooms(); return; }
+    if (m.t === "hello" || m.t === "presence") { LV.presence = m; renderRooms(); return; }
     if (m.t === "start") return liveStartMatch(m);
     if (m.t === "locked") { if (m.who === "opp") { S.oppLocked = true; const w = $("#watchTxt"); if (w && S.phase === "lock") w.textContent = "Both locked. The referee is resolving…"; else if (S.phase === "pick") toast("Your opponent locked in"); } return; }
     if (m.t === "result") { if (LV.resWait) { const r = LV.resWait; LV.resWait = null; r(m); } else if (S.phase === "pick" && isLive()) { LV.early = m; S.plan = m.plan.slice(); S.timedOut = true; lockIn(); } return; }
@@ -5514,7 +5614,6 @@ html[data-theme="light"] .h-r { color: #0b6b3c; } html[data-theme="light"] .h-u 
   function liveStartMatch(m) {
     if (!S.me || !S.me.online) return;
     if (S.phase !== "lobby" && S.phase !== "result" && S.phase !== "versus") { toast("A live room fight started: your current screen was closed."); }
-    const dlg = $("#roomDlg"); if (dlg && dlg.open) dlg.close();
     clearInterval(S.timer); clearTimeout(vsTimer); stopConfetti();
     const off = Date.now() - m.serverNow;
     S.livePickAt = m.pickAt + off; S.liveDeadline = m.deadline + off; LV.wantFight = false; S.oppLocked = !!(m.locked && m.locked.opp); S.liveDraft = null; LV.early = null;
@@ -5571,82 +5670,95 @@ html[data-theme="light"] .h-r { color: #0b6b3c; } html[data-theme="light"] .h-u 
   }
   async function openRoom(id, opt) {
     opt = opt || {};
-    LV.open = id; LV.detail[id] = LV.detail[id] || null;
-    const dlg = $("#roomDlg"); renderRoomDlg(); if (!dlg.open) dlg.showModal();
+    if (S.phase !== "lobby" && S.phase !== "versus" && S.phase !== "pick" && S.phase !== "lock") toLobby();
+    LV.open = id; if (LV.detail[id] === undefined) LV.detail[id] = null;
+    renderRooms(); setTimeout(() => { const h = $("#arenaHero"); if (h && S.phase === "lobby") h.scrollIntoView({ block: "start", behavior: REDUCED ? "auto" : "smooth" }); }, 60);
     try { LV.detail[id] = await api("GET", "/rooms/" + id, undefined, { auth: false }); } catch (e) { LV.detail[id] = { error: e }; }
-    renderRoomDlg();
+    renderRooms();
     const d = LV.detail[id];
     if (d && !d.error && d.open && ON.token && S.me && S.me.online) {
       const mineHost = (ON.myRooms || []).some(r => r.id === id);
       if (mineHost || opt.fight || !hosting()) { try { await liveConnect(id); } catch (_) {} }
       if (opt.fight && LV.roomId === id && LV.role === "chal") liveFight();
     }
-    renderRoomDlg();
+    renderRooms();
   }
   function liveFight() {
     if (!LV.ws || LV.role !== "chal") { toast("Sign in and create your dotBot first"); return; }
     const p = LV.presence || {}; if (!p.hostOnline) { toast("The host isn't in the room right now. Try again when it shows ● Host waiting."); return; }
     if (p.busy) { toast("A fight is running in this room. Try again in a minute."); return; }
-    LV.wantFight = true; liveSend({ t: "fight" }); renderRoomDlg();
+    LV.wantFight = true; liveSend({ t: "fight" }); renderRooms();
   }
-  function roomShareX(d) { return "https://x.com/intent/post?text=" + encodeURIComponent(roomShareText(d.lv, roomLink(d.id))); }
-  function renderRoomDlg() {
-    const dlg = $("#roomDlg"), body = $("#roomBody"); if (!dlg || !body || !LV.open) return;
-    const id = LV.open, d = LV.detail[id];
-    if (!d) { body.innerHTML = `<div class="empty small">Loading room…</div>`; return; }
-    if (d.error) { body.innerHTML = `<div class="empty small">${esc(errTxt(d.error))}</div>`; return; }
+  /* X share card (user 2026-11-09): online, Share on X posts the server's /r/<id> page (OG card image → redirects to the game with ?room=);
+     Copy link keeps the plain game link. ?lang=zh when the UI is 中文. Offline rooms are challenge links (unchanged). */
+  const uiZh = () => !!(window.I18N && I18N.lang === "zh");
+  function roomCardLink(id) { return online() ? ON.base + "/r/" + encodeURIComponent(id) + (uiZh() ? "?lang=zh" : "") : roomLink(id); }
+  function roomCardPng(id) { return ON.base + "/r/" + encodeURIComponent(id) + ".png" + (uiZh() ? "?lang=zh" : ""); }
+  function roomShareX(d) { return "https://x.com/intent/post?text=" + encodeURIComponent(roomShareText(d.lv, roomCardLink(d.id))); }
+  async function roomDownload(id, btn) {
+    const url = roomCardPng(id); if (btn) btn.disabled = true;
+    try {
+      const r = await fetch(url, { credentials: "omit", cache: "no-store" });
+      if (!r.ok || !/^image\/png/.test(r.headers.get("content-type") || "")) throw new Error("bad image");
+      const blob = await r.blob(), href = URL.createObjectURL(blob), a = document.createElement("a");
+      a.href = href; a.download = "dotbots-room.png"; a.rel = "noopener"; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(href), 10000); toast("Image saved: dotbots-room.png");
+    } catch (_) {
+      const w = window.open(url, "_blank", "noopener");
+      if (!w) { const fb = $("#raFallback"); if (fb) { fb.innerHTML = `Open the image: <a href="${esc(url)}" target="_blank" rel="noopener" class="mono">${esc(url.slice(0, 64))}…</a>`; fb.classList.remove("hidden"); } }
+    } finally { if (btn) btn.disabled = false; }
+  }
+  const renderRoomDlg = () => renderRooms(); // the room view lives in the arena hero now
+  // (a) my room / (v) someone's room: the arena with presence, stats and actions
+  function roomViewHtml(id) {
+    const d = LV.detail[id], mineHost = (ON.myRooms || []).some(r => r.id === id) || (LV.roomId === id && LV.role === "host");
+    const back = mineHost && hosting() && LV.roomId === id ? "" : `<button class="btn tiny ghost" id="raBack">← Back</button>`;
+    const wrapE = inner => ({ html: `<div class="ah-main state-load" data-state="load"><div class="ah-right">${back}<div class="empty small">${inner}</div></div></div>` });
+    if (d === undefined) { LV.detail[id] = null; api("GET", "/rooms/" + id, undefined, { auth: false }).then(j => { LV.detail[id] = j; renderRooms(); }).catch(e => { LV.detail[id] = { error: e }; renderRooms(); }); }
+    if (!d) return wrapE("Loading room…");
+    if (d.error) return wrapE(esc(errTxt(d.error)));
     const connected = LV.roomId === id && LV.hello, p = connected && LV.presence ? LV.presence : { hostOnline: d.hostOnline, busy: d.busy };
-    const amHost = connected ? LV.role === "host" : (ON.myRooms || []).some(r => r.id === id);
+    const amHost = connected ? LV.role === "host" : mineHost;
     const hostBot = amHost && S.me && S.me.online ? S.me : oppFromServer(d.host, "host" + id.slice(0, 8)), last = d.recent && d.recent[0];
     const my = S.me && S.me.online ? S.meta.botLevel(S.me).level : null, inBand = my != null && Math.abs(my - d.lv) <= ROOM_BAND;
     const st = !d.open ? ["off", "Room closed"] : p.busy ? ["busy", "⚔ Fight in progress"] : p.hostOnline ? ["on", amHost ? "● You're in the room · waiting for a challenger" : "● Host waiting"] : ["off", amHost ? "○ You're away · enter to wait" : "○ Host away"];
     const lastTxt = last ? `${esc(last.name)} <span class="tier ${esc(last.traits.Tier)}">${esc(last.traits.Tier)}</span> · Lv ${last.level} · <b class="${last.outcome === "win" ? "up" : last.outcome === "loss" ? "down" : ""}">${last.outcome === "win" ? "challenger won" : last.outcome === "loss" ? "host won" : "draw"}</b> ${last.hp ? `· HP ${last.hp[0]} vs ${last.hp[1]}` : ""}` : "";
     let act = "";
-    if (d.open && amHost) act = connected ? `<button class="btn ghost" id="raLeave">Leave room</button>` : `<button class="btn primary" id="raEnter">Enter room &amp; wait</button>`;
+    if (d.open && amHost) act = connected ? `<button class="btn ghost" id="raLeave">Leave room</button>` : `<button class="btn primary xl" id="raEnter">Enter room &amp; wait</button>`;
     else if (d.open) act = !ON.token || !(S.me && S.me.online) ? `<button class="btn primary" disabled>Sign in to fight</button>` : !inBand ? `<button class="btn primary" disabled>🔒 Lv ${d.joinLv[0]}–${d.joinLv[1]} only</button>` : `<button class="btn primary xl" id="raFight" ${!p.hostOnline || p.busy || LV.wantFight ? "disabled" : ""}>${LV.wantFight ? "Starting…" : "⚔ Fight live"}</button>`;
-    body.innerHTML = `<div class="ra-stage"><canvas id="raCanvas" width="960" height="504" aria-label="Room arena"></canvas>
+    const head = amHost ? (connected ? "Your live room" : "Your room") : `Room · ${esc(d.host.name)}`;
+    return { roomId: id, arena: d.arena, hostBot, recent: d.recent, html: `<div class="ah-main state-${amHost ? (connected ? "host" : "mine") : "view"}" data-state="${amHost ? (connected ? "host" : "mine") : "view"}" data-room="${esc(id)}">
+      <div class="ah-left"><div class="ra-stage"><canvas id="raCanvas" width="960" height="504" aria-label="Room arena"></canvas>
         <div class="ra-title">CHALLENGE</div>
         <div class="ra-tag l"><b>${esc(d.host.name)}</b><span>Lv ${d.lv} · ${esc(d.host.traits.Tier)}</span></div>
-        <div class="ra-tag r">${last ? `<b>${esc(last.name)}</b><span>Lv ${last.level} · ${last.outcome === "win" ? "WIN" : last.outcome === "loss" ? "LOSE" : "DRAW"}</span>` : `<b>?</b><span>Your bot?</span>`}</div>
+        <div class="ra-tag r">${last ? `<b>${esc(last.name)}</b><span>Lv ${last.level} · ${last.outcome === "win" ? "WIN" : last.outcome === "loss" ? "LOSE" : "DRAW"}</span>` : `<b>?</b><span>Your bot?</span>`}</div></div>
         <div class="ra-pres ${st[0]}" id="raPres">${st[1]}</div></div>
-      <div class="ra-info small"><div><span class="dim">Battlefield</span><b>${esc(roomArenaName(d.arena))}</b></div><div><span class="dim">Closes in</span><b>${d.open ? fmtHM(d.expiresAt - Date.now()) : "closed"}</b></div><div><span class="dim">Fights</span><b>${d.fights}</b>${d.fights ? ` <span class="dim">(host won ${d.hostWins})</span>` : ""}</div><div><span class="dim">Can join</span><b>Lv ${d.joinLv[0]}–${d.joinLv[1]}</b></div></div>
-      ${last ? `<div class="ra-last small"><span class="dim">Last challenger:</span> ${lastTxt}</div>` : ""}
-      <div class="ch-act big ra-act">${act}<a class="btn x" id="raShareX" href="${esc(roomShareX(d))}" target="_blank" rel="noopener">Share on X</a><button type="button" class="btn" data-copy="${esc(roomLink(id))}" data-copy-label="Room link" data-copy-box="#raFallback">Copy link</button></div>
-      <div class="share-fallback hidden" id="raFallback"></div>
-      <p class="dim small ra-note">Live fight: when a challenger enters while the host is in the room, a 5 s countdown starts and both pick 5 moves at the same time (${S.V2.pickSec} s). Time up = AUTO fills the empty slots. Rewards like any match.</p>`;
-    drawRoomArena($("#raCanvas", body), { arena: d.arena, hostBot, recent: d.recent, showLast: true });
-    bindCopy(body);
-    const sx = $("#raShareX", body); if (sx) sx.onclick = e => openIntent(e, sx.href, "#raFallback", "#raShareX");
-    const f = $("#raFight", body); if (f) f.onclick = () => liveFight();
-    const en = $("#raEnter", body); if (en) en.onclick = async () => { try { await liveConnect(id); } catch (e) { toast(errTxt(e)); } renderRoomDlg(); };
-    const lv = $("#raLeave", body); if (lv) lv.onclick = () => liveLeave("leave");
-    if (window.I18N && I18N.lang === "zh" && I18N.apply) try { I18N.apply(body); } catch (_) {}
+      <div class="ah-right"><div class="ah-head"><b>${head}</b>${back}</div>
+        <div class="ra-info small"><div><span class="dim">Battlefield</span><b>${esc(roomArenaName(d.arena))}</b></div><div><span class="dim">Closes in</span><b>${d.open ? fmtHM(d.expiresAt - Date.now()) : "closed"}</b></div><div><span class="dim">Fights</span><b>${d.fights}</b>${d.fights ? ` <span class="dim">(host won ${d.hostWins})</span>` : ""}</div><div><span class="dim">Can join</span><b>Lv ${d.joinLv[0]}–${d.joinLv[1]}</b></div></div>
+        ${last ? `<div class="ra-last small"><span class="dim">Last challenger:</span> ${lastTxt}</div>` : ""}
+        <div class="ch-act big ra-act">${act}<a class="btn x" id="raShareX" href="${esc(roomShareX(d))}" target="_blank" rel="noopener">Share on X</a>${amHost && online() ? `<button type="button" class="btn" id="raDl" data-dl="${esc(id)}">Download image</button>` : ""}<button type="button" class="btn" data-copy="${esc(roomLink(id))}" data-copy-label="Room link" data-copy-box="#raFallback">Copy link</button></div>
+        <div class="share-fallback hidden" id="raFallback"></div>
+        <p class="dim small ra-note">Live fight: when a challenger enters while the host is in the room, a 5 s countdown starts and both pick 5 moves at the same time (${S.V2.pickSec} s). Time up = AUTO fills the empty slots. Rewards like any match.</p></div></div>` };
   }
-  function closeRoomDlg() { const id = LV.open; LV.open = null; if (LV.ws && LV.role === "chal" && LV.roomId === id && !isLive()) liveLeave("close"); }
-
-  /* ---- rooms card (online) ---- */
-  function renderRoomsOnline(box) {
-    const b = S.me && S.me.online ? S.me : null, my = b ? S.meta.botLevel(b).level : 1, lo = Math.max(1, my - ROOM_BAND), hi = Math.min(30, my + ROOM_BAND);
-    const mine = new Set((ON.myRooms || []).map(r => r.id)), tiles = [];
-    for (const r of ON.myRooms || []) if (r.open) {
-      const here = LV.roomId === r.id && LV.role === "host" && LV.hello;
-      tiles.push(`<div class="rm-tile mine" data-rm="${esc(r.id)}">${b ? `<img src="${thumbUrl(b)}" alt="" style="background:${esc(DBArt.parseBot(b.svg).bg || "#222")}">` : `<div class="rm-ph">⚔</div>`}<div class="rm-info"><div class="rm-name">${esc(b ? botName(b) : "My room")}</div><div class="rm-meta"><b>Lv ${r.lv}</b> · ${esc(roomArenaName(r.arena))} · closes in ${fmtHM(r.expiresAt - Date.now())}</div><span class="rm-st ${here ? "open" : "wait"}">${here ? (r.busy ? "⚔ Fighting now" : "● You're waiting here") : "○ You're away"} · ${r.fights} fight${r.fights === 1 ? "" : "s"}</span></div><div class="rm-act"><button class="btn tiny primary" data-rm-open="${esc(r.id)}">${here ? "Open" : "Enter"}</button><a class="btn tiny x" href="${esc("https://x.com/intent/post?text=" + encodeURIComponent(roomShareText(r.lv, roomLink(r.id))))}" target="_blank" rel="noopener">Share on X</a></div></div>`);
-    }
+  function closeRoomView() { const id = LV.open; LV.open = null; if (LV.ws && LV.role === "chal" && LV.roomId === id && !isLive()) liveLeave("close"); renderRooms(); }
+  // strip: rooms where a host is waiting (compact arena thumbnails); rooms with the host away folded into <details>
+  function onlineStrip() {
+    const b = S.me && S.me.online ? S.me : null, my = b ? S.meta.botLevel(b).level : 1, mine = new Set((ON.myRooms || []).map(r => r.id));
+    const live = [], away = [];
     for (const r of ON.rooms || []) {
-      if (mine.has(r.id)) continue;
+      if (mine.has(r.id) || r.id === LV.open) continue;
       const host = oppFromServer(r.host, r.id.slice(0, 8)), inBand = Math.abs(r.lv - my) <= ROOM_BAND;
-      const pres = r.busy ? `<span class="rm-st lock">⚔ Fighting now</span>` : r.hostOnline ? `<span class="rm-st open">● Host waiting</span>` : `<span class="rm-st wait">○ Host away</span>`;
-      tiles.push(`<div class="rm-tile ${!inBand || !b ? "off" : ""}" data-rm="${esc(r.id)}"><img src="${thumbUrl(host)}" alt="" style="background:${esc(DBArt.parseBot(host.svg).bg || "#222")}"><div class="rm-info"><div class="rm-name">${esc(r.host.name)} <span class="tier ${esc(r.host.traits.Tier)}">${esc(r.host.traits.Tier)}</span></div><div class="rm-meta"><b>Lv ${r.lv}</b> · ${esc(roomArenaName(r.arena))} · closes in ${fmtHM(r.expiresAt - Date.now())}</div>${!inBand ? `<span class="rm-st lock">🔒 Lv too far</span>` : pres}</div><div class="rm-act"><button class="btn tiny ghost" data-rm-open="${esc(r.id)}">View</button><button class="btn tiny primary rm-go" data-rm-join="${esc(r.id)}" ${!b || !inBand || !r.hostOnline || r.busy ? "disabled" : ""}>⚔ Fight</button></div></div>`);
+      if (r.hostOnline || r.busy) live.push({ inBand, t: stripTile({ id: r.id, bot: host, name: r.host.name, tier: r.host.traits.Tier, lv: r.lv, arena: r.arena, arenaName: roomArenaName(r.arena), off: !inBand || !b,
+        st: r.busy ? ["lock", "⚔ fighting"] : !inBand ? ["lock", "🔒 Lv too far"] : ["open", "● waiting"],
+        act: `<button class="btn tiny primary rm-go" data-rm-join="${esc(r.id)}" ${!b || !inBand || !r.hostOnline || r.busy ? "disabled" : ""}>⚔ Fight</button><button class="btn tiny ghost" data-rm-open="${esc(r.id)}">View</button>` }) });
+      else away.push(`<div class="ah-away-row" data-rm="${esc(r.id)}"><span class="rm-name">${esc(r.host.name)}</span><span class="dim">Lv ${r.lv} · ${esc(roomArenaName(r.arena))} · closes in ${fmtHM(r.expiresAt - Date.now())}</span><span class="rm-st wait">○ Host away</span><button class="btn tiny ghost" data-rm-open="${esc(r.id)}">View</button></div>`);
     }
-    const hostingId = hosting() ? LV.roomId : null;
-    box.innerHTML = `<div class="rm-top"><span class="small">${b ? `Your bot <b>Lv ${my}</b> · you can join <b>Lv ${lo}–${hi}</b>` : "Sign in and create your dotBot to fight rooms"}</span>${b ? `<button class="btn tiny primary" id="roomCreate">${hostingId ? "Open my room" : "+ Create room"}</button>` : ""}<button class="btn tiny ghost" id="roomsRefresh">↻ Refresh</button></div>
-      <div class="rm-grid">${tiles.join("") || `<div class="empty small">No open rooms right now. Press <b>+ Create room</b> and wait in it for a challenger.</div>`}</div>
+    for (const r of ON.myRooms || []) if (r.open && r.id !== LV.open && !(hosting() && LV.roomId === r.id)) away.unshift(`<div class="ah-away-row mine" data-rm="${esc(r.id)}"><span class="rm-name">My room</span><span class="dim">Lv ${r.lv} · ${esc(roomArenaName(r.arena))} · closes in ${fmtHM(r.expiresAt - Date.now())}</span><span class="rm-st wait">○ You're away</span><button class="btn tiny" data-rm-open="${esc(r.id)}">Enter</button></div>`);
+    live.sort((x, y) => y.inBand - x.inBand);
+    return `<div class="ah-strip-h"><b>Live now</b><span class="small dim">${live.length} host${live.length === 1 ? "" : "s"} waiting${b ? ` · your bot Lv ${my} can join Lv ${Math.max(1, my - ROOM_BAND)}–${Math.min(30, my + ROOM_BAND)}` : ""}</span><button class="btn tiny ghost" id="roomsRefresh">↻ Refresh</button></div>
+      <div class="ah-strip" id="arenaStrip">${live.map(x => x.t).join("") || `<div class="empty small ah-empty">No host is waiting right now. Create a room and share it on X.</div>`}</div>
+      ${away.length ? `<details class="ah-away"><summary>${away.length} room${away.length === 1 ? "" : "s"} with the host away</summary><div class="ah-away-list">${away.join("")}</div></details>` : ""}
       <p class="dim small rm-note">Live rooms: fight a room while its host is there (● Host waiting). You both pick 5 moves at the same time; the server referees. 3 rooms per bot per day, ±3 levels, 24 h.</p>`;
-    bindCopy(box);
-    $$("[data-rm-join]", box).forEach(el => el.onclick = () => onlineJoin(el.dataset.rmJoin));
-    $$("[data-rm-open]", box).forEach(el => el.onclick = () => openRoom(el.dataset.rmOpen));
-    const rf = $("#roomsRefresh", box); if (rf) rf.onclick = () => refreshLists();
-    const cr = $("#roomCreate", box); if (cr) cr.onclick = () => hostingId ? openRoom(hostingId) : onlineRoom();
   }
   function onlineJoin(id) {
     if (!S.me || !S.me.online) { toast("Sign in and create your dotBot first"); return; }
@@ -5777,23 +5889,23 @@ html[data-theme="light"] .h-r { color: #0b6b3c; } html[data-theme="light"] .h-u 
     const qT = Q.map(q => `<li>${esc(q.name)} → +${q.bolts} Bolts</li>`).join("");
     const T = zh ? {
       start: `<div class="g-sec"><h2>0 · 快速开始：我的 dotBot</h2><ol><li>在 <b>My dotBot</b> 粘贴你的钱包地址（0x…），或在有钱包的浏览器里点连接，再起一个名字（最多 16 个字符）。</li><li>每个钱包得到 <b>1 个免费机器人</b>。外观由钱包地址决定（随机但固定）：Common 60% · Uncommon 25% · Rare 10% · Epic 4% · Legendary 1%。名字可随时用 ✎ Rename 修改，外观和 XP 不变。</li><li>点 <b>Find opponent</b> 开始对战。</li></ol><p><b>公平：</b>免费机器人和 NFT 持有者的机器人每场拿到<b>完全相同</b>的 XP、Bolts 和掉落几率。主网上持有者唯一多出的是可以开房间（第 11 节）。</p><p class="dim small">测试网预览：一切都是模拟，只保存在这个浏览器里，不上链、不能出售，没有代币，没有奖金。粘贴地址不证明你拥有该钱包。在线模式（第 0b 节）用钱包签名登录，进度保存在服务器上。</p></div>`,
-      online: `<div class="g-sec" id="gOnline"><h2>0b · 在线模式（服务器）与离线练习</h2><ul><li>页面顶部显示 <b>● Online</b> 时，比赛由 dotBots 服务器裁判，进度保存在服务器上；显示 <b>○ Offline</b> 或 <b>⚠ Server down</b> 时，只能玩练习赛，进度只存在这个浏览器里（服务器断线时的练习赛不保存）。</li><li><b>钱包签名登录：</b>点 <b>Connect wallet &amp; sign in</b>，钱包会弹出一段文字让你签名。签名<b>免费：没有 Gas、没有授权（approval）、不是交易</b>，只用来证明这个钱包是你的。登录时还有一次 Cloudflare 人机验证。登录有效 2 小时。</li><li>服务器替你选对手、用秘密种子重演比赛并发放奖励；结果页会核对种子承诺（✓ verified）。</li><li><b>开始后 15 分钟内没有提交的 AI 对战算作负一场：</b>段位 −1（不会掉出当前段位），没有 XP 和 Bolts。</li><li>每天 20 场计分赛之后的练习赛在你的浏览器里进行，不保存、没有奖励。</li><li>在线时 <b>⚔ Rooms</b> 显示真实玩家的房间，<b>🏆 Leaderboard</b> 显示本赛季排名。</li></ul></div>`,
+      online: `<div class="g-sec" id="gOnline"><h2>0b · 在线模式（服务器）与离线练习</h2><ul><li>页面顶部显示 <b>● Online</b> 时，比赛由 dotBots 服务器裁判，进度保存在服务器上；显示 <b>○ Offline</b> 或 <b>⚠ Server down</b> 时，只能玩练习赛，进度只存在这个浏览器里（服务器断线时的练习赛不保存）。</li><li><b>钱包签名登录：</b>点 <b>Connect wallet &amp; sign in</b>，钱包会弹出一段文字让你签名。签名<b>免费：没有 Gas、没有授权（approval）、不是交易</b>，只用来证明这个钱包是你的。登录时还有一次 Cloudflare 人机验证。登录有效 2 小时。</li><li>服务器替你选对手、用秘密种子重演比赛并发放奖励；结果页会核对种子承诺（✓ verified）。</li><li><b>开始后 15 分钟内没有提交的 AI 对战算作负一场：</b>段位 −1（不会掉出当前段位），没有 XP 和 Bolts。</li><li>每天 20 场计分赛之后的练习赛在你的浏览器里进行，不保存、没有奖励。</li><li>在线时大厅顶部的 <b>⚔ 竞技场</b> 显示你的房间和正在等待的真实玩家房间，<b>🏆 Leaderboard</b> 显示本赛季排名。</li></ul></div>`,
       energy: `<div class="g-ex"><b>为什么 Special 一场只能用一次？</b>没有每场次数限制，限制的是能量⚡。开局 ${M.energyStart}⚡，每回合 +${M.energyRegen}⚡（上限 ${M.energyMax}），Special 要 3–4⚡，Ultimate 要 5⚡。用完 Special 下一回合常常不够⚡。中间插 Punch（1⚡）或 Rest（+${IX.restEnergyBonus}⚡，但该回合多受 ${pct(IX.restDmgTaken - 1)}% 伤害）就能多放。例子（Special 4⚡）：Special → Rest → Special → Special → Special = 4 次。每日技能次数（第 8 节）是全天共用的库存，不是每场的上限。</div>`,
       sk: `<div class="g-sec"><h2>3b · 全部 Special 与 Ultimate</h2><table class="rw-tbl"><thead><tr><th>Special（眼睛）</th><th>能量</th><th>伤害</th><th>效果</th></tr></thead><tbody>${sigT}</tbody></table><table class="rw-tbl"><thead><tr><th>Ultimate（配件）</th><th>能量</th><th>伤害</th><th>效果</th></tr></thead><tbody>${ulT}</tbody></table><p class="small dim">Common 没有配件，所以没有 Ultimate，改为 Overclock：Special ×${S.R.overclock.sigDmgMult}。</p></div>`,
-      s6: `<div class="g-sec"><h2>6 · 每天的对战与奖励</h2><ul><li><b>每个机器人每天 ${RW.playsPerBotPerDay} 场计分对战</b>，所有稀有度相同，07:00 GMT+7 重置，无法增加。之后可以继续玩<b>练习赛</b>：没有任何奖励，也不消耗技能次数。</li><li><b>XP：</b>胜 ${RW.xp.win} · 平 ${RW.xp.draw} · 负 ${RW.xp.loss} · 每日签到 +${RW.xp.checkin}。用来升级（第 7 节）。</li><li><b>Bolts</b>（游戏内点数，不是代币，不能出售或提现）：胜 ${RW.bolts.win} · 平 ${RW.bolts.draw} · 负 ${RW.bolts.loss}，再乘等级加成：${multT}。还有每日任务和签到连签的 Bolts（第 12 节）。</li><li><b>Part Crate：</b>攒够 ${RW.crateCost} Bolts 在 Rewards &amp; rooms 卡里打开，得到 1 件随机物品。</li><li>每场结束后，结果页会把每样奖励做成一张卡：拿到了什么、有什么用、离下一步还差多少。点 <b>What is all this?</b> 或 <b>Rewards guide</b> 看说明表。</li></ul></div>`,
+      s6: `<div class="g-sec"><h2>6 · 每天的对战与奖励</h2><ul><li><b>每个机器人每天 ${RW.playsPerBotPerDay} 场计分对战</b>，所有稀有度相同，07:00 GMT+7 重置，无法增加。之后可以继续玩<b>练习赛</b>：没有任何奖励，也不消耗技能次数。</li><li><b>XP：</b>胜 ${RW.xp.win} · 平 ${RW.xp.draw} · 负 ${RW.xp.loss} · 每日签到 +${RW.xp.checkin}。用来升级（第 7 节）。</li><li><b>Bolts</b>（游戏内点数，不是代币，不能出售或提现）：胜 ${RW.bolts.win} · 平 ${RW.bolts.draw} · 负 ${RW.bolts.loss}，再乘等级加成：${multT}。还有每日任务和签到连签的 Bolts（第 12 节）。</li><li><b>Part Crate：</b>攒够 ${RW.crateCost} Bolts 在 Rewards 卡里打开，得到 1 件随机物品。</li><li>每场结束后，结果页会把每样奖励做成一张卡：拿到了什么、有什么用、离下一步还差多少。点 <b>What is all this?</b> 或 <b>Rewards guide</b> 看说明表。</li></ul></div>`,
       s8: `<div class="g-sec"><h2>8 · 技能次数（全天共用）与恢复药水</h2><p>每个机器人每天有技能次数，所有稀有度相同：Punch ${CH.punch} · Kick ${CH.kick} · Press ${CH.press} · Jump ${CH.jump} · Block ${CH.block} · Special ${CH.sig} · Ultimate ${CH.ult}。Rest 免费。07:00 GMT+7 重置。每个真正打出的招式用掉 1 次（锁定时扣除）。招式图标上显示 xN，0 次的招式变灰。赢一场随机恢复 1 次。</p><p><b>恢复药水</b>（小瓶 +3 给你选的一个技能 · 中瓶 +10 先补最低的技能 · 大瓶 全部补满；每个机器人每天最多 ${S.V31.potions.maxPerBotPerDay} 瓶）在背包里使用，背包将在主网开放。现在赢到的药水会为你的机器人保留。</p></div>`,
       s9: `<div class="g-sec"><h2>9 · 物品掉落</h2><ul><li>每场计分胜利有几率掉 1 件物品：${dropT}。每个机器人每天最多 ${D.maxPerBotPerDay} 件。平局和输只给 XP 和 Bolts。</li><li>稀有度：${rar}（等级越高 Rare+ 稍多）。</li><li>物品：恢复药水（补技能次数）· 皮肤和竞技场边框（纯外观，无战力）· Repair Kit、Gear 和 Skill Chip 代币（目前只放在背包，等 Gear 更新后才能用）。</li><li>升级礼物：Lv10 中瓶药水 · Lv15 Rare Gear 代币 · Lv20 Skill Chip Lv2 代币 · Lv25 Epic Gear 代币 · Lv30 传奇皮肤 + Iron Will 徽章。</li><li>本次测试隐藏了背包，主网开放。现在赢到的物品会为你的机器人保留。</li></ul></div>`,
-      s11: `<div class="g-sec"><h2>11 · 房间</h2><ol><li><b>⚔ Rooms</b> 卡片列出开放的房间：房主机器人、等级、战场、剩余时间和绿色 <b>Open</b> 标签。点 <b>⚔ Fight</b> 进入对战。</li><li>自己开房：锁定 5 个招式后点 <b>Create room</b>，得到房间链接，可一键分享到 X 邀请朋友。测试网上<b>任何人</b>都能开房；主网开房仅限 dotBots 持有者，加入对所有人开放。</li><li>只有和房主机器人相差 <b>±3 级以内</b>的机器人能加入，避免低级被高级碾压。免费机器人也能加入。</li><li>每个机器人每天最多开 3 个房间，链接 24 小时后失效。</li><li>加入者打的是房主锁好的 5 个招式，奖励和普通对战一样。</li></ol><p class="dim small">离线时，列表里的其他房间是由 AI 机器人开的演示房；在线时显示真实玩家的房间，房主的 5 个招式在你开打前保密，由服务器裁判防作弊。</p></div>`,
+      s11: `<div class="g-sec"><h2>11 · 房间（竞技场）</h2><ol><li>大厅顶部的 <b>⚔ 竞技场</b> 卡片就是房间竞技场：左边是你的机器人，右边是留给挑战者的 <b>?</b> 座位。</li><li>点 <b>+ 创建房间</b>（不需要先锁定招式）。只要你留在这个页面，房间就是实时的（<b>● 等待中</b>）。用 <b>分享到 X</b> / <b>复制链接</b> 邀请挑战者；<b>离开房间</b> 只是离开座位，房间 24 小时内都开着，可以再次进入。</li><li>把房间分享到 X 时，帖子里会显示你房间的图片（你的机器人、等级和战场）；<b>下载图片</b> 可以保存这张图。</li><li>竞技场下方的 <b>正在等待</b> 列出房主正在等待的房间：房主机器人、名字、等级、<b>● 等待中</b> 和 <b>⚔ 对战</b> 按钮。房主不在的房间收在“房主不在”折叠列表里。</li><li>挑战者进入后有 5 秒倒计时，然后双方<b>同时</b>选 5 个招式（20 秒，时间到由 AUTO 补满）。由服务器裁判，双方都拿普通对战的奖励。</li><li>只有和房主相差 <b>±3 级以内</b>的机器人能对战，同一个机器人不能打同一个房间两次。每个机器人每天最多开 3 个房间、加入 3 个房间，房间 24 小时后关闭。测试网上<b>任何人</b>都能开房；主网开房仅限 dotBots 持有者，加入对所有人开放。</li></ol><p class="dim small">离线时，列表里是 AI 机器人开的演示房间；你自己的房间是一个锁定了 5 个招式的挑战链接（在对战画面点 <b>⚔ 创建房间</b>）。</p></div>`,
       s12: `<div class="g-sec"><h2>12 · 每日任务与签到连签</h2><p>每天 07:00 GMT+7 随机 ${S.V31.quests.perDay} 个任务，完成自动加 Bolts：</p><ul>${qT}</ul><p><b>签到连签 Bolts</b>（每天第一次免费签到时发）：${login}。</p></div>`
     } : {
       start: `<div class="g-sec"><h2>0 · Quick start: My dotBot</h2><ol><li>In <b>My dotBot</b>, paste your wallet address (0x…) or press connect if your browser has a wallet, then give your bot a name (up to 16 characters).</li><li>Every wallet gets <b>1 free bot</b>. Its look comes from your address (random but fixed): Common 60% · Uncommon 25% · Rare 10% · Epic 4% · Legendary 1%. Rename it anytime with ✎ Rename; look and XP stay.</li><li>Press <b>Find opponent</b> to fight.</li></ol><p><b>Fair for everyone:</b> a free bot and a dotBots NFT holder's bot earn <b>exactly the same</b> XP, Bolts and item chances per match. On mainnet the only extra for holders is opening rooms (section 11).</p><p class="dim small">Testnet preview: everything is simulated and saved in this browser only. Nothing is on-chain, nothing can be sold, no tokens, no prizes. Pasting an address does not prove you own it. In online mode (section 0b) your wallet signs in and progress is saved on the server.</p></div>`,
-      online: `<div class="g-sec" id="gOnline"><h2>0b · Online mode (server) and offline practice</h2><ul><li>When the top bar shows <b>● Online</b>, the dotBots server referees your matches and saves your progress. <b>○ Offline</b> or <b>⚠ Server down</b> means practice only, saved in this browser (practice played while the server is down is not saved).</li><li><b>Wallet sign-in:</b> press <b>Connect wallet &amp; sign in</b> and your wallet asks you to sign a short message. Signing is <b>free: no gas, no approval, not a transaction</b>; it only proves the wallet is yours. There is one Cloudflare human check at sign-in. A sign-in lasts 2 hours.</li><li>The server picks your opponent, replays the match with a secret seed and gives the rewards; the result screen checks the seed commit (✓ verified).</li><li><b>An AI match you start but don't submit within 15 minutes counts as a loss:</b> rank −1 (never below your current rank), no XP or Bolts.</li><li>Practice matches after your 20 counted matches run in your browser: not saved, no rewards.</li><li>Online, <b>⚔ Rooms</b> lists real players' rooms and <b>🏆 Leaderboard</b> shows the season ranking.</li></ul></div>`,
+      online: `<div class="g-sec" id="gOnline"><h2>0b · Online mode (server) and offline practice</h2><ul><li>When the top bar shows <b>● Online</b>, the dotBots server referees your matches and saves your progress. <b>○ Offline</b> or <b>⚠ Server down</b> means practice only, saved in this browser (practice played while the server is down is not saved).</li><li><b>Wallet sign-in:</b> press <b>Connect wallet &amp; sign in</b> and your wallet asks you to sign a short message. Signing is <b>free: no gas, no approval, not a transaction</b>; it only proves the wallet is yours. There is one Cloudflare human check at sign-in. A sign-in lasts 2 hours.</li><li>The server picks your opponent, replays the match with a secret seed and gives the rewards; the result screen checks the seed commit (✓ verified).</li><li><b>An AI match you start but don't submit within 15 minutes counts as a loss:</b> rank −1 (never below your current rank), no XP or Bolts.</li><li>Practice matches after your 20 counted matches run in your browser: not saved, no rewards.</li><li>Online, the <b>⚔ Arena</b> at the top of the lobby shows your room and real players' rooms with the host waiting, and <b>🏆 Leaderboard</b> shows the season ranking.</li></ul></div>`,
       energy: `<div class="g-ex"><b>Why can I only use my Special once?</b> There is no per-match limit; energy is the limit. You start with ${M.energyStart}⚡ and get +${M.energyRegen}⚡ each turn (max ${M.energyMax}). A Special costs 3–4⚡ and an Ultimate 5⚡, so after a Special you are often short for the next turn. Put a Punch (1⚡) or a Rest (+${IX.restEnergyBonus}⚡, but you take +${pct(IX.restDmgTaken - 1)}% damage that turn) in between. Example with a 4⚡ Special: Special → Rest → Special → Special → Special = 4 Specials. Your daily skill charges (section 8) are a stock for the whole day, not a per-match cap.</div>`,
       sk: `<div class="g-sec"><h2>3b · Every Special and Ultimate</h2><table class="rw-tbl"><thead><tr><th>Special (Eyes)</th><th>Energy</th><th>Damage</th><th>Effect</th></tr></thead><tbody>${sigT}</tbody></table><table class="rw-tbl"><thead><tr><th>Ultimate (Accessory)</th><th>Energy</th><th>Damage</th><th>Effect</th></tr></thead><tbody>${ulT}</tbody></table><p class="small dim">Commons have no accessory, so no Ultimate; they get Overclock instead: Special ×${S.R.overclock.sigDmgMult}.</p></div>`,
-      s6: `<div class="g-sec"><h2>6 · Daily plays and rewards</h2><ul><li><b>${RW.playsPerBotPerDay} counted matches per bot per day</b>, the same for every rarity, reset at 07:00 GMT+7, no way to add more. After that you can keep playing <b>practice</b> matches: no rewards and no charges used.</li><li><b>XP:</b> win ${RW.xp.win} · draw ${RW.xp.draw} · loss ${RW.xp.loss} · daily check-in +${RW.xp.checkin}. XP levels up your bot (section 7).</li><li><b>Bolts</b> (in-game points, not a token, can't be sold or withdrawn): win ${RW.bolts.win} · draw ${RW.bolts.draw} · loss ${RW.bolts.loss}, times your level bonus: ${multT}. Daily quests and the check-in streak add more (section 12).</li><li><b>Part Crate:</b> at ${RW.crateCost} Bolts, open one in the Rewards &amp; rooms card for 1 random item.</li><li>After every match the result screen shows each reward as a card: what you got, what it does, and how far you are from the next step. Press <b>What is all this?</b> or <b>Rewards guide</b> for the table.</li></ul></div>`,
+      s6: `<div class="g-sec"><h2>6 · Daily plays and rewards</h2><ul><li><b>${RW.playsPerBotPerDay} counted matches per bot per day</b>, the same for every rarity, reset at 07:00 GMT+7, no way to add more. After that you can keep playing <b>practice</b> matches: no rewards and no charges used.</li><li><b>XP:</b> win ${RW.xp.win} · draw ${RW.xp.draw} · loss ${RW.xp.loss} · daily check-in +${RW.xp.checkin}. XP levels up your bot (section 7).</li><li><b>Bolts</b> (in-game points, not a token, can't be sold or withdrawn): win ${RW.bolts.win} · draw ${RW.bolts.draw} · loss ${RW.bolts.loss}, times your level bonus: ${multT}. Daily quests and the check-in streak add more (section 12).</li><li><b>Part Crate:</b> at ${RW.crateCost} Bolts, open one in the Rewards card for 1 random item.</li><li>After every match the result screen shows each reward as a card: what you got, what it does, and how far you are from the next step. Press <b>What is all this?</b> or <b>Rewards guide</b> for the table.</li></ul></div>`,
       s8: `<div class="g-sec"><h2>8 · Skill charges (for the whole day) and Recovery Potions</h2><p>Each bot has daily skill charges, the same for every rarity: Punch ${CH.punch} · Kick ${CH.kick} · Press ${CH.press} · Jump ${CH.jump} · Block ${CH.block} · Special ${CH.sig} · Ultimate ${CH.ult}. Rest is free. They reset at 07:00 GMT+7. Every move your bot plays uses 1 charge (taken when you lock). The picker shows xN on each skill; a skill at 0 is greyed out. A win gives 1 charge back to a random skill.</p><p><b>Recovery Potions</b> (Small +3 to one skill you choose · Medium +10 to your lowest skills first · Large refills everything; max ${S.V31.potions.maxPerBotPerDay} per bot per day) are used from the Inventory, which opens on mainnet. Potions you win now are kept for your bot.</p></div>`,
       s9: `<div class="g-sec"><h2>9 · Item drops</h2><ul><li>Each counted win can drop 1 item: ${dropT}. Max ${D.maxPerBotPerDay} items per bot per day. Draws and losses give XP and Bolts only.</li><li>Rarity: ${rar} (higher levels get slightly more Rare+).</li><li>Items: Recovery Potions (refill charges) · skins and arena frames (cosmetic, no power) · Repair Kit, Gear and Skill Chip tokens (kept in the Inventory until the Gear update).</li><li>Level gifts: Lv10 Medium Potion · Lv15 Rare Gear Token · Lv20 Skill Chip Lv2 Token · Lv25 Epic Gear Token · Lv30 Legendary skin + Iron Will badge.</li><li>The Inventory is hidden in this test and opens on mainnet. Items you win now are kept for your bot.</li></ul></div>`,
-      s11: `<div class="g-sec"><h2>11 · Rooms</h2><ol><li>The <b>⚔ Rooms</b> card lists open rooms: host bot, level, battlefield, time left and a green <b>Open</b> tag. Press <b>⚔ Fight</b> to play it.</li><li>To open your own: lock 5 moves and press <b>Create room</b>. You get a room link with one-tap Share on X to invite friends. On testnet <b>anyone</b> can open rooms; on mainnet opening is for dotBots holders, joining stays open to all.</li><li>Only bots within <b>±3 levels</b> of the host's bot can join, so low levels don't get crushed. Free bots can join.</li><li>Each bot can open 3 rooms per day. A link closes after 24 hours.</li><li>The joiner fights the host's 5 locked moves. Rewards are the same as any match.</li></ol><p class="dim small">Offline, the other rooms in the list are demo rooms hosted by AI bots. Online, the list shows real players' rooms; the host's 5 moves stay secret until you fight and the server referees every room fight.</p></div>`,
+      s11: `<div class="g-sec"><h2>11 · Rooms (the Arena)</h2><ol><li>The <b>⚔ Arena</b> card at the top of the lobby is the room arena: your bot on the left, the <b>?</b> seat for a challenger on the right.</li><li>Press <b>+ Create room</b> (no moves needed first). Your room is live while you stay on the page (<b>● waiting</b>). <b>Share on X</b> / <b>Copy link</b> bring challengers; <b>Leave room</b> only leaves your seat: the room stays open for 24 hours and you can enter again.</li><li>Sharing your room on X shows a picture of your room (your bot, level and battlefield) in the post; <b>Download image</b> saves that picture.</li><li>Under the arena, <b>Live now</b> lists rooms whose host is waiting: host bot, name, level, <b>● waiting</b> and a <b>⚔ Fight</b> button. Rooms with the host away are folded under "rooms with the host away".</li><li>When a challenger enters, a 5 s countdown starts and both players pick 5 moves <b>at the same time</b> (20 s, time up = AUTO fills the slots). The server referees; both bots get the normal match rewards.</li><li>Only bots within <b>±3 levels</b> of the host can fight, and the same bot can't fight a room twice. Each bot can open 3 rooms and join 3 rooms per day; a room closes after 24 hours. On testnet <b>anyone</b> can open rooms; on mainnet opening is for dotBots holders, joining stays open to all.</li></ol><p class="dim small">Offline, the list shows demo rooms hosted by AI bots, and your own room is a challenge link with 5 locked moves (<b>⚔ Create room</b> on the battle screen).</p></div>`,
       s12: `<div class="g-sec"><h2>12 · Daily quests and check-in streak</h2><p>${S.V31.quests.perDay} random quests every day at 07:00 GMT+7, Bolts added automatically when done:</p><ul>${qT}</ul><p><b>Check-in streak Bolts</b> (paid by your first free check-in of the day): ${login}.</p></div>`
     };
     const tr = x => (zh && I18N.tr ? I18N.tr(x) : x), BG = S.meta.BADGES || [];
@@ -6145,9 +6257,7 @@ html[data-theme="light"] .h-r { color: #0b6b3c; } html[data-theme="light"] .h-u 
     // v3.4.2 language / theme: the observer in i18n.js translates rendered text; the guide + rules have their own 中文 HTML
     if (window.I18N) I18N.onChange(() => { $("#rulesBody").innerHTML = rulesHtml(); bindSoundPreview($("#rulesBody")); $("#guideBody").innerHTML = LITE ? liteGuide(guideHtml()) : guideHtml(); bindSoundPreview($("#guideBody")); renderAllMeta(); renderSpecial(); updateFindLabel(); if (S.phase === "result" && S.cardReady) renderCard().then(url => { $("#cardImg").src = url; S.cardUrl = url; }); });
     window.__B3sel = selOf; // test hook (function selector)
-    window.__B3on = { api, refreshMe, refreshLists, checkHealth, signIn, signOut, ON, LV, openRoom, onlineRoom, liveLeave, flipLog };
-    $("#roomX").onclick = () => $("#roomDlg").close(); $("#roomDlg").addEventListener("close", closeRoomDlg);
-    $("#roomDlg").addEventListener("click", e => { if (e.target === $("#roomDlg")) $("#roomDlg").close(); });
+    window.__B3on = { api, refreshMe, refreshLists, checkHealth, signIn, signOut, ON, LV, openRoom, onlineRoom, liveLeave, flipLog, closeRoomView, renderRooms };
     S.loaded = true;
   }
   function toLobby() { if (onUp()) setTimeout(refreshLists, 50); clearTimeout(CH.poll); S.chainMatch = null; clearInterval(S.timer); clearTimeout(vsTimer); stopConfetti(); S.phase = "lobby"; show("lobby"); hud(null); $("#strip").innerHTML = ""; $("#phaseTag").textContent = ""; heroPreview(); renderHudTag(); }
