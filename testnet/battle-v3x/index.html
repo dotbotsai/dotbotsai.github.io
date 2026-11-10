@@ -1784,6 +1784,12 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
     ". Then you get 1 free dotBot per wallet, saved on the server.": "。然后每个钱包得到 1 个免费 dotBot，保存在服务器上。",
     "saved on the dotBots server": "保存在 dotBots 服务器上", "saved on the server": "保存在服务器上", "One free bot per wallet; the look is fixed by your wallet.": "每个钱包一个免费机器人；外观由钱包决定。",
     "Signed in as": "已登录：", "1/3 · Connect your wallet…": "1/3 · 连接钱包…", "2/3 · Quick human check…": "2/3 · 快速人机验证…",
+    "1/3 · Switch your wallet to BNB Smart Chain Testnet…": "1/3 · 将钱包切换到 BNB Smart Chain 测试网…",
+    "1/3 · Switch your wallet to BNB Smart Chain…": "1/3 · 将钱包切换到 BNB Smart Chain…",
+    "Sign-in stopped: the game runs on BNB Smart Chain Testnet. Please allow the network switch in your wallet and try again.": "登录已停止：游戏运行在 BNB Smart Chain 测试网。请在钱包中允许切换网络后重试。",
+    "Sign-in stopped: the game runs on BNB Smart Chain. Please allow the network switch in your wallet and try again.": "登录已停止：游戏运行在 BNB Smart Chain。请在钱包中允许切换网络后重试。",
+    "Sign-in failed: Your wallet is still on another network. Please switch it to BNB Smart Chain Testnet and try again.": "登录失败：钱包仍在其他网络。请切换到 BNB Smart Chain 测试网后重试。",
+    "Sign-in failed: Your wallet is still on another network. Please switch it to BNB Smart Chain and try again.": "登录失败：钱包仍在其他网络。请切换到 BNB Smart Chain 后重试。",
     "3/3 · Sign the message in your wallet (free: no gas, no approval, it only proves the wallet is yours)…": "3/3 · 在钱包里签名（免费：没有 Gas、没有授权，只证明钱包是你的）…",
     "Cancelled in the wallet.": "已在钱包中取消。", "Sign-in failed": "登录失败",
     "🏆 Leaderboard": "🏆 排行榜", "↻ Refresh": "↻ 刷新", "No counted matches yet this season. Be the first!": "本赛季还没有计分比赛。来当第一个吧！", "Loading…": "加载中…",
@@ -5792,6 +5798,10 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
       msg.textContent = "1/3 · Connect your wallet…";
       const accs = await prov.request({ method: "eth_requestAccounts" }); const addr = accs && accs[0] && String(accs[0]).toLowerCase();
       if (!addr || !/^0x[0-9a-f]{40}$/.test(addr)) throw new ApiErr(0, "no_account", "No wallet account selected.");
+      const net = (CHAINS[wantChainId(S.cfg && S.cfg.chainId)] || CHAINS[97]).chainName;
+      msg.textContent = "1/3 · Switch your wallet to " + net + "…";
+      try { await ensureChain(S.cfg && S.cfg.chainId, prov); }
+      catch (e) { if (e && e.code === 4001) throw new ApiErr(4001, "chain_rejected", "Sign-in stopped: the game runs on " + net + ". Please allow the network switch in your wallet and try again."); throw e; }
       msg.textContent = "2/3 · Quick human check…";
       const ts = await turnstileToken();
       const n = await api("POST", "/auth/nonce", { wallet: addr }, { auth: false });
@@ -5804,7 +5814,7 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
       refreshLists();
       return true;
     } catch (e) {
-      msg.textContent = e && e.code === 4001 ? "Cancelled in the wallet." : "Sign-in failed: " + errTxt(e); msg.classList.add("err"); return false;
+      msg.textContent = e && e.code === "chain_rejected" ? e.message : e && e.code === 4001 ? "Cancelled in the wallet." : "Sign-in failed: " + errTxt(e); msg.classList.add("err"); return false;
     } finally { ON.busy = false; renderMineBox(); }
   }
   function signOut() { const t = ON.token; if (t) api("POST", "/auth/logout", {}).catch(() => {}); if (LV.ws) liveLeave("signout"); clearSession(); renderMineBox(); renderBots(); renderRooms(); renderLeaderboard(); topSignOut(); toast("Signed out"); }
@@ -5853,7 +5863,8 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
     if (!signed) {
       $("#mineName").classList.add("hidden"); $("#mineRename").classList.add("hidden");
       $("#mineBtn").textContent = ON.busy ? "Signing in…" : "Connect wallet & sign in";
-      if (!ON.busy) msg.innerHTML = `<b>Online mode.</b> Your wallet signs a short message to prove it's yours: <b>no gas, no approval, no transaction</b>. Then you get 1 free dotBot per wallet, saved on the server.`;
+      // keep a sign-in error visible (was wiped by the finally re-render, 2026-11-10)
+      if (!ON.busy && !msg.classList.contains("err")) msg.innerHTML = `<b>Online mode.</b> Your wallet signs a short message to prove it's yours: <b>no gas, no approval, no transaction</b>. Then you get 1 free dotBot per wallet, saved on the server.`;
       return;
     }
     const w = ON.wallet ? ON.wallet.slice(0, 6) + "…" + ON.wallet.slice(-4) : "";
@@ -6556,12 +6567,19 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
   }
   async function getMatchC(id) { return decodeMatch(await beRead("getMatch(uint256)", u256(id))); }
   async function waitReceipt(hash) { for (let i = 0; i < 120; i++) { const r = await rpc("eth_getTransactionReceipt", [hash]).catch(() => null); if (r) { if (r.status !== "0x1") throw new Error("transaction reverted"); return r; } await new Promise(z => setTimeout(z, 1500)); } throw new Error("no receipt after 3 minutes"); }
-  async function ensureChain(chainId) {
-    const want = "0x" + Number(chainId || (chainCfg() || ciCfg() || { chainId: 97 }).chainId || 97).toString(16);
-    const cur = await window.ethereum.request({ method: "eth_chainId" });
+  /** fix 2026-11-10 21:24 (user via Web project): sign-in must also put the wallet on the right chain, so OKX etc. don't show "Base".
+      Works on any EIP-1193 provider (sign-in uses mbProvider(), txs use window.ethereum). Chain = arg, else config.json chainId (97 testnet / 56 mainnet build). */
+  const CHAINS = { 97: { chainName: "BNB Smart Chain Testnet", nativeCurrency: { name: "tBNB", symbol: "tBNB", decimals: 18 } }, 56: { chainName: "BNB Smart Chain", nativeCurrency: { name: "BNB", symbol: "BNB", decimals: 18 } } };
+  function wantChainId(chainId) { return Number(chainId || (chainCfg() || ciCfg() || {}).chainId || (S.cfg && S.cfg.chainId) || 97); }
+  async function ensureChain(chainId, prov) {
+    prov = prov || window.ethereum || mbProvider();
+    const id = wantChainId(chainId), want = "0x" + id.toString(16), meta = CHAINS[id] || CHAINS[97];
+    const cur = String(await prov.request({ method: "eth_chainId" }) || "").toLowerCase();
     if (cur === want) return;
-    try { await window.ethereum.request({ method: "wallet_switchEthereumChain", params: [{ chainId: want }] }); }
-    catch (e) { if (e && e.code === 4902) await window.ethereum.request({ method: "wallet_addEthereumChain", params: [{ chainId: want, chainName: "BNB Smart Chain Testnet", nativeCurrency: { name: "tBNB", symbol: "tBNB", decimals: 18 }, rpcUrls: [S.cfg.rpc], blockExplorerUrls: [S.cfg.explorer] }] }); else throw e; }
+    try { await prov.request({ method: "wallet_switchEthereumChain", params: [{ chainId: want }] }); }
+    catch (e) { if (e && (e.code === 4902 || (e.data && e.data.originalError && e.data.originalError.code === 4902))) await prov.request({ method: "wallet_addEthereumChain", params: [{ chainId: want, chainName: meta.chainName, nativeCurrency: meta.nativeCurrency, rpcUrls: [S.cfg.rpc], blockExplorerUrls: [S.cfg.explorer] }] }); else throw e; }
+    const now = String(await prov.request({ method: "eth_chainId" }) || "").toLowerCase();
+    if (now !== want) throw new ApiErr(0, "wrong_chain", "Your wallet is still on another network. Please switch it to " + meta.chainName + " and try again.");
   }
   async function sendTx(data, value, to, chainId) { await ensureChain(chainId); return window.ethereum.request({ method: "eth_sendTransaction", params: [{ from: S.addr, to: to || chainCfg().address, data, value: "0x" + (value || 0n).toString(16) }] }); }
   /* v3.2 Daily check-in: DailyCheckIn.checkIn() pays $0.01 in (t)BNB via the price feed, once per wallet per day (07:00 GMT+7).
