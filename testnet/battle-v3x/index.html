@@ -1025,6 +1025,34 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
 }
 @media (max-width: 520px) { .topbar.signed-in .top-actions { gap: 3px; } .topbar.signed-in .net-chip { padding-left: 6px; padding-right: 6px; } }
 
+/* lobby grid (user 2026-11-10): up to 20 online rooms as tiles, 5 / 4 columns desktop, 3 tablet, 2 mobile */
+.ah-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+.ah-grid .ah-empty { grid-column: 1 / -1; }
+.lg-tile { display: flex; flex-direction: column; gap: 4px; padding: 8px; border: 1px solid var(--line, #2a2f3a); border-radius: 12px; background: rgba(255,255,255,.03); min-width: 0; }
+.lg-tile:not(.off):not(.mine):hover { border-color: #22c55e; }
+.lg-tile.mine { border-style: dashed; border-color: var(--accent, #ff6a1a); }
+.lg-tile.off { opacity: .7; }
+.lg-thumb { position: relative; height: 70px; border-radius: 8px; background: #0b0820 center / cover no-repeat; image-rendering: pixelated; display: flex; align-items: flex-end; justify-content: center; border: 1px solid #000; overflow: hidden; }
+.lg-thumb img { width: 44px; height: 44px; image-rendering: pixelated; border-radius: 6px; margin-bottom: 4px; box-shadow: 0 2px 0 rgba(0,0,0,.5); }
+.lg-lv { position: absolute; top: 4px; left: 4px; font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 6px; background: rgba(0,0,0,.65); color: #fff; }
+.lg-name { font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lg-host { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lg-stats { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px 6px; }
+.lg-act { display: flex; gap: 4px; margin-top: auto; }
+.lg-act .btn { flex: 1; }
+@media (max-width: 1200px) { .ah-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (max-width: 860px) { .ah-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .ah-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .lg-host .tier { display: none; } }
+/* user 2026-11-10: X account in Profile, dotBots Quest needs it, fraud notice, quest-cheat flag */
+.pf-x { grid-column: 1 / -1; display: flex; flex-direction: column; gap: 8px; }
+.pfx-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.pfx-row .inp { flex: 1 1 200px; min-width: 0; height: 34px; }
+.pfx-row a.mono { color: var(--cyan); font-weight: 700; }
+.xq-fraud { margin-top: 10px; padding: 8px 10px; border-radius: 10px; border: 1px solid rgba(255,211,92,.35); background: rgba(255,211,92,.06); color: var(--ink, inherit); line-height: 1.45; }
+.xq-flag { padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(248,113,113,.6); background: rgba(248,113,113,.10); }
+.xq-flag b { color: #f87171; }
+.xq-needx { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; padding: 8px 0; }
+
 </style>
 <script>(function(){try{var q=new URLSearchParams(location.search),t=q.get("theme"),l=q.get("lang");if(t==="light"||t==="dark")localStorage.setItem("db34.theme",t);if(l==="zh"||l==="en")localStorage.setItem("db34.lang",l);t=localStorage.getItem("db34.theme");l=localStorage.getItem("db34.lang");}catch(e){}var d=document.documentElement;d.setAttribute("data-theme",t==="light"?"light":"dark");d.setAttribute("lang",l==="zh"?"zh-CN":"en");})();</script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23ff4d00'/%3E%3Ccircle cx='16' cy='16' r='5' fill='white'/%3E%3C/svg%3E">
@@ -1450,6 +1478,13 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
   I.PAT.push(
     [/^(.*[A-Za-z].*) \((\+\d+|preview, 0)\)$/, m => { const x = I.tr(m[1]); return x === m[1] ? null : x + "（" + m[2].replace("preview", "预览") + "）"; }],
     [/^(\w+) eyes, ([\w ]+) antenna, (\w+) mouth$/, m => `眼睛 ${m[1]} · 天线 ${m[2]} · 嘴巴 ${m[3]}`],
+    // X account link confirms (user 2026-11-10): the handle is free text, so these lines are patterns
+    [/^Link @(\w{1,15}) to this wallet\? You get \+(\d+) XP \(first link only\)\. dotBots only reads public X info and can never post or change your X account\. One X account can be linked to one wallet only\.$/, m => `把 @${m[1]} 绑定到这个钱包？你会获得 +${m[2]} XP（仅第一次绑定）。dotBots 只读取公开的 X 信息，永远不能发帖或修改你的 X 账号。一个 X 账号只能绑定一个钱包。`],
+    [/^Disconnect @(\w{1,15})\? You lose (\d+) XP \(never below the start of your current level\)\. dotBots Quest needs a linked X account\. dotBots only reads public X info and can never post or change your X account\.$/, m => `解除绑定 @${m[1]}？你会失去 ${m[2]} XP（不会低于当前等级的起点）。dotBots 任务需要绑定 X 账号。dotBots 只读取公开的 X 信息，永远不能发帖或修改你的 X 账号。`],
+    // room names (user 2026-11-10): the typed name is free text, so these lines are patterns
+    [/^✓ “(.+)” is available$/, m => `✓ “${m[1]}” 可以使用`], [/^“(.+)” is taken$/, m => `“${m[1]}” 已被使用`],
+    [/^(\d+) rooms? for “(.+)”$/, m => `“${m[2]}”：${m[1]} 个房间`],
+    [/^Your room name will be “(.+)” for good\. It can't be changed later\. Continue\?$/, m => `你的房间名将永久为“${m[1]}”，之后不能修改。继续吗？`],
     [/^(Mon|Tue|Wed|Thu|Fri|Sat|Sun)(: .*)?$/, m => ({ Mon: "一", Tue: "二", Wed: "三", Thu: "四", Fri: "五", Sat: "六", Sun: "日" })[m[1]] + (m[2] ? { ": checked in": "：已签到", ": today — press Check in": "：今天 — 请按签到", ": missed": "：漏签" }[m[2]] || m[2] : "")],
   );
   const Z = {
@@ -1805,6 +1840,12 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
     "💬 Room chat": "💬 房间聊天", "max {0} · not saved": "最多 {0} 字 · 不保存", "Say hi to the room.": "和房间里的人打个招呼吧。", "Message (max {0})": "消息（最多 {0} 字）", "Send": "发送",
     "Host": "房主", "Challenger": "挑战者", "Viewer": "观众", "Close chat": "关闭聊天", "Chat message": "聊天消息",
     "Max {0} characters": "最多 {0} 个字", "No links in chat": "聊天里不能发链接", "Please keep it friendly": "请文明发言", "Type a message": "请输入消息", "Slow down: one message every {0}.{1} s": "慢一点：每 {0}.{1} 秒一条",
+    "🔒 Your room name is set and can't be changed.": "🔒 你的房间名已设置，不能修改。", "Set once, can't be changed later. First come, first served.": "只能设置一次，之后不能修改。先到先得。",
+    "Please pick another name": "请换一个名字", "Use letters, numbers, Chinese characters, space, _ . -": "请使用字母、数字、汉字、空格、_ . -",
+    "This room name is already taken. Pick another one (first come, first served).": "这个房间名已被使用，请换一个（先到先得）。", "Give your room a name (up to {0} characters).": "请给房间起名（最多 {0} 个字符）。",
+    "{0} rooms online · up to {1} · most PvP wins this week first": "{0} 个在线房间 · 最多 {1} 个 · 本周 PvP 胜场多的排前面", "{0} room online · up to {1} · most PvP wins this week first": "{0} 个在线房间 · 最多 {1} 个 · 本周 PvP 胜场多的排前面",
+    "No online room matches your search.": "没有符合搜索的在线房间。", "wins this week": "本周胜场", "● idle": "● 空闲", "⚔ Join": "⚔ 加入",
+    "Only rooms with the host online are listed. Ask to fight while the host is there; the host accepts or declines in {0} s. {1} room per bot per day, any level, open until the host closes it or runs out of plays.": "只显示房主在线的房间。房主在时申请对战；房主在 {0} 秒内接受或拒绝。每个机器人每天 {1} 个房间，任何等级，房主关闭或次数用完前一直开放。",
     "Create your room": "创建你的房间", "Room name (max {0})": "房间名（最多 {0} 字）", "+ Create room": "+ 创建房间", "Random": "随机",
     "One room per day. It stays open until you close it, run out of plays, or the daily reset (07:00 GMT+7). Any level can ask to join; you accept or decline.": "每天一个房间。房间会一直开着，直到你关闭、次数用完或每日重置（GMT+7 07:00）。任何等级都可以申请加入，由你接受或拒绝。",
     "Up to {0} letters, numbers, Chinese characters, space, _ . -": "最多 {0} 个字母、数字、汉字、空格、_ . -", "Please pick another name.": "请换一个名字。",
@@ -1880,6 +1921,42 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
     "Like": "点赞", "Like this post on X": "在 X 上给这条帖子点赞", "Repost": "转发", "Repost this post on X": "在 X 上转发这条帖子", "Comment": "评论",
     "Post {0} of this week": "本周第 {0} 条帖子", "Pinned post": "置顶帖", "@dotBots_ai profile": "@dotBots_ai 主页", "no quest posts this week yet": "本周还没有任务帖子", "new posts every Monday": "每周一更新帖子",
     "Every level-up also needs one more {0}-day check-in streak (Lv{1} needs {2}, Lv{3} needs {4}).": "每次升级还需要多完成一次连续 {0} 天签到（Lv{1} 需 {2} 次，Lv{3} 需 {4} 次）。", "Daily reset in": "每日重置还有", "RIVAL": "对手", "Your opponent": "你的对手",
+
+    /* ---------------- X account link, dotBots Quest (last 2 days, once per dotBot), fraud notice, quest-cheat flag (user 2026-11-10) */
+    "Comment from your linked X account, then paste the link of your comment": "用你绑定的 X 账号评论，然后粘贴你评论的链接",
+    "If we find cheating in dotBots Quest (claiming without really following, liking, reposting or commenting), dotBots may cancel the XP earned, match results and rewards, and stop that dotBot from levelling up. dotBots Quest is optional, but if you do it, do it for real.": "如果我们发现 dotBots 任务中有作弊行为（没有真正关注、点赞、转发或评论就领取），dotBots 可能取消已获得的 XP、对战结果和奖励，并让该 dotBot 无法升级。dotBots 任务是自愿参加的，但只要参加，就请认真完成。",
+    "Flagged for quest cheating": "因任务作弊被标记",
+    "This dotBot can't claim dotBots Quest, can't level up and is hidden from the weekly leaderboard.": "这个 dotBot 不能领取 dotBots 任务、不能升级，并且不显示在每周排行榜上。",
+    "This dotBot can't level up, can't claim dotBots Quest and is hidden from the weekly leaderboard. Its dotBots Quest XP was cancelled.": "这个 dotBot 不能升级、不能领取 dotBots 任务，并且不显示在每周排行榜上。它从 dotBots 任务获得的 XP 已被取消。",
+    "Link your X account in Profile first": "请先在档案中绑定你的 X 账号",
+    "dotBots Quest needs your X username (+{0} XP the first time you link). dotBots only reads public X info and can never post or change your X account.": "dotBots 任务需要你的 X 用户名（第一次绑定 +{0} XP）。dotBots 只读取公开的 X 信息，永远不能发帖或修改你的 X 账号。",
+    "Open Profile": "打开档案",
+    "no quest posts in the last {0} days": "最近 {0} 天没有任务帖子",
+    "Post {0}": "第 {0} 条帖子",
+    "Honor-based: open the link, do it on X, wait {0} s, claim. Each quest once per dotBot": "诚信制：打开链接，在 X 上完成，等 {0} 秒后领取。每个任务每个 dotBot 只能领取一次",
+    "max {0} XP per day from quests": "每天任务最多 {0} XP",
+    "posts from the last {0} days": "最近 {0} 天的帖子",
+    "Linked X account": "已绑定的 X 账号",
+    "@dotBots_ai posts from the last {0} days on X": "@dotBots_ai 最近 {0} 天的 X 帖子",
+    "Link your X account in Profile first.": "请先在档案中绑定你的 X 账号。",
+    "This X account is already linked to another wallet.": "这个 X 账号已经绑定到另一个钱包。",
+    "This wallet already has an X account linked. Disconnect it first.": "这个钱包已经绑定了一个 X 账号，请先解除绑定。",
+    "X usernames are {0}–{1} letters, numbers or _.": "X 用户名为 {0}–{1} 个字母、数字或 _。",
+    "The comment must be posted from your linked X account.": "评论必须由你绑定的 X 账号发布。",
+    "This dotBot is flagged for quest cheating.": "这个 dotBot 因任务作弊被标记。",
+    "This quest is no longer available (posts from the last {0} days only).": "这个任务已失效（只限最近 {0} 天的帖子）。",
+    "X account": "X 账号",
+    "Linked": "已绑定",
+    "Disconnect": "解除绑定",
+    "Link X account": "绑定 X 账号",
+    "Link your X account to unlock dotBots Quest (+{0} XP the first time).": "绑定你的 X 账号即可解锁 dotBots 任务（第一次绑定 +{0} XP）。",
+    "@username or x.com/username": "@用户名 或 x.com/用户名",
+    "dotBots only reads your public X username. It can never post or change anything on your X account. {0} wallet = {1} X account.": "dotBots 只读取你公开的 X 用户名，永远不能在你的 X 账号上发帖或修改任何内容。{0} 个钱包 = {1} 个 X 账号。",
+    "X account linked: +{0} XP": "X 账号已绑定：+{0} XP",
+    "X account linked": "X 账号已绑定",
+    "X account disconnected: −{0} XP": "X 账号已解除绑定：−{0} XP",
+    "X account disconnected": "X 账号已解除绑定",
+    "dotBots Quest (signed in, X account linked in Profile): follow @dotBots_ai, then Like, Repost and Comment on each @dotBots_ai post from the last {0} days. Open the link, do it on X, wait {1} s, then Claim. Each quest once per dotBot, max {2} XP per day. Offline practice keeps {3} battle quests.": "dotBots 任务（登录并在档案中绑定 X 账号后）：关注 @dotBots_ai，然后为最近 {0} 天每条 @dotBots_ai 帖子点赞、转发并评论。打开链接，在 X 上完成，等待 {1} 秒后领取。每个任务每个 dotBot 只能领取一次，每天最多 {2} XP。离线练习仍保留 {3} 个对战任务。",
   });
 })();
 
@@ -2594,8 +2671,9 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
     function rawLevel(xp) { let lv = 1; while (lv < MAXLV && xp >= cum(lv + 1)) lv++; return lv; }
     function weeksFor(level) { let w = 0; for (const [lv, wk] of GATES) if (level >= lv) w = Math.max(w, wk); return w; }
     function capByWeeks(weeks) { for (const [lv, wk] of GATES) if (weeks < wk) return lv - 1; return MAXLV; }
-    function levelOf(xp, weeks) {
-      weeks = weeks || 0; const raw = rawLevel(xp), cap = capByWeeks(weeks), lv = Math.min(raw, cap), max = lv >= MAXLV, gated = raw > lv;
+    /* frozenLv (user 2026-11-10, quest-cheat flag set by the server admin): the level can not rise above it; extra XP is kept as reserve */
+    function levelOf(xp, weeks, frozenLv) {
+      weeks = weeks || 0; const raw = rawLevel(xp), cap = Math.min(capByWeeks(weeks), frozenLv > 0 ? frozenLv : MAXLV), lv = Math.min(raw, cap), max = lv >= MAXLV, gated = raw > lv;
       const need = max ? 0 : xpNeed(lv), into = max ? 0 : gated ? need : xp - cum(lv), reserve = gated ? xp - cum(lv + 1) : 0;
       const g = GATES.find(([glv]) => glv > lv) || null;
       return { level: lv, raw, into, need, max, gated, reserve, xp, weeks, nextGate: g ? { level: g[0], weeks: g[1], have: weeks, met: weeks >= g[1] } : null };
@@ -2611,12 +2689,12 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
       return { done, run, runStart, last: prev };
     }
     function fullWeeks(r) { return streakInfo(r).done; }
-    function botLevel(b) { const r = bot(b); return levelOf(r.xp, fullWeeks(r)); }
+    function botLevel(b) { const r = bot(b); return levelOf(r.xp, fullWeeks(r), r.frozenLv); }
     function weekView(b) {
       const r = bot(b), d = dayKey(), si = streakInfo(r), set = new Set(r.days), checkedToday = set.has(d);
       const start = si.run > 0 ? si.runStart : checkedToday ? d : d;          // current streak block (7 slots)
       const dots = Array.from({ length: 7 }, (_, i) => ({ day: start + i, done: i < si.run, today: start + i === d, past: start + i < d }));
-      const lv = levelOf(r.xp, si.done);
+      const lv = levelOf(r.xp, si.done, r.frozenLv);
       const missed = !checkedToday && si.last !== null && si.last < d - 1 && r.days.length > 0;
       return { full: si.done, dots, doneThisWeek: si.run, streakDay: si.run, missed, checkedToday, weekStart: start * DAY + offMs, nextWeekAt: (start + 7) * DAY + offMs, nextGate: lv.nextGate, level: lv };
     }
@@ -2762,7 +2840,7 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
       const pl = plays(b), counted = info.counted == null ? pl.left > 0 : !!info.counted && pl.left > 0;
       if (counted) r.playsUsed++;
       const earning = isEarning(b), paid = earning && counted;
-      const wk0 = fullWeeks(r), lv0 = levelOf(r.xp, wk0);
+      const wk0 = fullWeeks(r), lv0 = levelOf(r.xp, wk0, r.frozenLv);
       const out = { counted, practice: !counted, earning, paid, bolts: 0, boltsBase: 0, boltsMult: boltsMult(lv0.level), xp: 0, xpCheckin: 0, newBadges: [], quests: [], rankUp: null, levelUp: null,
         restored: [], drop: null, dropChance: 0, dropCapped: false, gifts: [], before: lv0 };
       if (counted) {
@@ -2770,7 +2848,7 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
         r.xp += out.xp; r.counted++;
         // user 12:09: while XP sits in Reserve behind a weekly gate, the reserve XP earned in a counted match also pays Bolts
         // at 1 Bolt per 4 XP ("Reserve bonus"); real bots / holder toggle only (Bolts rule); remainder carried; XP itself is kept
-        const resGain = Math.max(0, levelOf(r.xp, wk0).reserve - lv0.reserve); out.reserveXp = resGain;
+        const resGain = Math.max(0, levelOf(r.xp, wk0, r.frozenLv).reserve - lv0.reserve); out.reserveXp = resGain;
         if (resGain && paid) { const per = (cfg.reserveBonus && cfg.reserveBonus.xpPerBolt) || 4, tot = resGain + (r.reserveCarry || 0); out.reserveBolts = Math.floor(tot / per); r.reserveCarry = tot % per; }
         else out.reserveBolts = 0;
         if (paid) { out.boltsBase = win ? RW.bolts.win : draw ? RW.bolts.draw : RW.bolts.loss; out.bolts = Math.round(out.boltsBase * out.boltsMult); }
@@ -2792,7 +2870,7 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
         out.hist = logMatch(b, info, out); save();
         return out;
       }
-      const wk1 = fullWeeks(r), lv1 = levelOf(r.xp, wk1);
+      const wk1 = fullWeeks(r), lv1 = levelOf(r.xp, wk1, r.frozenLv);
       if (wk1 > wk0) out.weekDone = wk1;
       if (lv1.level > lv0.level) {
         out.levelUp = Object.assign({ from: lv0.level, to: lv1.level, jump: lv1.level - lv0.level }, giveGifts(b, lv0.level, lv1.level, out));
@@ -2874,10 +2952,10 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
      *  credits the wallet login streak (simulated Bolts for real bots / holder toggle) the first time each day. No fee, no tx. */
     function checkIn(b) {
       const r = bot(b), d = dayKey(); if (r.days.includes(d)) return { ok: false, reason: "already checked in today", already: true };
-      const wk0 = fullWeeks(r), lv0 = levelOf(r.xp, wk0);
+      const wk0 = fullWeeks(r), lv0 = levelOf(r.xp, wk0, r.frozenLv);
       r.days.push(d); r.xp += RW.xp.checkin;
       const login = st.login.claimedDay === d ? null : claimLogin(isEarning(b));
-      const wk1 = fullWeeks(r), lv1 = levelOf(r.xp, wk1), out = { ok: true, xp: RW.xp.checkin, before: lv0, level: lv1, weekDone: wk1 > wk0 ? wk1 : 0, login, gifts: [], newBadges: [] };
+      const wk1 = fullWeeks(r), lv1 = levelOf(r.xp, wk1, r.frozenLv), out = { ok: true, xp: RW.xp.checkin, before: lv0, level: lv1, weekDone: wk1 > wk0 ? wk1 : 0, login, gifts: [], newBadges: [] };
       if (lv1.level > lv0.level) out.levelUp = Object.assign({ from: lv0.level, to: lv1.level, jump: lv1.level - lv0.level }, giveGifts(b, lv0.level, lv1.level, out));
       if (wk1 >= 1) award(r, "week1", out.newBadges); if (lv1.level >= 10) award(r, "lv10", out.newBadges); if (lv1.level >= 20) award(r, "lv20", out.newBadges); if (lv1.level >= 30) { award(r, "lv30", out.newBadges); award(r, "iron_will", out.newBadges); award(r, "og", out.newBadges); }
       save(); out.weeks = weekView(b); return out;
@@ -3084,7 +3162,7 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
 <script>/* names.js */
 /* dotBots bot names (user default 2026-11-09 08:26): max 16 characters, letters/digits/space/_ . - plus Chinese characters,
  * basic bad-word filter (small EN + ZH list). Fix list 2026-11-09 (item 1): names are UNIQUE across wallets, compared with key()
- * (trimmed, spaces collapsed, case-insensitive); the server enforces it. check(raw, 24) = room names (item 3); text() = chat (item 8). Shared byte-for-byte with the server
+ * (trimmed, spaces collapsed, case-insensitive); the server enforces it. check(raw, 10) = room names (user 2026-11-10: max 10, set once per wallet, unique - server room_names); text() = chat (item 8). Shared byte-for-byte with the server
  * (server/src/shared/names.js via npm run sync-shared), so the client check and the server check are the same code. */
 (function (root, factory) {
   const api = factory();
@@ -3135,7 +3213,65 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
   function key(raw) { return tidy(raw).toLowerCase(); }
   /** keep only allowed characters, cut to 16 (used while typing / for pasted names) */
   function clean(s) { return tidy(String(s == null ? "" : s).replace(/[^A-Za-z0-9 _.\-\u4e00-\u9fff]/g, "")).slice(0, MAX); }
-  return { MAX, ROOM_MAX: 24, TEXT_MAX, check, clean, tidy, text, key, badWord };
+  return { MAX, ROOM_MAX: 10, TEXT_MAX, check, clean, tidy, text, key, badWord };
+});
+
+</script>
+<script>/* rematch.js */
+/* dotBots Bot Battle v3.4 - the 10 s "Continue / Leave room" window after a ROOM (live PvP) match, as a small state machine.
+ * Bug (user 2026-11-10 07:00): the window was started the moment the live result message arrived (rematchStart in liveLock),
+ * i.e. while the replay of the match was only starting, and a late {t:"rematch_off"} from the room (or the window's own timeout)
+ * left RM.off set, so its banner ("Time's up: no next match…") showed on the NEXT screen, even an AI match result.
+ * Now: arm() keeps the window pending when the result arrives; it opens only when the result screen of THAT live match is
+ * shown (shown("live")); any other result (AI, challenge, practice) or starting another match clears it; a rematch_off with
+ * nothing armed or open is ignored (stale). The server starts its 10 s after the replay time (showAt) to match.
+ *   const R = DBRematch.create({ now: () => Date.now() });
+ *   R.arm(resultMsg, offText) live result received (rematchAt / rematchMs / serverNow from the room)
+ *   R.shown(kind, timeoutTxt) a result screen is shown: "live" (+ armedFor(result)) opens the armed window, anything else clears
+ *   R.off(text)             the room ended the window (left / timeout / gone / no plays)
+ *   R.tick(timeoutText)     every 250 ms while open
+ *   R.view(phase)           { overlay, left, bar } to render; nothing unless phase === "result"
+ *   R.clear()               leave room / start an AI match / back to the lobby / next live match starts */
+(function (root, factory) {
+  if (typeof module === "object" && module.exports) module.exports = factory();
+  else root.DBRematch = factory();
+})(typeof self !== "undefined" ? self : this, function () {
+  function create(opts) {
+    const now = (opts && opts.now) || (() => Date.now());
+    const st = { pend: null, live: false, at: 0, off: null, me: false, opp: false, ms: 10000 };
+    function clear() { st.pend = null; st.live = false; st.at = 0; st.off = null; st.me = false; st.opp = false; }
+    function arm(m, offText, ref) {
+      clear();
+      const skew = now() - (m.serverNow || now());
+      st.pend = { at: m.rematchAt ? m.rematchAt + skew : 0, ms: m.rematchMs || 10000, offText: m.rematchAt ? null : offText || null, ref: ref === undefined ? m : ref };
+    }
+    /** is `ref` (the live result message) the one armed? */
+    function armedFor(ref) { return !!st.pend && st.pend.ref === ref; }
+    function shown(kind, timeoutText) {
+      if (kind !== "live" || !st.pend) { clear(); return false; }
+      const p = st.pend; st.pend = null; st.me = false; st.opp = false;
+      if (p.at && p.at > now()) { st.live = true; st.at = p.at; st.ms = p.ms; st.off = null; return true; }
+      st.live = false; st.at = 0; st.off = p.offText || (p.at ? timeoutText || null : null); return false;
+    }
+    function off(text) {
+      if (st.live) { st.live = false; st.at = 0; st.off = text; return true; }
+      if (st.pend) { st.pend.at = 0; st.pend.offText = text; return true; } // ended during the replay: shown on the result screen
+      return false; // nothing armed or open: a stale message from a room we're no longer looking at
+    }
+    function tick(timeoutText) {
+      if (st.live && st.at && now() > st.at + 3000) { st.live = false; st.at = 0; st.off = timeoutText; }
+      return st.live;
+    }
+    function vote(me, opp) { if (st.live) { st.me = !!me; st.opp = !!opp; } }
+    function view(phase) {
+      if (phase !== "result") return { overlay: false, left: 0, bar: null };
+      // the window opens at (at - ms): the server's 10 s start after the replay time, so an early result screen waits for it
+      if (st.live && st.at && now() >= st.at - st.ms) return { overlay: true, left: Math.max(0, Math.ceil((st.at - now()) / 1000)), bar: null, me: st.me, opp: st.opp };
+      return { overlay: false, left: 0, bar: st.live ? null : st.off };
+    }
+    return { st, clear, arm, armedFor, shown, off, tick, vote, view };
+  }
+  return { create };
 });
 
 </script>
@@ -4566,6 +4702,7 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
 
   async function findMatch(sameOpp) {
     if (!S.me) return;
+    try { rmClear(); } catch (_) {} // an AI / challenge match never carries a room's Continue window or its banner
     if (S.testnet) return chainStart();
     if (onBot(S.me)) return onlineFind(sameOpp);
     S.forcePractice = false; S.practiceWhy = null; S.serverMatch = null;
@@ -4770,6 +4907,7 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
   }
   function finish() {
     S.phase = "result"; const R = S.result;
+    try { rmShown(); } catch (_) {} // the room's Continue / Leave window opens HERE (result shown), never at match start
     $("#watch").classList.add("hidden"); $("#result").classList.remove("hidden"); $("#phaseTag").textContent = "";
     const t = $("#resTitle"); t.textContent = R.w === 0 ? "VICTORY" : R.w === 1 ? "DEFEAT" : "DRAW"; t.className = "res-title " + (R.w === 0 ? "win" : R.w === 1 ? "lose" : "draw");
     const missTxt = S.liveMissed === "me" ? "You didn't pick in time — match lost" : S.liveMissed === "opp" ? "Your opponent didn't pick in time — you win" : "";
@@ -5087,6 +5225,7 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
         </div>
         <div class="small dim pf-chg-h">Skill charges now <span class="dim">(reset 07:00 GMT+7)</span></div>${chargesRow(b, "big")}
       </div>
+      ${xCardHtml()}
       ${weekCardHtml()}
       <div class="card pf-today" id="pfToday"><div class="card-h"><h2>Today</h2><span class="dim small">since 07:00 GMT+7</span></div>
         <div class="pft-grid">
@@ -5109,6 +5248,7 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
         ${hist.length ? `<div class="hlist" id="histList">${hist.map((e, i) => histRow(e, f, i)).join("")}</div>` : `<div class="empty small" id="histEmpty">No matches yet with this bot. Play a match and it shows up here.</div>`}
       </div>`;
     const pc = $("#pfPractice"); if (pc) pc.onchange = e => { S.pfPractice = e.target.checked; renderProfilePage(); };
+    bindXCard(box);
     $("#pfBotName").textContent = shortName(b);
   }
   let profileFrom = "lobby";
@@ -5348,7 +5488,7 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
     const RW = S.V31.rewards, cost = RW.crateCost, st = S.meta.state, b = S.me, h = isHolder(b), rt = b ? roomsToday(b) : null, lvl = b ? S.meta.botLevel(b).level : 1;
     box.innerHTML = `<div class="pg-row"><div class="pg-k">Bolts</div><div class="pg-v"><b id="liteBolts">${st.bolts}</b> <span class="dim small">· ${b && b.online ? "saved on the server" : "same for every bot"}</span></div></div>
       <div class="pg-row" id="crateRow"><div class="pg-k">Part Crate</div><div class="pg-v"><div class="bar crate"><i style="width:${Math.min(100, st.bolts / cost * 100)}%"></i></div><span class="small">${fmtN(Math.min(st.bolts, cost))}/${fmtN(cost)} Bolts</span> <button class="btn tiny" id="crateSoon" disabled>Coming soon</button><div class="small crate-note" id="crateNote">📦 <b>${fmtN(cost)} Bolts opens 1 crate = 1 random item.</b> Items will be tradable later.</div></div></div>
-      ${b && b.online ? `<div class="pg-sub">dotBots Quest <span class="dim small">· this week's @dotBots_ai posts on X</span></div><div id="liteXq"></div>` : `<div class="pg-sub">Daily quests <span class="dim small">· new set at 07:00 GMT+7</span></div>
+      ${b && b.online ? `<div class="pg-sub">dotBots Quest <span class="dim small">· @dotBots_ai posts from the last 2 days on X</span></div><div id="liteXq"></div>` : `<div class="pg-sub">Daily quests <span class="dim small">· new set at 07:00 GMT+7</span></div>
       <ul class="quests" id="liteQuests">${S.meta.questsToday().map(q => `<li class="${q.done ? "done" : ""}"><span class="qn">${esc(q.name)}</span><span class="qp">${q.prog}/${q.target}</span><span class="qb">+${q.bolts}</span></li>`).join("")}</ul>`}
       <button class="btn tiny ghost" data-rw-guide>Rewards guide</button>`;
     renderRooms(); if (b && b.online) renderQuests();
@@ -5437,7 +5577,13 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
     let main, strip;
     if (up && LV.open) { main = roomViewHtml(LV.open); strip = onlineStrip(); }
     else { strip = up ? onlineStrip() : offlineStrip(); main = createViewHtml(up); }
-    box.innerHTML = main.html + strip;
+    // fix (user 2026-11-10 07:11): keep typing in room search across re-renders (debounced search + lobby poll rebuild the DOM;
+    // removing the focused input fired blur -> SR.focus=false, so focus was lost after the first pause)
+    const ae = document.activeElement, srHad = !!(ae && ae.id === "srIn"), srSel = srHad ? [ae.selectionStart, ae.selectionEnd] : null;
+    if (srHad) SR.typed = ae.value;
+    SR.rebuilding = true; box.innerHTML = main.html + strip; SR.rebuilding = false;
+    if (srHad) SR.focus = true;
+    SR.sel = srSel;
     const cv = $("#raCanvas", box); if (cv && main.arena) drawRoomArena(cv, { arena: main.arena, hostBot: main.hostBot, recent: main.recent, showLast: !!main.recent });
     bindArena(box, main);
   }
@@ -5446,7 +5592,7 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
     $$("[data-rm-join]", box).forEach(el => el.onclick = () => joinRoom(el.dataset.rmJoin));
     $$("[data-rm-open]", box).forEach(el => el.onclick = () => openRoom(el.dataset.rmOpen));
     const rf = $("#roomsRefresh", box); if (rf) rf.onclick = () => refreshLists();
-    const sq = $("#srIn", box); if (sq) { sq.oninput = () => { clearTimeout(SR.t); SR.typed = sq.value; const v = sq.value.trim().slice(0, 32); SR.t = setTimeout(() => roomSearch(v), 350); }; sq.onkeydown = e => { if (e.key === "Enter") { clearTimeout(SR.t); roomSearch(sq.value.trim().slice(0, 32)); } }; if (SR.focus) { sq.focus(); sq.setSelectionRange(sq.value.length, sq.value.length); } sq.onfocus = () => { SR.focus = true; }; sq.onblur = () => { SR.focus = false; }; }
+    const sq = $("#srIn", box); if (sq) { sq.oninput = () => { clearTimeout(SR.t); SR.typed = sq.value; const v = sq.value.trim().slice(0, 32); SR.t = setTimeout(() => roomSearch(v), 350); }; sq.onkeydown = e => { if (e.key === "Enter") { clearTimeout(SR.t); roomSearch(sq.value.trim().slice(0, 32)); } }; if (SR.focus) { sq.focus(); const L = sq.value.length, ss = SR.sel || [L, L]; sq.setSelectionRange(Math.min(ss[0], L), Math.min(ss[1], L)); } SR.sel = null; sq.onfocus = () => { SR.focus = true; }; sq.onblur = () => { if (!SR.rebuilding) SR.focus = false; }; }
     const rc = $("#raClose", box); if (rc) rc.onclick = () => closeMyRoom(rc.dataset.id);
     const ro = $("#raReopen", box); if (ro) ro.onclick = () => reopenRoom(ro.dataset.id);
     const cr = $("#roomCreate", box); if (cr) cr.onclick = () => onUp() ? onlineRoom() : openInfo("Rooms offline", `<p>Offline, a room is a challenge link with your 5 locked moves.</p><ol><li>Press <b>Find opponent</b>.</li><li>Lock 5 moves.</li><li>Press <b>⚔ Create room</b> on the battle screen and share the link.</li></ol><p class="dim small">Live rooms (you wait in the room, both pick at the same time) need the dotBots server.</p>`);
@@ -5516,9 +5662,11 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
     network: "Server unreachable. Offline practice still works (not saved).", server_error: "Server error. Offline practice still works (not saved).",
     session_expired: "Your sign-in expired (2 h). Sign in again with your wallet.", session_revoked: "You signed out elsewhere. Sign in again with your wallet.", bad_session: "Please sign in again with your wallet.", no_session: "Please sign in with your wallet first.",
     no_bot: "Create your free dotBot first.", bot_exists: "This wallet already has its free dotBot.", already_checked_in: "Already checked in today with this bot · next check-in after 07:00 GMT+7",
-    name_taken: "This name is already taken. Pick another one (names are unique).", rename_disabled: "Bot names are permanent.", room_exists: "One room per day: reopen today's room.",
+    name_taken: "This name is already taken. Pick another one (names are unique).", rename_disabled: "Bot names are permanent.", room_exists: "One room per day: reopen today's room.", room_name_taken: "This room name is already taken. Pick another one (first come, first served).", name_required: "Give your room a name (up to 10 characters).",
     not_host: "Only the host can do this.", no_plays: "No plays left today. More at 07:00 GMT+7.", host_no_plays: "The host has no plays left today.", room_expired: "That room was for an earlier day. Create today's room.",
-    invalid_link: "Paste the link of your post: https://x.com/<you>/status/…", too_soon: "Wait 10 seconds after opening the link.", not_opened: "Open the quest link first.", already_claimed: "Already claimed today.",
+    invalid_link: "Paste the link of your post: https://x.com/<you>/status/…", x_not_linked: "Link your X account in Profile first.", x_taken: "This X account is already linked to another wallet.",
+    x_already_linked: "This wallet already has an X account linked. Disconnect it first.", invalid_x_handle: "X usernames are 1–15 letters, numbers or _.",
+    comment_not_yours: "The comment must be posted from your linked X account.", flagged: "This dotBot is flagged for quest cheating.", invalid_quest: "This quest is no longer available (posts from the last 2 days only).", too_soon: "Wait 10 seconds after opening the link.", not_opened: "Open the quest link first.", already_claimed: "Already claimed today.",
     match_expired: "This match expired.", already_settled: "This match was already played.", room_cap: "One room per bot per day. New room at 07:00 GMT+7.",
     join_cap: "Each bot can join 3 rooms per day. More at 07:00 GMT+7.", level_band: "This room is for bots within ±3 levels of the host.", already_fought: "Your bot already fought this room.",
     room_closed: "This room is closed.", no_room: "Room not found.", own_room: "You can't fight your own room. Share it instead.", holders_only: "On mainnet only dotBots holders can open rooms. Anyone can join.",
@@ -5825,7 +5973,7 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
   function liveUrl(id) { return ON.base.replace(/^http/, "ws") + "/rooms/" + id + "/live"; }
   function liveLeave(why) {
     LV.closing = true; const w = LV.ws; LV.ws = null; LV.roomId = null; LV.role = null; LV.hello = null; LV.presence = null; LV.wantFight = false; clearInterval(LV.beat);
-    RQ.cur = null; reqPop(); CHAT.lines = []; CHAT.open = false; renderChat(); clearInterval(RM.t); RM.at = 0; RM.off = null;
+    RQ.cur = null; reqPop(); CHAT.lines = []; CHAT.open = false; renderChat(); rmClear();
     try { if (w) w.close(1000, why || "leave"); } catch (_) {}
     renderRooms();
   }
@@ -5859,15 +6007,15 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
     if (m.t === "requested") { LV.wantFight = true; LV.reqAt = m.expiresAt + (Date.now() - m.serverNow); clearInterval(RQ.wait); RQ.wait = setInterval(() => { if (!LV.wantFight || Date.now() > LV.reqAt + 2000) clearInterval(RQ.wait); renderRooms(); }, 1000); renderRooms(); return; }
     if (m.t === "declined") { LV.wantFight = false; clearInterval(RQ.wait); toast(m.reason === "timeout" ? "The host didn't answer in 10 s: request declined." : m.reason === "host" ? "The host declined your request." : "Request cancelled."); renderRooms(); return; }
     if (m.t === "rematch_off") return rematchOff(m);
-    if (m.t === "continue") { RM.me = !!m.me; RM.opp = !!m.opp; rematchBar(); return; }
+    if (m.t === "continue") { RMS.vote(m.me, m.opp); rematchBar(); return; }
     if (m.t === "void") { // fix 6: neither player picked -> void, nothing counted
       S.serverMatch = null; clearInterval(S.timer); clearTimeout(vsTimer); if (LV.resWait) { const r = LV.resWait; LV.resWait = null; r({ ok: false, quit: true }); }
       toast(`Neither player picked in time: match void. No rewards, no play used.${m.missedPicks ? ` Missed picks in this room: ${m.missedPicks}/3` : ""}`);
       refreshMe().catch(() => {}); if (S.phase !== "lobby") toLobby(); return;
     }
     if (m.t === "removed") { // fix 6: 3 missed picks in this room
-      if (m.who === "me") { LV.closing = true; toast(LV.role === "host" ? "Removed from room: 3 missed picks. Your room is closed." : "Removed from room: 3 missed picks"); clearInterval(RM.t); RM.at = 0; RM.off = "Removed from room: 3 missed picks"; rematchBar(); if (LV.role !== "host") { LV.open = null; liveLeave("removed"); } }
-      else { toast("Your opponent was removed from the room: 3 missed picks"); clearInterval(RM.t); RM.at = 0; RM.off = "Your opponent was removed from the room: 3 missed picks"; rematchBar(); }
+      if (m.who === "me") { LV.closing = true; toast(LV.role === "host" ? "Removed from room: 3 missed picks. Your room is closed." : "Removed from room: 3 missed picks"); clearInterval(RM.t); RMS.off("Removed from room: 3 missed picks"); rematchBar(); if (LV.role !== "host") { LV.open = null; liveLeave("removed"); } }
+      else { toast("Your opponent was removed from the room: 3 missed picks"); clearInterval(RM.t); RMS.off("Your opponent was removed from the room: 3 missed picks"); rematchBar(); }
       return;
     }
     if (m.t === "closed") { if (m.reason !== "host_no_plays") LV.closing = true; toast(m.reason === "host_no_plays" ? "The host has no plays left: the room closed for today." : m.reason === "host_missed_picks" ? (LV.role === "host" ? "Removed from room: 3 missed picks. Your room is closed." : "The host missed 3 picks: the room closed.") : "The host closed the room."); RQ.cur = null; reqPop(); if (ON.me && ON.me.room && LV.role === "host") ON.me.room.open = false; if (m.reason !== "host_no_plays" || !isLive()) { delete LV.detail[LV.roomId]; } return; }
@@ -5894,7 +6042,7 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
     S.replayGen = (S.replayGen || 0) + 1; stage.clearChips(); // both pressed Continue: stop the replay that may still be playing
     clearInterval(S.timer); clearTimeout(vsTimer); stopConfetti();
     const off = Date.now() - m.serverNow;
-    clearInterval(RM.t); RM.at = 0; RM.off = null; rematchBar(); RQ.cur = null; reqPop();
+    rmClear(); RQ.cur = null; reqPop();
     S.liveBadges = { me: (m.me && m.me.badges) || [], opp: (m.opponent && m.opponent.badges) || [] };
     S.livePickAt = m.pickAt + off; S.liveDeadline = m.deadline + off; LV.wantFight = false; S.oppLocked = !!(m.locked && m.locked.opp); S.liveDraft = null; LV.early = null;
     S.serverMatch = { id: m.matchId, kind: "live", role: m.role, roomId: LV.roomId, seedCommit: m.seedCommit, expiresAt: S.liveDeadline };
@@ -5921,7 +6069,7 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
       F = await wait;
     }
     if (!F || !F.ok) { S.serverMatch = null; if (F && F.quit) return; toast(F && F.message ? F.message : "No result from the live room. Check your match history after a refresh."); refreshMe().catch(() => {}); toLobby(); return; }
-    rematchStart(F); ["#rematchBtn", "#newOppBtn"].forEach(q => { const el = $(q); if (el) el.classList.add("hidden"); });
+    rematchStart(F); /* armed only: opens on this match's result screen (finish -> rmShown) */ ["#rematchBtn", "#newOppBtn"].forEach(q => { const el = $(q); if (el) el.classList.add("hidden"); });
     if (F.missed === "me") toast(`You didn't pick in time — match lost${F.missedPicks ? ` · missed picks in this room: ${F.missedPicks}/3` : ""}`);
     else if (F.missed === "opp") toast("Your opponent didn't pick in time — you win");
     return serverResult(F, sm, before);
@@ -6028,17 +6176,16 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
         <p class="dim small ra-note">Live fight: a challenger asks while the host is in the room; the host accepts or declines (10 s). Then a 5 s countdown and both pick 5 moves at the same time (${S.V2.pickSec} s). Time up = AUTO fills the empty slots. Both get normal rewards and spend 1 play. Quitting a match = play lost and −20 XP. After a match the next one starts in 5 s unless someone leaves.</p></div></div>` };
   }
   function closeRoomView() { const id = LV.open; LV.open = null; if (LV.ws && LV.role === "chal" && LV.roomId === id && !isLive()) liveLeave("close"); renderRooms(); }
-  // strip: rooms where a host is waiting (compact arena thumbnails); rooms with the host away folded into <details>
-  // item 4: lobby = up to 20 rooms (hosts online first, mixed levels) + search by room name, bot name or level; host-away rooms folded (not joinable)
+  // lobby (user 2026-11-10): the server lists only rooms whose host is online (max 20), sorted by the host's PvP wins this week;
+  // shown as a responsive grid of tiles (5/4 columns desktop, 2 on mobile). Search (?q=) keeps the same rules.
   function onlineStrip() {
-    const list = SR.rooms || ON.rooms || [], mineId = ON.me && ON.me.room ? ON.me.room.id : null, live = [], away = [];
-    for (const r of list) { if (r.id === LV.open && !SR.rooms) continue; (r.hostOnline ? live : away).push(roomTile(r)); }
-    const head = SR.rooms ? `<b>Search</b><span class="small dim">${SR.rooms.length} room${SR.rooms.length === 1 ? "" : "s"} for “${esc(SR.q)}”</span>` : `<b>Live now</b><span class="small dim">${live.length} host${live.length === 1 ? "" : "s"} waiting · up to 20 rooms · any level</span>`;
+    const list = SR.rooms || ON.rooms || [], tiles = [];
+    for (const r of list) { if (r.id === LV.open && !SR.rooms) continue; if (r.hostOnline) tiles.push(roomTile(r)); }
+    const head = SR.rooms ? `<b>Search</b><span class="small dim">${tiles.length} room${tiles.length === 1 ? "" : "s"} for “${esc(SR.q)}”</span>` : `<b>Live now</b><span class="small dim">${tiles.length} room${tiles.length === 1 ? "" : "s"} online · up to 20 · most PvP wins this week first</span>`;
     return `<div class="ah-search"><input class="inp" id="srIn" maxlength="32" placeholder="Search rooms: name, bot name or level (e.g. 10)" value="${esc(SR.typed != null ? SR.typed : SR.q)}" autocomplete="off" aria-label="Search rooms"><button class="btn tiny ghost" id="roomsRefresh">↻ Refresh</button></div>
       <div class="ah-strip-h" id="srRes">${head}</div>
-      <div class="ah-strip" id="arenaStrip">${live.join("") || `<div class="empty small ah-empty">${SR.rooms ? "No room with a host waiting matches your search." : "No host is waiting right now. Create a room and share it on X."}</div>`}</div>
-      ${away.length ? `<details class="ah-away" ${SR.rooms ? "open" : ""}><summary>${away.length} room${away.length === 1 ? "" : "s"} with the host away (can't be joined)</summary><div class="ah-strip">${away.join("")}</div></details>` : ""}
-      <p class="dim small rm-note">Rooms: ask to fight while the host is there (● Host waiting); the host accepts or declines in 10 s. 1 room per bot per day, any level, open until the host closes it or runs out of plays.</p>`;
+      <div class="ah-grid" id="arenaStrip">${tiles.join("") || `<div class="empty small ah-empty">${SR.rooms ? "No online room matches your search." : "No host is waiting right now. Create a room and share it on X."}</div>`}</div>
+      <p class="dim small rm-note">Only rooms with the host online are listed. Ask to fight while the host is there; the host accepts or declines in 10 s. 1 room per bot per day, any level, open until the host closes it or runs out of plays.</p>`;
   }
   function onlineJoin(id) {
     if (!S.me || !S.me.online) { toast("Sign in and create your dotBot first"); return; }
@@ -6170,8 +6317,8 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
       s6: `<div class="g-sec"><h2>6 · 每天的对战与奖励</h2><ul><li><b>每个机器人每天 ${RW.playsPerBotPerDay} 场计分对战</b>，所有稀有度相同，07:00 GMT+7 重置，无法增加。之后可以继续玩<b>练习赛</b>：没有任何奖励，也不消耗技能次数。</li><li><b>XP：</b>胜 ${RW.xp.win} · 平 ${RW.xp.draw} · 负 ${RW.xp.loss} · 每日签到 +${RW.xp.checkin}。用来升级（第 7 节）。</li><li><b>Bolts</b>（游戏内点数，不是代币，不能出售或提现）：胜 ${RW.bolts.win} · 平 ${RW.bolts.draw} · 负 ${RW.bolts.loss}，再乘等级加成：${multT}。还有每日任务和签到连签的 Bolts（第 12 节）。</li><li><b>Part Crate（零件箱）：</b>即将推出。<b>${RW.crateCost.toLocaleString("en-US")} Bolts 开 1 个箱子 = 1 件随机物品</b>。物品以后可以交易。你现在攒的 Bolts 会一直保存在服务器上。</li><li>每场结束后，结果页会把每样奖励做成一张卡：拿到了什么、有什么用、离下一步还差多少。点 <b>What is all this?</b> 或 <b>Rewards guide</b> 看说明表。</li></ul></div>`,
       s8: `<div class="g-sec"><h2>8 · 技能次数（全天共用）与恢复药水</h2><p>每个机器人每天有技能次数，所有稀有度相同：Punch ${CH.punch} · Kick ${CH.kick} · Press ${CH.press} · Jump ${CH.jump} · Block ${CH.block} · Special ${CH.sig} · Ultimate ${CH.ult}。Rest 免费。07:00 GMT+7 重置。每个真正打出的招式用掉 1 次（锁定时扣除）。招式图标上显示 xN，0 次的招式变灰。赢一场随机恢复 1 次。</p><p><b>恢复药水</b>（小瓶 +3 给你选的一个技能 · 中瓶 +10 先补最低的技能 · 大瓶 全部补满；每个机器人每天最多 ${S.V31.potions.maxPerBotPerDay} 瓶）在背包里使用，背包将在主网开放。现在赢到的药水会为你的机器人保留。</p></div>`,
       s9: `<div class="g-sec"><h2>9 · 物品掉落</h2><ul><li>每场计分胜利有几率掉 1 件物品：${dropT}。每个机器人每天最多 ${D.maxPerBotPerDay} 件。平局和输只给 XP 和 Bolts。</li><li>稀有度：${rar}（等级越高 Rare+ 稍多）。</li><li>物品：恢复药水（补技能次数）· 皮肤和竞技场边框（纯外观，无战力）· Repair Kit、Gear 和 Skill Chip 代币（目前只放在背包，等 Gear 更新后才能用）。</li><li>升级礼物：Lv10 中瓶药水 · Lv15 Rare Gear 代币 · Lv20 Skill Chip Lv2 代币 · Lv25 Epic Gear 代币 · Lv30 传奇皮肤 + Iron Will 徽章。</li><li>本次测试隐藏了背包，主网开放。现在赢到的物品会为你的机器人保留。</li></ul></div>`,
-      s11: `<div class="g-sec"><h2>11 · 房间（竞技场）</h2><ol><li>大厅顶部的 <b>⚔ 竞技场</b> 卡片就是房间竞技场：左边是你的机器人，右边是留给挑战者的 <b>?</b> 座位。</li><li><b>+ 创建房间</b>：给房间起名（最多 24 个字符，不能有不文明用语；名字会大字显示在房间上），再选一个战场（10 个之一或随机）。<b>每个机器人每天 1 个房间。</b>不需要先锁定招式。</li><li>只要你留在页面上，房间就是实时的（<b>● 房主在等待</b>）。房间会一直开着，直到你点 <b>关闭房间</b>、次数用完或 GMT+7 07:00 每日重置。关闭后当天还有次数时可以 <b>重新开放</b> 同一个房间。房间开着时房间链接都有效。</li><li><b>任何等级</b>都可以申请对战（没有等级限制）。挑战者点 <b>⚔ 申请对战</b>；房主会看到对方的名字、等级、胜/平/负和徽章，有 <b>10 秒</b> 选择 <b>接受</b> 或 <b>拒绝</b>，不回应 = 拒绝。</li><li>只有房主在时才能对战，绝不会用 AI 代替房主。接受后 5 秒倒计时，然后双方<b>同时</b>选 5 个招式（20 秒；时间到时选了部分招式的由 AUTO 补满空位，一个都没选 = 这场输，见 11b）。服务器裁判。房主和挑战者都拿正常奖励（XP、Bolts、段位），各消耗 1 场。</li><li>大厅：最多显示 <b>20 个房间</b>，在线的房主优先，各种等级混在一起。搜索框可以按房间名、机器人名或等级查找（输入 <b>10</b> 就显示 Lv10 机器人的房间）。房主不在的房间会折叠起来，不能加入。</li><li>把房间分享到 X 时，帖子里会显示房间图片；<b>下载图片</b> 可保存这张图。测试网上<b>任何人</b>都能开房；主网上只有 dotBots 持有者能开房，所有人都能加入。</li></ol><p class="dim small">离线时，列表显示 AI 机器人开的演示房间，你自己的房间是锁定了 5 个招式的挑战链接（在对战画面点 <b>⚔ 创建房间</b>）。</p></div>
-<div class="g-sec" id="gFix"><h2>11b · 下一场、退出、聊天、排行榜等</h2><ul><li><b>下一场：</b>每场房间对战一出结果，屏幕上会立刻出现一个很大的 <b>10 秒</b> 倒计时和两个按钮：<b>继续</b> 和 <b>离开房间</b>（回放在后面继续播放）。<b>双方都按继续</b>，马上和同一对手开始下一场（每场双方各消耗 1 场次数）。有人按 <b>离开房间</b> 就离开，没有惩罚。10 秒结束时如果不是双方都按了继续，就不会开始下一场，也没有惩罚：大家留在房间里（房主继续等待挑战者）。</li><li><b>中途退出</b>（倒计时或选招时点退出，或离开页面且在计时结束前没回来）：退出的一方失去这一场次数并扣 <b>20 XP</b>（不会低于本级起点，不会掉级，也不会变成负数）。另一方没有奖励、不消耗次数，这场对双方都不计。与 AI 对战中途退出同样失去一场并扣 20 XP。下一场开始后再离开，算作退出。</li><li><b>没选招（房间对战）：</b>20 秒选招时间结束时，人在房间里却<b>一个招式都没选、也没锁定</b>的一方<b>直接输掉这一场</b>：对手赢，双方照常拿胜/负奖励、各消耗 1 场，这场算你一场负。（只要选了至少 1 个招式，时间到时 AUTO 会补满空位；手动点 AUTO 按钮也可以。）<b>双方都没选</b> = 这场作废：没有奖励、不计排行榜、不消耗次数。同一个房间里累计 <b>3 次没选招</b> 会被移出房间（房主：房间关闭；挑战者：被请出）。离开房间后次数清零。没选招的一方不会自动开始下一场。</li><li><b>房间聊天：</b>房间里的所有人（房主、挑战者、观众）都可以聊天。最多 50 个字，不能发链接，不能有不文明用语，每 1.5 秒一条。聊天不保存，房间关闭就没了。</li><li><b>每周排行榜：</b>只计房间（PvP）对战，不计 AI 对战。每周一 GMT+7 07:00 重置。按胜场排名，其次负场少者、平局多者、先达到者。显示胜/平/负。赛季段位（青铜到传奇）不变。</li><li><b>徽章</b>（连胜、段位、房主、Lv30 的 OG 机器人等）会在每场对战中显示在机器人能量条旁边，也显示在房间卡片和加入申请里。</li><li><b>机器人名字</b>在创建时选一次，之后永久不变。所有钱包的名字都唯一（不区分大小写和多余空格），先到先得。如果你的机器人和规则之前更早的机器人重名，会请你重新取一次名。</li><li><b>与 AI 对战：</b>Lv1 的 AI 和以前一样，之后每升一级都会更难一点。赢 AI 的奖励和房间对战一样。</li><li><b>X 任务</b>（在线，诚信制，不读取 X 数据）：关注 @dotBots_ai，以及对 <b>本周</b> @dotBots_ai 的每一条任务帖子点赞 / 转发 / 评论（任务卡里列出帖子和链接）。本周 = 周一 GMT+7 07:00 到下周一 07:00，每周一换新帖子；还没有本周帖子时，用置顶帖或主页。打开链接，等 10 秒后领取；评论任务需要粘贴你评论的链接。关注、点赞 +10 XP，转发 +15，评论 +20；每个任务每天一次，每天任务最多 <b>50 XP</b>。</li><li><b>个人资料：</b>机器人的全部信息（今天的对战、奖励、胜/平/负、徽章、连签、XP、升级条件、任务）以及本周对战记录（每周一 GMT+7 07:00 重置）。连续签到 30 天礼物 <b>即将推出</b>（链上）。</li><li><b>即将推出：</b>物品市场、赛季通行证、锦标赛。</li></ul></div>`,
+      s11: `<div class="g-sec"><h2>11 · 房间（竞技场）</h2><ol><li>大厅顶部的 <b>⚔ 竞技场</b> 卡片就是房间竞技场：左边是你的机器人，右边是留给挑战者的 <b>?</b> 座位。</li><li><b>+ 创建房间</b>：给房间起名，再选一个战场（10 个之一或随机）。<b>房间名最多 10 个字符</b>，不能有不文明用语，<b>先到先得</b>（每个名字唯一，大小写不同也算同一个名字）。<b>房间名只能设置一次，之后不能修改</b>：你钱包以后开的房间都会用这个名字。<b>每个机器人每天 1 个房间。</b>不需要先锁定招式。</li><li>只要你留在页面上，房间就是实时的（<b>● 房主在等待</b>）。房间会一直开着，直到你点 <b>关闭房间</b>、次数用完或 GMT+7 07:00 每日重置。关闭后当天还有次数时可以 <b>重新开放</b> 同一个房间。房间开着时房间链接都有效。</li><li><b>任何等级</b>都可以申请对战（没有等级限制）。挑战者点 <b>⚔ 申请对战</b>；房主会看到对方的名字、等级、胜/平/负和徽章，有 <b>10 秒</b> 选择 <b>接受</b> 或 <b>拒绝</b>，不回应 = 拒绝。</li><li>只有房主在时才能对战，绝不会用 AI 代替房主。接受后 5 秒倒计时，然后双方<b>同时</b>选 5 个招式（20 秒；时间到时选了部分招式的由 AUTO 补满空位，一个都没选 = 这场输，见 11b）。服务器裁判。房主和挑战者都拿正常奖励（XP、Bolts、段位），各消耗 1 场。</li><li>大厅：只显示<b>房主在线</b>的房间，最多 <b>20 个</b>，各种等级混在一起，<b>本周 PvP 胜场最多</b>的房主排在前面。每个卡片显示房间名、房主机器人、等级、本周胜场，以及房主是空闲还是在对战。搜索框可以按房间名、机器人名或等级查找在线房间（输入 <b>10</b> 就显示 Lv10 机器人的房间）。房主不在的房间不会显示。</li><li>把房间分享到 X 时，帖子里会显示房间图片；<b>下载图片</b> 可保存这张图。测试网上<b>任何人</b>都能开房；主网上只有 dotBots 持有者能开房，所有人都能加入。</li></ol><p class="dim small">离线时，列表显示 AI 机器人开的演示房间，你自己的房间是锁定了 5 个招式的挑战链接（在对战画面点 <b>⚔ 创建房间</b>）。</p></div>
+<div class="g-sec" id="gFix"><h2>11b · 下一场、退出、聊天、排行榜等</h2><ul><li><b>下一场：</b>每场房间对战一出结果，屏幕上会立刻出现一个很大的 <b>10 秒</b> 倒计时和两个按钮：<b>继续</b> 和 <b>离开房间</b>（回放在后面继续播放）。<b>双方都按继续</b>，马上和同一对手开始下一场（每场双方各消耗 1 场次数）。有人按 <b>离开房间</b> 就离开，没有惩罚。10 秒结束时如果不是双方都按了继续，就不会开始下一场，也没有惩罚：大家留在房间里（房主继续等待挑战者）。</li><li><b>中途退出</b>（倒计时或选招时点退出，或离开页面且在计时结束前没回来）：退出的一方失去这一场次数并扣 <b>20 XP</b>（不会低于本级起点，不会掉级，也不会变成负数）。另一方没有奖励、不消耗次数，这场对双方都不计。与 AI 对战中途退出同样失去一场并扣 20 XP。下一场开始后再离开，算作退出。</li><li><b>没选招（房间对战）：</b>20 秒选招时间结束时，人在房间里却<b>一个招式都没选、也没锁定</b>的一方<b>直接输掉这一场</b>：对手赢，双方照常拿胜/负奖励、各消耗 1 场，这场算你一场负。（只要选了至少 1 个招式，时间到时 AUTO 会补满空位；手动点 AUTO 按钮也可以。）<b>双方都没选</b> = 这场作废：没有奖励、不计排行榜、不消耗次数。同一个房间里累计 <b>3 次没选招</b> 会被移出房间（房主：房间关闭；挑战者：被请出）。离开房间后次数清零。没选招的一方不会自动开始下一场。</li><li><b>房间聊天：</b>房间里的所有人（房主、挑战者、观众）都可以聊天。最多 50 个字，不能发链接，不能有不文明用语，每 1.5 秒一条。聊天不保存，房间关闭就没了。</li><li><b>每周排行榜：</b>只计房间（PvP）对战，不计 AI 对战。每周一 GMT+7 07:00 重置。按胜场排名，其次负场少者、平局多者、先达到者。显示胜/平/负。赛季段位（青铜到传奇）不变。</li><li><b>徽章</b>（连胜、段位、房主、Lv30 的 OG 机器人等）会在每场对战中显示在机器人能量条旁边，也显示在房间卡片和加入申请里。</li><li><b>机器人名字</b>在创建时选一次，之后永久不变。所有钱包的名字都唯一（不区分大小写和多余空格），先到先得。如果你的机器人和规则之前更早的机器人重名，会请你重新取一次名。</li><li><b>与 AI 对战：</b>Lv1 的 AI 和以前一样，之后每升一级都会更难一点。赢 AI 的奖励和房间对战一样。</li><li><b>dotBots 任务</b>（在线，诚信制，不读取 X 数据）：先在<b>档案里绑定你的 X 账号</b>（输入 X 用户名；第一次绑定 +200 XP，解除绑定 −200 XP；1 个钱包 = 1 个 X 账号；dotBots 只读取公开的 X 信息，永远不能发帖或修改你的 X 账号）。然后关注 @dotBots_ai，并对 <b>最近 2 天</b> @dotBots_ai 的每一条任务帖子点赞 / 转发 / 评论（任务卡里列出帖子和链接，最新的在前，最多 10 条）。最近 2 天没有帖子时，用置顶帖或主页。打开链接，等 10 秒后领取；评论任务需要粘贴你评论的链接，且必须由你绑定的 X 账号发布。关注、点赞 +10 XP，转发 +15，评论 +20；<b>每个任务每个 dotBot 只能领取一次</b>，每天任务最多 <b>200 XP</b>，所以能拿到的 XP 取决于帖子数量。<b>如果我们发现 dotBots 任务中有作弊行为（没有真正关注、点赞、转发或评论就领取），dotBots 可能取消已获得的 XP、对战结果和奖励，并让该 dotBot 无法升级。dotBots 任务是自愿参加的，但只要参加，就请认真完成。</b></li><li><b>个人资料：</b>机器人的全部信息（今天的对战、奖励、胜/平/负、徽章、连签、XP、升级条件、任务）以及本周对战记录（每周一 GMT+7 07:00 重置）。连续签到 30 天礼物 <b>即将推出</b>（链上）。</li><li><b>即将推出：</b>物品市场、赛季通行证、锦标赛。</li></ul></div>`,
       s12: `<div class="g-sec"><h2>12 · 每日任务与签到连签</h2><p>每天 07:00 GMT+7 随机 ${S.V31.quests.perDay} 个任务，完成自动加 Bolts：</p><ul>${qT}</ul><p><b>签到连签 Bolts</b>（每天第一次免费签到时发）：${login}。</p></div>`
     } : {
       start: `<div class="g-sec"><h2>0 · Quick start: My dotBot</h2><ol><li>In <b>My dotBot</b>, paste your wallet address (0x…) or press connect if your browser has a wallet, then give your bot a name (up to 16 characters).</li><li>Every wallet gets <b>1 free bot</b>. Its look comes from your address (random but fixed): Common 60% · Uncommon 25% · Rare 10% · Epic 4% · Legendary 1%. The name is <b>permanent</b> and unique across all wallets.</li><li>Press <b>Play vs AI</b> to fight, or ask to fight a player's room in the Arena.</li></ol><p><b>Fair for everyone:</b> a free bot and a dotBots NFT holder's bot earn <b>exactly the same</b> XP, Bolts and item chances per match. On mainnet the only extra for holders is opening rooms (section 11).</p><p class="dim small">Testnet preview: everything is simulated and saved in this browser only. Nothing is on-chain, nothing can be sold, no tokens, no prizes. Pasting an address does not prove you own it. In online mode (section 0b) your wallet signs in and progress is saved on the server.</p></div>`,
@@ -6181,8 +6328,8 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
       s6: `<div class="g-sec"><h2>6 · Daily plays and rewards</h2><ul><li><b>${RW.playsPerBotPerDay} counted matches per bot per day</b>, the same for every rarity, reset at 07:00 GMT+7, no way to add more. After that you can keep playing <b>practice</b> matches: no rewards and no charges used.</li><li><b>XP:</b> win ${RW.xp.win} · draw ${RW.xp.draw} · loss ${RW.xp.loss} · daily check-in +${RW.xp.checkin}. XP levels up your bot (section 7).</li><li><b>Bolts</b> (in-game points, not a token, can't be sold or withdrawn): win ${RW.bolts.win} · draw ${RW.bolts.draw} · loss ${RW.bolts.loss}, times your level bonus: ${multT}. Daily quests and the check-in streak add more (section 12).</li><li><b>Part Crate:</b> coming soon. <b>${RW.crateCost.toLocaleString("en-US")} Bolts opens 1 crate = 1 random item</b>. Items will be tradable later. The Bolts you collect now stay saved on the server.</li><li>After every match the result screen shows each reward as a card: what you got, what it does, and how far you are from the next step. Press <b>What is all this?</b> or <b>Rewards guide</b> for the table.</li></ul></div>`,
       s8: `<div class="g-sec"><h2>8 · Skill charges (for the whole day) and Recovery Potions</h2><p>Each bot has daily skill charges, the same for every rarity: Punch ${CH.punch} · Kick ${CH.kick} · Press ${CH.press} · Jump ${CH.jump} · Block ${CH.block} · Special ${CH.sig} · Ultimate ${CH.ult}. Rest is free. They reset at 07:00 GMT+7. Every move your bot plays uses 1 charge (taken when you lock). The picker shows xN on each skill; a skill at 0 is greyed out. A win gives 1 charge back to a random skill.</p><p><b>Recovery Potions</b> (Small +3 to one skill you choose · Medium +10 to your lowest skills first · Large refills everything; max ${S.V31.potions.maxPerBotPerDay} per bot per day) are used from the Inventory, which opens on mainnet. Potions you win now are kept for your bot.</p></div>`,
       s9: `<div class="g-sec"><h2>9 · Item drops</h2><ul><li>Each counted win can drop 1 item: ${dropT}. Max ${D.maxPerBotPerDay} items per bot per day. Draws and losses give XP and Bolts only.</li><li>Rarity: ${rar} (higher levels get slightly more Rare+).</li><li>Items: Recovery Potions (refill charges) · skins and arena frames (cosmetic, no power) · Repair Kit, Gear and Skill Chip tokens (kept in the Inventory until the Gear update).</li><li>Level gifts: Lv10 Medium Potion · Lv15 Rare Gear Token · Lv20 Skill Chip Lv2 Token · Lv25 Epic Gear Token · Lv30 Legendary skin + Iron Will badge.</li><li>The Inventory is hidden in this test and opens on mainnet. Items you win now are kept for your bot.</li></ul></div>`,
-      s11: `<div class="g-sec"><h2>11 · Rooms (the Arena)</h2><ol><li>The <b>⚔ Arena</b> card at the top of the lobby is the room arena: your bot on the left, the <b>?</b> seat for a challenger on the right.</li><li><b>+ Create room</b>: give it a name (up to 24 characters, no bad words; the name shows big on the room) and pick a battlefield (one of 10, or Random). <b>One room per bot per day.</b> No moves needed first.</li><li>Your room is live while you stay on the page (<b>● Host waiting</b>). It stays open until you press <b>Close room</b>, run out of plays, or the daily reset at 07:00 GMT+7. After closing you can <b>Reopen</b> the same room that day while you have plays. The room link works as long as the room is open.</li><li><b>Any level</b> can ask to fight (no level limit). A challenger presses <b>⚔ Ask to fight</b>; the host sees the challenger's name, level, W/D/L and badges and has <b>10 s</b> to <b>Accept</b> or <b>Decline</b>. No answer = declined.</li><li>Rooms can only be fought while the host is there; there is never an AI stand-in. After Accept, a 5 s countdown, then both pick 5 moves <b>at the same time</b> (20 s; at time up AUTO fills the empty slots of a player who picked some moves, a player who picked nothing loses, see 11b). The server referees. Host and challenger both get the normal rewards (XP, Bolts, rank) and each spend 1 play.</li><li>Lobby: up to <b>20 rooms</b>, hosts who are online first, all levels mixed. The search box finds rooms by room name, bot name or level (type <b>10</b> to see rooms of Lv10 bots). Rooms with the host away are folded and can't be joined.</li><li>Sharing your room on X shows a picture of your room in the post; <b>Download image</b> saves that picture. On testnet <b>anyone</b> can open rooms; on mainnet opening is for dotBots holders, joining stays open to all.</li></ol><p class="dim small">Offline, the list shows demo rooms hosted by AI bots, and your own room is a challenge link with 5 locked moves (<b>⚔ Create room</b> on the battle screen).</p></div>
-<div class="g-sec" id="gFix"><h2>11b · Rematch, quitting, chat, leaderboard and more</h2><ul><li><b>Next match:</b> as soon as a room match result is known, a big <b>10 s</b> countdown shows on screen with two buttons: <b>Continue</b> and <b>Leave room</b> (the replay keeps playing behind it). <b>Both press Continue</b> = the next match with the same opponent starts at once (1 play each). Press <b>Leave room</b> to leave with no penalty. If the 10 s end without both pressing Continue, no next match starts and nobody is penalised: you both stay in the room (the host keeps waiting for challengers).</li><li><b>Quitting a match</b> (Quit button during the countdown or the pick, or leaving the page and not coming back before the timer ends): the quitter loses that play and <b>20 XP</b> (never below the start of the current level, never a level down, never negative). The other player gets no reward, spends no play, and the match is not counted for either. Quitting a match vs AI: play lost and −20 XP too. Leaving once the next match has started counts as quitting.</li><li><b>No pick (room matches):</b> when the 20 s pick timer ends, a player who is in the room but has <b>not picked a single move and not locked</b> <b>loses that match</b>: the opponent wins, both get the normal win / loss rewards and spend 1 play, and it counts as your loss. (If you picked at least 1 move, AUTO fills your empty slots when time is up; you can also press the AUTO button yourself.) <b>Neither player picked</b> = the match is void: no rewards, no leaderboard, no plays used. <b>3 missed picks</b> in the same room = you are removed from the room (host: the room closes; challenger: kicked). The count resets when you leave the room. A missed pick also stops the next match.</li><li><b>Room chat:</b> everyone in the room (host, challenger, viewers) can chat. Max 50 characters, no links, no bad words, one message every 1.5 s. Chat is not saved: it's gone when the room closes.</li><li><b>Weekly leaderboard:</b> only room (PvP) matches count, never AI matches. Resets every Monday 07:00 GMT+7. Ranked by wins, then fewer losses, then more draws, then who got there first. Shows W/D/L. Season ranks (Bronze to Legend) stay as before.</li><li><b>Badges</b> (win streaks, rank, Host, OG bot at Lv30 and the rest) show next to each bot's energy bar in every match, on room tiles and in join requests.</li><li><b>Bot names</b> are chosen once when you create your bot and are permanent. Every name is unique across all wallets (case and extra spaces don't matter); first come, first served. If your bot shares a name with an older bot from before this rule, you are asked once to pick a new one.</li><li><b>Play vs AI:</b> Lv1 AI plays like before, then it gets a bit harder at every level. Beating the AI gives the same rewards as a room match.</li><li><b>dotBots Quest</b> (online, honor-based, we don't read X): Follow @dotBots_ai, plus Like / Repost / Comment on <b>each @dotBots_ai quest post of this week</b> (the quest card lists the posts with links). A week runs Monday 07:00 GMT+7 to the next Monday 07:00; new posts every Monday. If there is no post for the week yet, the quests use the pinned post or the profile. Open the link, wait 10 s, then Claim; the comment quest asks for the link of your comment. Follow and Like +10 XP, Repost +15, Comment +20; each quest once per day, max <b>50 XP</b> per day from quests.</li><li><b>Profile:</b> everything about your bot (today's matches, rewards, W/D/L, badges, streak, XP, level gate, quests) and this week's match history (resets Monday 07:00 GMT+7). The 30-day check-in streak gift is <b>coming soon</b> (on-chain).</li><li><b>Coming soon:</b> Item Market, Season Pass and Tournaments.</li></ul></div>`,
+      s11: `<div class="g-sec"><h2>11 · Rooms (the Arena)</h2><ol><li>The <b>⚔ Arena</b> card at the top of the lobby is the room arena: your bot on the left, the <b>?</b> seat for a challenger on the right.</li><li><b>+ Create room</b>: give it a name and pick a battlefield (one of 10, or Random). <b>Room name: up to 10 characters</b>, no bad words, <b>first come, first served</b> (each name is unique, capital letters don't make a new name). <b>You set it once and it can't be changed</b>: every later room of your wallet uses the same name. <b>One room per bot per day.</b> No moves needed first.</li><li>Your room is live while you stay on the page (<b>● Host waiting</b>). It stays open until you press <b>Close room</b>, run out of plays, or the daily reset at 07:00 GMT+7. After closing you can <b>Reopen</b> the same room that day while you have plays. The room link works as long as the room is open.</li><li><b>Any level</b> can ask to fight (no level limit). A challenger presses <b>⚔ Ask to fight</b>; the host sees the challenger's name, level, W/D/L and badges and has <b>10 s</b> to <b>Accept</b> or <b>Decline</b>. No answer = declined.</li><li>Rooms can only be fought while the host is there; there is never an AI stand-in. After Accept, a 5 s countdown, then both pick 5 moves <b>at the same time</b> (20 s; at time up AUTO fills the empty slots of a player who picked some moves, a player who picked nothing loses, see 11b). The server referees. Host and challenger both get the normal rewards (XP, Bolts, rank) and each spend 1 play.</li><li>Lobby: only rooms with the <b>host online</b> are listed, up to <b>20 rooms</b>, all levels mixed, hosts with the <b>most PvP wins this week</b> first. Each tile shows the room name, host bot, level, wins this week and whether the host is idle or fighting. The search box finds online rooms by room name, bot name or level (type <b>10</b> to see rooms of Lv10 bots). Rooms with the host away are not listed.</li><li>Sharing your room on X shows a picture of your room in the post; <b>Download image</b> saves that picture. On testnet <b>anyone</b> can open rooms; on mainnet opening is for dotBots holders, joining stays open to all.</li></ol><p class="dim small">Offline, the list shows demo rooms hosted by AI bots, and your own room is a challenge link with 5 locked moves (<b>⚔ Create room</b> on the battle screen).</p></div>
+<div class="g-sec" id="gFix"><h2>11b · Rematch, quitting, chat, leaderboard and more</h2><ul><li><b>Next match:</b> as soon as a room match result is known, a big <b>10 s</b> countdown shows on screen with two buttons: <b>Continue</b> and <b>Leave room</b> (the replay keeps playing behind it). <b>Both press Continue</b> = the next match with the same opponent starts at once (1 play each). Press <b>Leave room</b> to leave with no penalty. If the 10 s end without both pressing Continue, no next match starts and nobody is penalised: you both stay in the room (the host keeps waiting for challengers).</li><li><b>Quitting a match</b> (Quit button during the countdown or the pick, or leaving the page and not coming back before the timer ends): the quitter loses that play and <b>20 XP</b> (never below the start of the current level, never a level down, never negative). The other player gets no reward, spends no play, and the match is not counted for either. Quitting a match vs AI: play lost and −20 XP too. Leaving once the next match has started counts as quitting.</li><li><b>No pick (room matches):</b> when the 20 s pick timer ends, a player who is in the room but has <b>not picked a single move and not locked</b> <b>loses that match</b>: the opponent wins, both get the normal win / loss rewards and spend 1 play, and it counts as your loss. (If you picked at least 1 move, AUTO fills your empty slots when time is up; you can also press the AUTO button yourself.) <b>Neither player picked</b> = the match is void: no rewards, no leaderboard, no plays used. <b>3 missed picks</b> in the same room = you are removed from the room (host: the room closes; challenger: kicked). The count resets when you leave the room. A missed pick also stops the next match.</li><li><b>Room chat:</b> everyone in the room (host, challenger, viewers) can chat. Max 50 characters, no links, no bad words, one message every 1.5 s. Chat is not saved: it's gone when the room closes.</li><li><b>Weekly leaderboard:</b> only room (PvP) matches count, never AI matches. Resets every Monday 07:00 GMT+7. Ranked by wins, then fewer losses, then more draws, then who got there first. Shows W/D/L. Season ranks (Bronze to Legend) stay as before.</li><li><b>Badges</b> (win streaks, rank, Host, OG bot at Lv30 and the rest) show next to each bot's energy bar in every match, on room tiles and in join requests.</li><li><b>Bot names</b> are chosen once when you create your bot and are permanent. Every name is unique across all wallets (case and extra spaces don't matter); first come, first served. If your bot shares a name with an older bot from before this rule, you are asked once to pick a new one.</li><li><b>Play vs AI:</b> Lv1 AI plays like before, then it gets a bit harder at every level. Beating the AI gives the same rewards as a room match.</li><li><b>dotBots Quest</b> (online, honor-based, we don't read X): first <b>link your X account in Profile</b> (type your X username; +200 XP the first time, Disconnect = −200 XP; 1 wallet = 1 X account; dotBots only reads public X info and can never post or change your X account). Then Follow @dotBots_ai, plus Like / Repost / Comment on <b>each @dotBots_ai quest post from the last 2 days</b> (the quest card lists the posts with links, newest first, max 10). If there is no post from the last 2 days, the quests use the pinned post or the profile. Open the link, wait 10 s, then Claim; the comment quest asks for the link of your comment, posted from your linked X account. Follow and Like +10 XP, Repost +15, Comment +20; <b>each quest once per dotBot</b>, max <b>200 XP</b> per day from quests, so the XP you can get depends on how many posts there are. <b>If we find cheating in dotBots Quest (claiming without really following, liking, reposting or commenting), dotBots may cancel the XP earned, match results and rewards, and stop that dotBot from levelling up. dotBots Quest is optional, but if you do it, do it for real.</b></li><li><b>Profile:</b> everything about your bot (today's matches, rewards, W/D/L, badges, streak, XP, level gate, quests) and this week's match history (resets Monday 07:00 GMT+7). The 30-day check-in streak gift is <b>coming soon</b> (on-chain).</li><li><b>Coming soon:</b> Item Market, Season Pass and Tournaments.</li></ul></div>`,
       s12: `<div class="g-sec"><h2>12 · Daily quests and check-in streak</h2><p>${S.V31.quests.perDay} random quests every day at 07:00 GMT+7, Bolts added automatically when done:</p><ul>${qT}</ul><p><b>Check-in streak Bolts</b> (paid by your first free check-in of the day): ${login}.</p></div>`
     };
     const tr = x => (zh && I18N.tr ? I18N.tr(x) : x), BG = S.meta.BADGES || [];
@@ -6254,7 +6401,7 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
       <li>Nothing here is a real payment. Nothing for money adds plays, XP or battle power.</li></ul></div>
     <div class="g-sec"><h2>10 · Badges</h2><p>Each bot collects badges on its profile card: First Win, win streaks of 5 / 10 / 20, first K.O. with your Special or Ultimate, Flawless, Comeback, Giant Slayer, World Tour (win on 6 different battlefields), Challenge Accepted, ranks reached, levels 10 / 20 / 30, Full Week, and Iron Will (Lv30, bound to the bot).</p></div>
     <div class="g-sec"><h2>11 · Challenge a friend (Challenge link)</h2><ol><li>Lock your 5 moves and press <b>⚔ Challenge a friend</b> (also on the result screen). Your 5 moves are saved in a link.</li><li>Press <b>Share on X</b> or <b>Copy link</b>.</li><li>Your friend opens the link and fights your 5 moves with their own bot. Their result screen gives them a line to share back with you.</li></ol><p class="dim small">The link carries a commit, so the moves can't be changed after you share it. Old one-move links from v3.2 no longer work.</p></div>
-    <div class="g-sec"><h2>12 · Daily quests and login streak</h2><p>dotBots Quest (signed in): follow @dotBots_ai, then Like, Repost and Comment on each @dotBots_ai post of this week. Open the link, do it on X, wait 10 s, then Claim. Each gives XP, max 50 XP per day, new posts every Monday 07:00 GMT+7. Offline practice keeps 3 battle quests.</p><p>Check in each day for a 7-day streak: ${RW.loginStreakBolts.join(" / ")} Bolts (simulated, real-bot mode only).</p></div>
+    <div class="g-sec"><h2>12 · Daily quests and login streak</h2><p>dotBots Quest (signed in, X account linked in Profile): follow @dotBots_ai, then Like, Repost and Comment on each @dotBots_ai post from the last 2 days. Open the link, do it on X, wait 10 s, then Claim. Each quest once per dotBot, max 200 XP per day. Offline practice keeps 3 battle quests.</p><p>If we find cheating in dotBots Quest (claiming without really following, liking, reposting or commenting), dotBots may cancel the XP earned, match results and rewards, and stop that dotBot from levelling up. dotBots Quest is optional, but if you do it, do it for real.</p><p>Check in each day for a 7-day streak: ${RW.loginStreakBolts.join(" / ")} Bolts (simulated, real-bot mode only).</p></div>
     <div class="g-sec"><h2>13 · Testnet mode</h2><p>5-move battles on testnet use a BattleEntry contract (not switched on in this page yet): sign one entry transaction ($0.03 in test BNB + a hash of your 5 moves), get paired with another player, reveal automatically, watch the result. <b>Check-in is free</b> in every mode: no fee, no transaction (the paid check-in contract is not used). Test BNB has no value; fees go to the team test wallet; no prize, no payout.</p></div>
     <div class="g-sec"><h2>14 · Battlefields, background button and music</h2><p>There are 10 battlefields: ${DBArenas.LIST.map(a => esc(a.name)).join(", ")}. Press <b>Change background</b> (picture icon) (in the Battlefield card, on the battle screen, or the picture button at the top) to pick one, or <b>Random</b>. Your choice is saved on this device. <b>Rematch</b> always keeps the same battlefield; <b>New opponent</b> uses your choice (a new random one if you chose Random).</p><p>Each battlefield has its own background music, made in your browser (no audio files). Music is <b>off by default</b>: the ♪ button (top right) turns it on, the slider sets the volume, separate from sound effects.</p><p>During a battle the bottom-left tag shows your rank arena (for example <b>Silver Arena</b>) and <b>plays left today</b> with the time until 07:00 GMT+7.</p></div>
     <div class="g-sec" id="gProfile"><h2>15 · Profile &amp; match history, language and theme</h2><ul>
@@ -6450,7 +6597,7 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
      1 names permanent + unique · 2 weekly PvP board · 3 rooms (1/day, name, close/reopen, no level limit, join request 10 s) · 4 lobby 20 + search
      5 quit = play lost −20 XP · 8 room chat · 9 rematch 5 s · 10 background pick · 12 Play vs AI · 13 badges by the energy bar
      14 profile + this week · 15 Coming soon · 7 X quests. Offline (no server) keeps working: practice vs AI + demo rooms. */
-  const FX = { quitXp: 20, roomNameMax: 24, chatMax: 50, reqMs: 10000 };
+  const FX = { quitXp: 20, roomNameMax: 10, chatMax: 50, reqMs: 10000 };
   const BADGE_X = { host: { icon: "⌂", name: "Host" }, og: { icon: "OG", name: "OG bot" } };
   function badgeInfo(id) { const b = (S.meta && S.meta.BADGES || []).find(x => x.id === id); return b ? { icon: b.icon, name: b.name } : BADGE_X[id] || { icon: "•", name: id }; }
   function badgeChips(ids, max) {
@@ -6498,15 +6645,28 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
   /* ---- end of a room match (user 2026-11-09 22:39): big 10 s countdown + Continue / Leave room, shown as soon as the result is
      known (fixed overlay over the replay and the result screen). Both Continue -> next match at once (1 play each). Leave room ->
      leave, no penalty. Time up without both -> no next match, no penalty, both stay in the room. ---- */
-  const RM = { at: 0, ms: 10000, t: null, off: null, me: false, opp: false };
+  /* user 2026-11-10 07:00 fix: the window state lives in DBRematch (web/js/rematch.js, unit-tested in test/rematch34.js). It is
+     ARMED when the live result arrives and OPENS only on that room match's result screen (finish -> rmShown); AI / other results,
+     a new match, leaving the room and the lobby clear it; a rematch_off with nothing armed or open is ignored (was: its banner
+     showed on the next AI result). */
+  const RMS = DBRematch.create({ now: () => Date.now() }), RM = RMS.st; RM.t = null;
+  const RM_TIMEOUT = "Time's up: no next match. No penalty.";
+  function rmClear() { clearInterval(RM.t); RMS.clear(); rematchBar(); }
+  function rmShown() { // called by finish() for every result screen
+    const live = !!(S.lastServerMatch && RMS.armedFor(S.lastServerMatch));
+    if (!live) { if (RM.pend || RM.live || RM.off) rmClear(); return; }
+    RMS.shown("live", RM_TIMEOUT);
+    clearInterval(RM.t); if (RM.live) RM.t = setInterval(() => { if (!RMS.tick(RM_TIMEOUT)) clearInterval(RM.t); rematchBar(); }, 250);
+    rematchBar();
+  }
   function rmOverlay() {
     let el = $("#rmOverlay"); if (!el) { el = document.createElement("div"); el.id = "rmOverlay"; el.className = "rm-ov hidden"; el.setAttribute("role", "dialog"); el.setAttribute("aria-live", "polite"); el.setAttribute("aria-label", "Next match"); document.body.appendChild(el); }
     return el;
   }
   function rematchBar() {
-    const box = $("#rmBar"), ov = rmOverlay();
-    if (RM.at) { // decision window: big overlay, compact bar hidden
-      const left = Math.max(0, Math.ceil((RM.at - Date.now()) / 1000));
+    const box = $("#rmBar"), ov = rmOverlay(), V = RMS.view(S.phase);
+    if (V.overlay) { // decision window: big overlay, compact bar hidden
+      const left = V.left;
       if (box) box.classList.add("hidden");
       ov.classList.remove("hidden");
       ov.innerHTML = `<div class="rm-ov-in"><div class="rm-ov-t">Next match?</div><div class="rm-big" id="rmCd">${left}</div>
@@ -6520,26 +6680,27 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
     }
     ov.classList.add("hidden"); ov.innerHTML = "";
     if (!box) return;
-    if (!RM.off) { box.classList.add("hidden"); return; }
+    if (!V.bar) { box.classList.add("hidden"); return; }
     box.classList.remove("hidden");
-    box.innerHTML = `<span>${esc(RM.off)}</span><button class="btn tiny" id="rmLobby">Back to the room</button>`; $("#rmLobby").onclick = () => { RM.off = null; rematchBar(); toLobby(); };
+    box.innerHTML = `<span>${esc(V.bar)}</span><button class="btn tiny" id="rmLobby">Back to the room</button>`; $("#rmLobby").onclick = () => { rmClear(); toLobby(); };
   }
   function rematchLeave() {
-    liveSend({ t: "leave" }); clearInterval(RM.t); RM.at = 0; RM.off = null; rematchBar();
+    liveSend({ t: "leave" }); rmClear();
     if (LV.role === "host") { toast("No next match. No penalty. Your room stays open."); toLobby(); return; }
     toast("You left the room. No penalty."); LV.open = null; liveLeave("leave"); toLobby();
   }
+  /** live result received: ARM the window only (it opens on this match's result screen, see rmShown) */
   function rematchStart(m) {
-    RM.me = false; RM.opp = false;
-    if (!m.rematchAt) { clearInterval(RM.t); RM.at = 0; RM.off = m.rematchOff === "host_no_plays" ? "The host has no plays left: the room is closed for today." : m.rematchOff === "afk" ? (m.afk === "me" ? "No next match: you didn't pick any move." : "No next match: your opponent didn't pick any move.") : m.rematchOff ? "No next match: no plays left today." : null; rematchBar(); return; }
-    RM.off = null; RM.ms = m.rematchMs || 10000; RM.at = m.rematchAt + (Date.now() - m.serverNow);
-    clearInterval(RM.t); RM.t = setInterval(() => { if (!RM.at) return clearInterval(RM.t); if (Date.now() > RM.at + 3000) { RM.at = 0; RM.off = "Time's up: no next match. No penalty."; } rematchBar(); }, 250); rematchBar();
+    clearInterval(RM.t);
+    const offText = m.rematchOff === "host_no_plays" ? "The host has no plays left: the room is closed for today." : m.rematchOff === "afk" ? (m.afk === "me" ? "No next match: you didn't pick any move." : "No next match: your opponent didn't pick any move.") : m.rematchOff ? "No next match: no plays left today." : null;
+    RMS.arm(m, offText); rematchBar();
   }
   function rematchOff(m) {
-    clearInterval(RM.t); RM.at = 0;
-    RM.off = m.reason === "left" ? (m.who === "me" ? "You left. No penalty." : "Your opponent left. No penalty.") : m.reason === "timeout" ? "Time's up: no next match. No penalty. You're still in the room." : m.reason === "gone" ? "Your opponent left the room." : m.reason === "no_plays" ? "No next match: no plays left today." : "Next match cancelled.";
+    clearInterval(RM.t);
+    RMS.off(m.reason === "left" ? (m.who === "me" ? "You left. No penalty." : "Your opponent left. No penalty.") : m.reason === "timeout" ? "Time's up: no next match. No penalty. You're still in the room." : m.reason === "gone" ? "Your opponent left the room." : m.reason === "no_plays" ? "No next match: no plays left today." : "Next match cancelled.");
     rematchBar();
   }
+
 
   /* ---- 3: join requests (host side pop-up, challenger side wait) ---- */
   const RQ = { cur: null, t: null, wait: null };
@@ -6583,21 +6744,30 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
     if (!S.me || !S.me.online) { toast("Sign in and create your dotBot first"); return; }
     const today = ON.me && ON.me.room;
     if (today) return reopenRoom(today.id);
-    const def = (botName(S.me) + " room").slice(0, FX.roomNameMax), pick = S.arenaPick || "random";
+    // room name (user 2026-11-10): set ONCE per wallet, permanent, unique (first come first served), max 10; later rooms reuse it (locked input)
+    const fixedName = ON.me && ON.me.roomName ? ON.me.roomName : null, pick = S.arenaPick || "random";
+    const def = fixedName || DBNames.clean(botName(S.me)).slice(0, FX.roomNameMax);
     const tiles = [{ id: "random", name: "Random" }].concat(DBArenas.LIST.map(a => ({ id: a.id, name: a.name })));
     openInfo("Create your room", `<p class="small dim">One room per day. It stays open until you close it, run out of plays, or the daily reset (07:00 GMT+7). Any level can ask to join; you accept or decline.</p>
-      <label class="small" for="crName">Room name (max 24)</label><input class="inp" id="crName" maxlength="24" value="${esc(def)}" autocomplete="off">
+      <label class="small" for="crName">Room name (max ${FX.roomNameMax})</label><input class="inp" id="crName" maxlength="${FX.roomNameMax}" value="${esc(def)}" autocomplete="off"${fixedName ? " readonly aria-readonly=\"true\"" : ""}>
+      <div class="small dim" id="crNameHint">${fixedName ? "🔒 Your room name is set and can't be changed." : "Set once, can't be changed later. First come, first served."}</div>
       <div class="small cr-l">Battlefield</div><div class="cr-arenas">${tiles.map(t => `<button type="button" class="cr-ar ${t.id === pick ? "on" : ""}" data-ar="${esc(t.id)}">${t.id === "random" ? `<span class="cr-rnd">?</span>` : `<img src="${arenaThumbUrl(t.id)}" alt="">`}<span>${esc(t.name)}</span></button>`).join("")}</div>
       <div class="cr-msg small" id="crMsg"></div><div class="ch-act"><button class="btn primary" id="crGo">+ Create room</button></div>`);
-    let ar = pick;
+    let ar = pick, nt = null;
+    const ni = $("#crName");
+    if (!fixedName && ni) ni.oninput = () => { clearTimeout(nt); const v = ni.value, h = $("#crNameHint"); nt = setTimeout(async () => { if (!v.trim() || !h) return; const k = DBNames.check(v, FX.roomNameMax);
+      if (!k.ok) { h.innerHTML = `<b class="err">${k.reason === "bad_word" ? "Please pick another name" : k.reason === "too_long" ? `Max ${FX.roomNameMax} characters` : "Use letters, numbers, Chinese characters, space, _ . -"}</b>`; return; }
+      try { const r = await api("GET", "/names/check?kind=room&name=" + encodeURIComponent(v), undefined, { auth: false }); if (ni.value !== v) return; h.innerHTML = r.available ? `<b class="ok">✓ “${esc(r.name)}” is available</b>` : r.reason === "taken" ? `<b class="err">“${esc(r.name)}” is taken</b>` : `<b class="err">Please pick another name</b>`; if (window.I18N && I18N.lang === "zh" && I18N.apply) try { I18N.apply(h); } catch (_) {} } catch (_) {} }, 400); };
     $$(".cr-ar").forEach(b => b.onclick = () => { ar = b.dataset.ar; $$(".cr-ar").forEach(x => x.classList.toggle("on", x === b)); });
     $("#crGo").onclick = async () => {
-      const c = DBNames.check($("#crName").value, FX.roomNameMax), msg = $("#crMsg");
-      if (!c.ok) { msg.textContent = c.reason === "bad_word" ? "Please pick another name." : "Up to 24 letters, numbers, Chinese characters, space, _ . -"; msg.classList.add("err"); return; }
+      const c = fixedName ? { ok: true, name: fixedName } : DBNames.check($("#crName").value, FX.roomNameMax), msg = $("#crMsg");
+      if (!c.ok) { msg.textContent = c.reason === "bad_word" ? "Please pick another name." : `Up to ${FX.roomNameMax} letters, numbers, Chinese characters, space, _ . -`; msg.classList.add("err"); return; }
+      const cq = `Your room name will be “${c.name}” for good. It can't be changed later. Continue?`;
+      if (!fixedName && !window.confirm(window.I18N && I18N.lang === "zh" && I18N.tr ? I18N.tr(cq) : cq)) return;
       $("#crGo").disabled = true;
       try {
         const r = await api("POST", "/rooms", { name: c.name, arena: ar });
-        $("#infoDlg").close(); ON.me.room = { id: r.roomId, name: r.name, open: true, arena: r.arena };
+        $("#infoDlg").close(); ON.me.room = { id: r.roomId, name: r.name, open: true, arena: r.arena }; ON.me.roomName = r.name;
         ON.myRooms = [{ id: r.roomId, name: r.name, lv: r.lv, arena: r.arena, expiresAt: r.expiresAt, fights: 0, hostWins: 0, open: true, live: true }].concat(ON.myRooms || []);
         toast("Room open. Stay in the room: challengers ask to join and you accept."); await openRoom(r.roomId); refreshLists();
       } catch (e) { if (e.code === "room_exists" && e.data && e.data.roomId) { $("#infoDlg").close(); return reopenRoom(e.data.roomId); } msg.textContent = errTxt(e); msg.classList.add("err"); $("#crGo").disabled = false; }
@@ -6627,11 +6797,13 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
     SR.busy = false; renderRooms();
   }
   function renderSearchRes() { const el = $("#srRes"); if (el && SR.busy) el.innerHTML = `<div class="dim small">Searching…</div>`; }
-  function roomTile(r) {
+  function roomTile(r) { // lobby grid tile (user 2026-11-10): room name, host bot, level, weekly PvP wins, idle / fighting, Join
     const b = S.me && S.me.online ? S.me : null, host = oppFromServer(r.host, r.id.slice(0, 8)), mine = ON.me && ON.me.room && ON.me.room.id === r.id;
-    const st = !r.hostOnline ? ["off", "○ Host away"] : r.busy ? ["lock", "⚔ fighting"] : ["open", "● Host waiting"];
-    return stripTile({ id: r.id, bot: host, name: r.name || r.host.name, sub: `${r.host.name} · W/D/L ${r.host.wins || 0}/${r.host.draws || 0}/${r.host.losses || 0}`, badges: r.host.badges, tier: r.host.traits.Tier, lv: r.lv, arena: r.arena, arenaName: roomArenaName(r.arena), off: !r.hostOnline || r.busy || !b, mine,
-      st, act: mine ? `<button class="btn tiny" data-rm-open="${esc(r.id)}">Enter</button>` : `<button class="btn tiny primary rm-go" data-rm-join="${esc(r.id)}" ${!b || !r.hostOnline || r.busy ? "disabled" : ""}>⚔ Ask to fight</button><button class="btn tiny ghost" data-rm-open="${esc(r.id)}">View</button>` });
+    const st = !r.hostOnline ? ["off", "○ Host away"] : r.busy ? ["lock", "⚔ fighting"] : ["open", "● idle"], wk = (r.host.week && r.host.week.wins) || 0, bg = arenaThumbUrl(r.arena);
+    const act = mine ? `<button class="btn tiny" data-rm-open="${esc(r.id)}">Enter</button>` : `<button class="btn tiny primary rm-go" data-rm-join="${esc(r.id)}" ${!b || !r.hostOnline || r.busy ? "disabled" : ""}>⚔ Join</button><button class="btn tiny ghost" data-rm-open="${esc(r.id)}">View</button>`;
+    return `<div class="lg-tile ${r.busy || !b ? "off" : ""} ${mine ? "mine" : ""}" data-rm="${esc(r.id)}"><div class="lg-thumb"${bg ? ` style="background-image:url(${bg})"` : ""}>${host ? `<img src="${thumbUrl(host)}" alt="" style="background:${botBg(host)}">` : `<span class="rm-ph">⚔</span>`}<span class="lg-lv">Lv ${r.lv}</span></div>
+      <div class="lg-name" title="${esc(r.name || r.host.name)}">${esc(r.name || r.host.name)}</div><div class="lg-host small"><span class="dim">Host</span> ${esc(r.host.name)}${r.host.traits && r.host.traits.Tier ? ` <span class="tier ${esc(r.host.traits.Tier)}">${esc(r.host.traits.Tier)}</span>` : ""}</div>
+      <div class="lg-stats small"><span><b>${wk}</b> wins this week</span><span class="rm-st ${st[0]}">${st[1]}</span></div><div class="lg-act">${act}</div></div>`;
   }
 
   /* ---- 2: weekly PvP leaderboard ---- */
@@ -6640,13 +6812,15 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
   /* ---- 7: X quests (online, honor-based) ---- */
   /* fix 5 (user 2026-11-09 22:39): Follow + Like / Repost / Comment on each @dotBots_ai post of this week (server list, Monday
      07:00 GMT+7 reset); no posts this week -> the pinned post / profile. Grouped by post, each with its link. */
-  const XQ = { list: null, posts: [], source: "week", xp: 0, max: 50, open: {}, t: null };
+  const XQ = { list: null, posts: [], source: "recent", xp: 0, max: 200, open: {}, t: null, linked: false, handle: null, flagged: false };
   const XQ_TXT = { follow: ["Follow @dotBots_ai", "Open X and follow @dotBots_ai"], like: ["Like", "Like this post on X"], repost: ["Repost", "Repost this post on X"],
-    comment: ["Comment", "Comment, then paste the link of your comment"] };
-  async function loadQuests() { if (!onUp() || !ON.token || !(S.me && S.me.online)) { XQ.list = null; renderQuests(); return; } try { const j = await api("GET", "/quests"); XQ.list = j.quests; XQ.posts = j.posts || []; XQ.source = j.source || "week"; XQ.xp = j.xpToday; XQ.max = j.xpMax; } catch (_) {} renderQuests(); }
+    comment: ["Comment", "Comment from your linked X account, then paste the link of your comment"] };
+  // user 2026-11-10 (C): fraud notice under the quest card (and in How to play)
+  const XQ_FRAUD = "If we find cheating in dotBots Quest (claiming without really following, liking, reposting or commenting), dotBots may cancel the XP earned, match results and rewards, and stop that dotBot from levelling up. dotBots Quest is optional, but if you do it, do it for real.";
+  async function loadQuests() { if (!onUp() || !ON.token || !(S.me && S.me.online)) { XQ.list = null; renderQuests(); return; } try { const j = await api("GET", "/quests"); XQ.list = j.quests; XQ.posts = j.posts || []; XQ.source = j.source || "recent"; XQ.xp = j.xpToday; XQ.max = j.xpMax; XQ.linked = !!j.xLinked; XQ.handle = j.xHandle || null; XQ.flagged = !!j.flagged; } catch (_) {} renderQuests(); }
   function questRow(q) {
     const kind = q.kind || q.id.split(":")[0], T = XQ_TXT[kind] || [q.id, ""], o = XQ.open[q.id] || (q.opened ? q.opened + 10000 : 0), ready = o && Date.now() >= o, wait = o && !ready ? Math.ceil((o - Date.now()) / 1000) : 0;
-    return `<li class="${q.claimed ? "done" : ""}" data-quest="${esc(q.id)}"><div class="xq-t"><b>${esc(T[0])}</b> <span class="xq-xp">+${q.xp} XP</span><div class="dim small">${esc(T[1])}</div>${q.needsLink && !q.claimed && o ? `<input class="inp xq-link" data-xq-link="${esc(q.id)}" placeholder="https://x.com/you/status/…" autocomplete="off">` : ""}</div>
+    return `<li class="${q.claimed ? "done" : ""}" data-quest="${esc(q.id)}"><div class="xq-t"><b>${esc(T[0])}</b> <span class="xq-xp">+${q.xp} XP</span><div class="dim small">${esc(T[1])}</div>${q.needsLink && !q.claimed && o ? `<input class="inp xq-link" data-xq-link="${esc(q.id)}" placeholder="https://x.com/${esc(XQ.handle || "you")}/status/…" autocomplete="off">` : ""}</div>
       <div class="xq-a">${q.claimed ? `<span class="ok small">✓ claimed</span>` : !o ? `<a class="btn tiny x" href="${esc(q.url)}" target="_blank" rel="noopener" data-xq-open="${esc(q.id)}">Open X</a>` : `<button class="btn tiny primary" data-xq-claim="${esc(q.id)}" ${ready ? "" : "disabled"}>${ready ? "Claim" : `Claim in ${wait}s`}</button>`}</div></li>`;
   }
   function renderQuests() {
@@ -6655,21 +6829,70 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
     const slot = LITE ? $("#liteXq") : null;
     const show = onUp() && !!ON.token && !!(S.me && S.me.online); card.classList.toggle("hidden", !show || !!slot); if (!show) return;
     const box = slot || $("#xqBody"); if (!XQ.list) { box.innerHTML = `<div class="dim small">Loading…</div>`; return; }
+    const fraud = `<div class="xq-fraud small" id="xqFraud">⚠ <span>${esc(XQ_FRAUD)}</span></div>`;
+    if (XQ.flagged) { box.innerHTML = `<div class="xq-flag" id="xqFlag"><b>Flagged for quest cheating</b><div class="small">This dotBot can't claim dotBots Quest, can't level up and is hidden from the weekly leaderboard.</div></div>${fraud}`; if (window.I18N && I18N.lang === "zh" && I18N.apply) try { I18N.apply(box); } catch (_) {} return; }
+    if (!XQ.linked) { // user 2026-11-10 (B): dotBots Quest needs a linked X account
+      box.innerHTML = `<div class="xq-needx" id="xqNeedX"><b>Link your X account in Profile first</b><div class="small dim">dotBots Quest needs your X username (+${XL_XP} XP the first time you link). dotBots only reads public X info and can never post or change your X account.</div><button class="btn tiny primary" id="xqGoProfile">Open Profile</button></div>${fraud}`;
+      $("#xqGoProfile").onclick = () => showProfile();
+      if (window.I18N && I18N.lang === "zh" && I18N.apply) try { I18N.apply(box); } catch (_) {}
+      return;
+    }
     const follow = XQ.list.filter(q => (q.kind || q.id) === "follow"), groups = [];
-    for (const q of XQ.list) { if ((q.kind || q.id) === "follow") continue; const k = q.post ? q.post.url : q.url; let g = groups.find(x => x.url === k); if (!g) groups.push(g = { url: k, n: q.post ? q.post.n : groups.length + 1, fallback: !!(q.post && q.post.fallback), qs: [] }); g.qs.push(q); }
-    const head = g => g.fallback ? (XQ.source === "pinned" ? "Pinned post" : "@dotBots_ai profile") + ` <span class="dim small">· no quest posts this week yet</span>` : `Post ${g.n} of this week`;
-    box.innerHTML = `<div class="small dim">Honor-based: open the link, do it on X, wait 10 s, claim. Max ${XQ.max} XP per day from quests · today <b>${XQ.xp}/${XQ.max} XP</b> · new at 07:00 GMT+7 · new posts every Monday</div>
+    for (const q of XQ.list) { if ((q.kind || q.id) === "follow") continue; const k = q.post ? q.post.url : q.url; let g = groups.find(x => x.url === k); if (!g) groups.push(g = { url: k, n: q.post ? q.post.n : groups.length + 1, date: q.post && q.post.date || null, fallback: !!(q.post && q.post.fallback), qs: [] }); g.qs.push(q); }
+    const head = g => g.fallback ? (XQ.source === "pinned" ? "Pinned post" : "@dotBots_ai profile") + ` <span class="dim small">· no quest posts in the last 2 days</span>` : `Post ${g.n}` + (g.date ? ` <span class="dim small mono">${esc(g.date)}</span>` : "");
+    box.innerHTML = `<div class="small dim">Honor-based: open the link, do it on X, wait 10 s, claim. Each quest once per dotBot · max ${XQ.max} XP per day from quests · today <b>${XQ.xp}/${XQ.max} XP</b> · posts from the last 2 days</div>
+      <div class="small dim">Linked X account: <b class="mono">@${esc(XQ.handle)}</b></div>
       <ul class="xq-list">${follow.map(questRow).join("")}</ul>
-      ${groups.map(g => `<div class="xq-post" data-post="${esc(g.url)}"><div class="xq-ph"><b>${head(g)}</b> <a class="xq-plink" href="${esc(g.url)}" target="_blank" rel="noopener">${esc(g.url.replace(/^https:\/\//, ""))} ↗</a></div><ul class="xq-list">${g.qs.map(questRow).join("")}</ul></div>`).join("")}`;
+      ${groups.map(g => `<div class="xq-post" data-post="${esc(g.url)}"><div class="xq-ph"><b>${head(g)}</b> <a class="xq-plink" href="${esc(g.url)}" target="_blank" rel="noopener">${esc(g.url.replace(/^https:\/\//, ""))} ↗</a></div><ul class="xq-list">${g.qs.map(questRow).join("")}</ul></div>`).join("")}${fraud}`;
     $$("[data-xq-open]", box).forEach(a => a.onclick = async () => { const id = a.dataset.xqOpen; try { const r = await api("POST", "/quests/open", { id }); XQ.open[id] = Date.now() + Math.max(0, r.claimAt - Date.now()); } catch (e) { toast(errTxt(e)); } clearInterval(XQ.t); XQ.t = setInterval(() => { renderQuests(); if (!Object.values(XQ.open).some(t => t > Date.now() - 1000)) clearInterval(XQ.t); }, 1000); renderQuests(); });
     $$("[data-xq-claim]", box).forEach(b => b.onclick = async () => {
       const id = b.dataset.xqClaim, inp = $$("[data-xq-link]", box).find(x => x.dataset.xqLink === id), body = { id }; if (inp) body.link = inp.value.trim();
       b.disabled = true;
-      try { const r = await api("POST", "/quests/claim", body); toast(r.xp ? `+${r.xp} XP from dotBots Quest${r.levelUp ? ` · LEVEL UP Lv ${r.levelUp.to}` : ""}` : "Daily quest XP cap reached (50)"); await refreshMe(); }
-      catch (e) { toast(e.code === "invalid_link" ? "Paste the link of your post: https://x.com/<you>/status/…" : errTxt(e)); }
+      try { const r = await api("POST", "/quests/claim", body); toast(r.xp ? `+${r.xp} XP from dotBots Quest${r.levelUp ? ` · LEVEL UP Lv ${r.levelUp.to}` : ""}` : `Daily quest XP cap reached (${XQ.max})`); await refreshMe(); }
+      catch (e) { toast(e.code === "invalid_link" ? "Paste the link of your post: https://x.com/<you>/status/…" : errTxt(e)); if (e.code === "x_not_linked" || e.code === "flagged") refreshMe().catch(() => {}); }
       loadQuests();
     });
     if (window.I18N && I18N.lang === "zh" && I18N.apply) try { I18N.apply(box); } catch (_) {}
+  }
+
+  /* ---- X account in Profile (user 2026-11-10 A): type the X username (no X API, no OAuth). 1 wallet = 1 X account.
+     Link = +200 XP the first time (POST /me/x), Disconnect = −200 XP, never below the start of the current level (POST /me/x/unlink).
+     dotBots Quest needs it. A bot flagged for quest cheating (admin) shows a notice here. */
+  const XL_XP = 200;
+  function xCardHtml() {
+    if (!(S.me && S.me.online && ON.token && ON.me)) return "";
+    const h = ON.me.xHandle, flagged = !!(ON.me.bot && ON.me.bot.flagged);
+    return `<div class="card pf-x" id="pfX"><div class="card-h"><h2>X account</h2>${h ? `<span class="chip ok">Linked</span>` : `<span class="chip">+${XL_XP} XP</span>`}</div>
+      ${flagged ? `<div class="xq-flag" id="pfFlag"><b>Flagged for quest cheating</b><div class="small">This dotBot can't level up, can't claim dotBots Quest and is hidden from the weekly leaderboard. Its dotBots Quest XP was cancelled.</div></div>` : ""}
+      ${h ? `<div class="pfx-row"><span class="small">Linked:</span> <a class="mono" id="pfXHandle" href="https://x.com/${esc(h)}" target="_blank" rel="noopener">@${esc(h)}</a><button class="btn tiny" id="pfXOff">Disconnect</button></div>`
+        : `<div class="small dim">Link your X account to unlock dotBots Quest (+${XL_XP} XP the first time).</div><div class="pfx-row"><input class="inp" id="pfXIn" maxlength="80" placeholder="@username or x.com/username" autocomplete="off" spellcheck="false"><button class="btn tiny primary" id="pfXOn">Link X account</button></div>`}
+      <div class="small dim">dotBots only reads your public X username. It can never post or change anything on your X account. 1 wallet = 1 X account.</div>
+      <div class="small err hidden" id="pfXMsg"></div></div>`;
+  }
+  const zhq = q => (window.I18N && I18N.lang === "zh" && I18N.tr ? I18N.tr(q) : q);
+  /** "@name", "name" or a pasted x.com / twitter.com profile URL -> name (same rules as the server: 1-15 [A-Za-z0-9_]) */
+  function xHandleOf(raw) {
+    let s = String(raw || "").trim(); const m = /^(?:https?:\/\/)?(?:www\.|mobile\.)?(?:x|twitter)\.com\/@?([^/?#\s]+)\/?(?:[?#].*)?$/i.exec(s);
+    if (m) s = m[1]; else if (s.startsWith("@")) s = s.slice(1);
+    return /^[A-Za-z0-9_]{1,15}$/.test(s) ? s : null;
+  }
+  function bindXCard(box) {
+    const on = $("#pfXOn", box), off = $("#pfXOff", box), msg = $("#pfXMsg", box);
+    const fail = e => { if (msg) { msg.textContent = zhq(errTxt(e)); msg.classList.remove("hidden"); } };
+    if (on) on.onclick = async () => {
+      const h = xHandleOf($("#pfXIn", box).value); if (!h) return fail({ code: "invalid_x_handle" });
+      if (!window.confirm(zhq(`Link @${h} to this wallet? You get +${XL_XP} XP (first link only). dotBots only reads public X info and can never post or change your X account. One X account can be linked to one wallet only.`))) return;
+      on.disabled = true;
+      try { const r = await api("POST", "/me/x", { handle: h }); toast(r.xpGained ? `X account linked: +${r.xpGained} XP` : "X account linked"); await refreshMe(); }
+      catch (e) { fail(e); on.disabled = false; }
+    };
+    if (off) off.onclick = async () => {
+      const h = ON.me && ON.me.xHandle;
+      if (!window.confirm(zhq(`Disconnect @${h}? You lose ${XL_XP} XP (never below the start of your current level). dotBots Quest needs a linked X account. dotBots only reads public X info and can never post or change your X account.`))) return;
+      off.disabled = true;
+      try { const r = await api("POST", "/me/x/unlink", {}); toast(r.xpLost ? `X account disconnected: −${r.xpLost} XP` : "X account disconnected"); await refreshMe(); }
+      catch (e) { fail(e); off.disabled = false; }
+    };
   }
 
   /* ---- 15: Coming soon ---- */
@@ -6807,7 +7030,7 @@ html[data-theme="light"] .btn.signout-btn { background: #fff0f0; color: #b3262c;
     window.__B3on = { api, refreshMe, refreshLists, checkHealth, signIn, signOut, ON, LV, openRoom, onlineRoom, liveLeave, flipLog, closeRoomView, renderRooms, liveSend, RM, RQ, CHAT, SR, quitMatch, roomSearch, loadWeek, loadQuests, XQ, closeMyRoom, reopenRoom };
     S.loaded = true;
   }
-  function toLobby() { ["#rematchBtn", "#newOppBtn"].forEach(q => { const el = $(q); if (el) el.classList.remove("hidden"); }); clearInterval(RM.t); RM.at = 0; RM.off = null; rematchBar(); if (onUp()) setTimeout(refreshLists, 50); clearTimeout(CH.poll); S.chainMatch = null; clearInterval(S.timer); clearTimeout(vsTimer); stopConfetti(); S.phase = "lobby"; show("lobby"); hud(null); $("#strip").innerHTML = ""; $("#phaseTag").textContent = ""; heroPreview(); renderHudTag(); }
+  function toLobby() { ["#rematchBtn", "#newOppBtn"].forEach(q => { const el = $(q); if (el) el.classList.remove("hidden"); }); rmClear(); if (onUp()) setTimeout(refreshLists, 50); clearTimeout(CH.poll); S.chainMatch = null; clearInterval(S.timer); clearTimeout(vsTimer); stopConfetti(); S.phase = "lobby"; show("lobby"); hud(null); $("#strip").innerHTML = ""; $("#phaseTag").textContent = ""; heroPreview(); renderHudTag(); }
   init().catch(e => { console.error(e); document.body.insertAdjacentHTML("beforeend", `<div style="padding:20px;color:#ff8b8f">Could not start: ${esc(e.message || e)}</div>`); });
 })();
 
