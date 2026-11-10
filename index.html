@@ -5,15 +5,15 @@
 <meta name="referrer" content="strict-origin-when-cross-origin"/>
 <meta name="description" content="dotBots: every .ai Agent ID can mint exactly one pixel bot, its handle printed on its chest. 2,222 bots, art 100% on-chain on BNB Chain."/>
 <meta property="og:type" content="website"/>
-<meta property="og:url" content="https://dotbotsai.github.io/"/>
+<meta property="og:url" content="https://dotbots.app/"/>
 <meta property="og:title" content="dotBots: one on-chain bot per .ai Agent ID"/>
 <meta property="og:description" content="2,222 pixel bots, 100% on-chain on BNB Chain. Your .ai handle printed on your bot's chest."/>
-<meta property="og:image" content="https://dotbotsai.github.io/og-card.png"/>
+<meta property="og:image" content="https://dotbots.app/og-card.png"/>
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:site" content="@dotBots_ai"/>
 <meta name="twitter:title" content="dotBots: one on-chain bot per .ai Agent ID"/>
 <meta name="twitter:description" content="2,222 pixel bots, 100% on-chain on BNB Chain. Your .ai handle printed on your bot's chest."/>
-<meta name="twitter:image" content="https://dotbotsai.github.io/og-card.png"/>
+<meta name="twitter:image" content="https://dotbots.app/og-card.png"/>
 <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAACOElEQVR4nO2aP0hVURzHP88EB4OgRSGTFIcsKhGhnHRIMaFFioaWEiGCBmtxsDEHQVRUFCGcFPzTlFCDITkK4eBgtQSBg6VEWwhJDfIu6j3Kvb1zzu/G+X2m+373nnO/fO/vnd/vnvdyGPi4u/7HFP/fqS25mjsaK5IQkiXUAGkB0gRvQLGLSS8+mzTGPw0+8jI+DcFngBogLUCaWGMA9hqhm9W3AXj3ZVFk/FG0ETKgBkgLkCZ4A6wtgncaugsWk4ZXH4ZTj9FF0ICTVtgHJ2VcmuzQDLA10fJAia2pEvGjud/KPMFngBogLUCa4A0ouBE6+74nFiu7/qYAScfzbbU9FkuzGGojZEANkBYgjZNW2PRdzSrBZ0DwBljbDzCVwzz1nRsArE1dSjRXkuv/5V1Ay6ABL/sB+SeZf7JJr/eBZoDPm/l8skkJPgOCN8Dpb4NZQ8ugAWuL4EmNkAt0U9QSTspg0oYnLS7KaPAZ4NWA8sbTPm+XCOcGtM3VRMeNfRWx8+dbzsRid1cv83CzLvp88Ng2zgzoWKkFoPxGKQDN4xfIndovww++XotiTSOVh8bdWqjh5+dfANzfuOJKXoST/QAfi6DuB1jCSRnM4lvfcQSfAfoyJCEkS6gB0gKkUQOkBUijBkgLkMabAdtbOwBMvHgJwFDvGMuvVxjqHePt/FIUA1iccfMXGxPeDJgenQXg8fMuAJ72PYnOVVSdY+/3Hu33WgHY2vzuS5Z2groGSAuQJngD/gLkFIt95+I8mQAAAABJRU5ErkJggg=="/>
 
     <title>dotBots: every .ai Agent ID can mint exactly one bot</title>
@@ -1693,7 +1693,7 @@ tr.is-highlight > :last-child { box-shadow: 12px 0 var(--fill-tertiary); }
         function shareBind(out, id, m) {
           var tier = tierOf(m), name = "dotbot-" + id + ".png", note = out.querySelector(".x-shareMsg"), blob = null;
           var text = "My dotBot #" + id + (tier ? " (" + tier + ")" : "") + " \ud83e\udd16\n\nOne bot per .ai Agent ID, 100% on-chain on BNB Chain.\n\n@dotBots_ai #dotBots #AgentID #BNBChain #NFT";
-          var url = "https://x.com/intent/post?text=" + encodeURIComponent(text) + "&url=" + encodeURIComponent("https://dotbotsai.github.io");
+          var url = "https://x.com/intent/post?text=" + encodeURIComponent(text) + "&url=" + encodeURIComponent("https://dotbots.app");
           function say(en, zh, bad) { note.hidden = false; note.className = "x-msg x-shareMsg" + (bad ? " is-bad" : ""); setT(note, en, zh); }
           pngBlob(m.image || "").then(function (b) { blob = b; }).catch(function () {});
           out.querySelector('[data-act="save"]').addEventListener("click", function (e) {
