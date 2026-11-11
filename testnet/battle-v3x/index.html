@@ -1278,6 +1278,51 @@ html[data-theme="light"] .cru-f b{color:#b35c00}
 html[data-theme="light"] .cru-badge{color:#2a2a6a}
 @media (max-width:820px){.cru-steps{grid-template-columns:1fr}.cru-facts{grid-template-columns:repeat(2,minmax(0,1fr))}.cru-row{grid-template-columns:1fr}.cupx-rules{margin:0 12px 16px;padding:16px}.cru-ht{font-size:1.5rem}}
 @media (prefers-reduced-motion:reduce){.cupx-rules,.cru-warn{animation:none}.cru-step:hover{transform:none}}
+/* How to play readability (user 2026-11-11 20:25) */
+#guideBody{max-width:860px;margin:0 auto}
+.gd-hero{position:relative;overflow:hidden;border-radius:18px;padding:20px 20px 18px;margin-bottom:14px;background:radial-gradient(120% 140% at 0% 0%,rgba(255,77,0,.28),transparent 55%),linear-gradient(135deg,#1d1f2a,#13141a);border:1px solid rgba(255,106,43,.35)}
+.gd-hh{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;margin-bottom:14px}
+.gd-ht{font-size:22px;font-weight:800;letter-spacing:-.01em;color:#fff}
+.gd-hs{font-size:14px;color:var(--text-2);margin-top:4px;line-height:1.5}
+.gd-all{flex:none;font-size:13px}
+.gd-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.gd-step{position:relative;background:rgba(0,0,0,.32);border:1px solid var(--line-2);border-radius:14px;padding:14px 12px 12px}
+.gd-sn{position:absolute;top:10px;right:12px;font-size:12px;font-weight:800;color:var(--accent-2);opacity:.9}
+.gd-si{font-size:26px;line-height:1;margin-bottom:8px}
+.gd-stt{font-weight:800;font-size:15px;color:#fff;margin-bottom:4px}
+.gd-sd{font-size:13px;line-height:1.5;color:var(--text-2)}
+@media (max-width:720px){.gd-steps{grid-template-columns:1fr 1fr}.gd-ht{font-size:19px}}
+@media (max-width:420px){.gd-hero{padding:16px 14px}.gd-steps{gap:8px}.gd-step{padding:12px 10px 10px}.gd-si{font-size:22px;margin-bottom:6px}.gd-stt{font-size:14px}.gd-sd{font-size:12.5px}}
+.g-sec.gd-sec{padding:0;margin-bottom:8px;overflow:hidden;transition:border-color .15s}
+.g-sec.gd-sec>h2{margin:0;display:block}
+.gd-h{all:unset;box-sizing:border-box;width:100%;display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;font-size:16px;font-weight:700;color:var(--text)}
+.gd-h:hover{background:var(--card-2)}
+.gd-h:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.gd-ic{flex:none;width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-size:19px;background:var(--accent-wash);border:1px solid rgba(255,77,0,.3)}
+.gd-n{flex:none;font-size:11px;font-weight:800;color:var(--text-3);background:var(--card-2);border:1px solid var(--line);border-radius:999px;padding:2px 8px}
+.gd-t{flex:1;min-width:0;line-height:1.35}
+.gd-ch{flex:none;font-size:22px;color:var(--text-3);transition:transform .2s;transform:rotate(90deg)}
+[dir="rtl"] .gd-ch{transform:rotate(90deg)}
+.gd-sec.open{border-color:rgba(255,106,43,.45)}
+.gd-sec.open .gd-ch{transform:rotate(-90deg);color:var(--accent-2)}
+.gd-b{display:none;padding:2px 18px 16px 64px;font-size:15px;line-height:1.7}
+[dir="rtl"] .gd-b{padding:2px 64px 16px 18px}
+.gd-sec.open .gd-b{display:block;animation:gdIn .18s ease-out}
+@keyframes gdIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+.gd-b p,.gd-b ul,.gd-b ol{margin:8px 0;color:var(--text-2)}
+.gd-b li{margin:7px 0;padding-left:2px}
+.gd-b li::marker{color:var(--accent-2)}
+.gd-b b{color:var(--text)}
+.gd-b .g-ex{font-size:14px;line-height:1.6}
+.gd-tw{overflow-x:auto;margin:10px 0;border:1px solid var(--line);border-radius:12px}
+.gd-tw .rw-tbl{margin:0;font-size:13.5px}
+.gd-tw .rw-tbl th{background:var(--card-2);color:var(--text);font-weight:700;position:sticky;top:0}
+.gd-tw .rw-tbl tr:nth-child(even) td{background:rgba(255,255,255,.025)}
+@media (max-width:720px){.gd-b{padding:2px 14px 14px;font-size:14.5px}[dir="rtl"] .gd-b{padding:2px 14px 14px}.gd-h{padding:12px;gap:10px;font-size:15px}.gd-ic{width:32px;height:32px;font-size:17px}}
+html[data-theme="light"] .gd-hero{background:radial-gradient(120% 140% at 0% 0%,rgba(255,77,0,.16),transparent 55%),linear-gradient(135deg,#fff,#f6f3ef)}
+html[data-theme="light"] .gd-ht,html[data-theme="light"] .gd-stt{color:#1a1a1a}
+html[data-theme="light"] .gd-step{background:rgba(255,255,255,.8)}
+@media (prefers-reduced-motion:reduce){.gd-ch,.gd-sec.open .gd-b{transition:none;animation:none}}
 
 </style>
 <script>(function(){var C=["zh","hi","en","ur","vi","pt-BR","pcm","id","uk","fil","ru"],M={zh:"zh",hi:"hi",en:"en",ur:"ur",vi:"vi",pt:"pt-BR",pcm:"pcm",id:"id","in":"id",uk:"uk",fil:"fil",tl:"fil",ru:"ru"},H={zh:"zh-CN"};function n(x){x=String(x||"").toLowerCase();if(!x)return null;for(var i=0;i<C.length;i++)if(C[i].toLowerCase()===x)return C[i];return M[x.split(/[-_]/)[0]]||null;}var t,l;try{var q=new URLSearchParams(location.search);t=q.get("theme");l=n(q.get("lang"));if(t==="light"||t==="dark")localStorage.setItem("db34.theme",t);if(l)localStorage.setItem("db34.lang",l);t=localStorage.getItem("db34.theme");l=n(localStorage.getItem("db34.lang"));}catch(e){}if(!l){var L=(navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language]);for(var j=0;j<L.length&&!l;j++)l=n(L[j]);}l=l||"en";var d=document.documentElement;d.setAttribute("data-theme",t==="light"?"light":"dark");d.setAttribute("data-lang",l);d.setAttribute("lang",H[l]||l);d.setAttribute("dir",l==="ur"?"rtl":"ltr");})();</script>
@@ -6898,6 +6943,43 @@ window.DBGuideI18n = {"hi":{"start":"<div class=\"g-sec\"><h2>0 · जल्द�
     if (fp) fp.replaceWith(frag(fx));
     const box = document.createElement("div"); box.appendChild(t.content); return box.innerHTML;
   }
+  /* user 2026-11-11 20:25: How to play made easier to read: quick-start hero (4 steps), icon headers, sections fold open/close (content unchanged) */
+  const GDL = {"en": {"qh": "Start in 1 minute", "qs": "The whole game in 4 steps. Tap any section below for the details.", "q1t": "Get your bot", "q1d": "Connect your wallet, sign the free message and name your free dotBot.", "q2t": "Pick 5 moves", "q2d": "You have {s} seconds to lock one move per turn, or press AUTO.", "q3t": "Watch the fight", "q3d": "Both bots play 5 turns at once. Energy and counters decide who wins.", "q4t": "Earn and level up", "q4d": "{p} counted matches per bot per day give XP. Reset at 07:00 GMT+7.", "oa": "Open all", "ca": "Close all", "toc": "Contents"}, "zh": {"qh": "1 分钟上手", "qs": "4 步看懂整个游戏。点下面任一章节查看细节。", "q1t": "领取机器人", "q1d": "连接钱包，签名免费消息，给你的免费 dotBot 起名。", "q2t": "选 5 个招式", "q2d": "你有 {s} 秒为每回合锁定一个招式，或按 AUTO。", "q3t": "观看对战", "q3d": "双方同时打出 5 回合。能量和克制决定胜负。", "q4t": "赚 XP 升级", "q4d": "每个机器人每天 {p} 场计分对战给 XP。07:00 GMT+7 重置。", "oa": "全部展开", "ca": "全部收起", "toc": "目录"}, "vi": {"qh": "Bắt đầu trong 1 phút", "qs": "Cả game gói trong 4 bước. Bấm vào từng mục bên dưới để xem chi tiết.", "q1t": "Nhận bot", "q1d": "Kết nối ví, ký tin nhắn miễn phí và đặt tên cho dotBot miễn phí của bạn.", "q2t": "Chọn 5 chiêu", "q2d": "Bạn có {s} giây để khóa mỗi lượt một chiêu, hoặc bấm AUTO.", "q3t": "Xem trận đấu", "q3d": "Hai bot đánh 5 lượt cùng lúc. Năng lượng và thế khắc chế quyết định thắng thua.", "q4t": "Nhận XP, lên cấp", "q4d": "Mỗi bot có {p} trận tính điểm mỗi ngày để nhận XP. Reset lúc 07:00 GMT+7.", "oa": "Mở tất cả", "ca": "Thu gọn", "toc": "Mục lục"}, "hi": {"qh": "1 मिनट में शुरू करें", "qs": "पूरा गेम 4 कदमों में। विवरण के लिए नीचे कोई भी सेक्शन दबाएँ।", "q1t": "अपना बॉट पाएँ", "q1d": "वॉलेट जोड़ें, मुफ़्त संदेश पर साइन करें और अपने मुफ़्त dotBot को नाम दें।", "q2t": "5 चालें चुनें", "q2d": "हर टर्न के लिए एक चाल लॉक करने को {s} सेकंड हैं, या AUTO दबाएँ।", "q3t": "लड़ाई देखें", "q3d": "दोनों बॉट एक साथ 5 टर्न खेलते हैं। एनर्जी और काउंटर तय करते हैं कौन जीतेगा।", "q4t": "कमाएँ और लेवल बढ़ाएँ", "q4d": "हर बॉट को रोज़ {p} गिने जाने वाले मैच XP देते हैं। 07:00 GMT+7 पर रीसेट।", "oa": "सब खोलें", "ca": "सब बंद करें", "toc": "विषय सूची"}, "ur": {"qh": "1 منٹ میں شروع کریں", "qs": "پورا گیم 4 قدموں میں۔ تفصیل کے لیے نیچے کوئی بھی حصہ دبائیں۔", "q1t": "اپنا بوٹ لیں", "q1d": "والیٹ جوڑیں، مفت پیغام پر سائن کریں اور اپنے مفت dotBot کو نام دیں۔", "q2t": "5 چالیں چنیں", "q2d": "ہر ٹرن کے لیے ایک چال لاک کرنے کو {s} سیکنڈ ہیں، یا AUTO دبائیں۔", "q3t": "لڑائی دیکھیں", "q3d": "دونوں بوٹ ایک ساتھ 5 ٹرن کھیلتے ہیں۔ انرجی اور کاؤنٹر جیت کا فیصلہ کرتے ہیں۔", "q4t": "کمائیں اور لیول بڑھائیں", "q4d": "ہر بوٹ کے روزانہ {p} گنے جانے والے میچ XP دیتے ہیں۔ 07:00 GMT+7 پر ری سیٹ۔", "oa": "سب کھولیں", "ca": "سب بند کریں", "toc": "فہرست"}, "pt-BR": {"qh": "Comece em 1 minuto", "qs": "O jogo todo em 4 passos. Toque em qualquer seção abaixo para ver os detalhes.", "q1t": "Pegue seu bot", "q1d": "Conecte a carteira, assine a mensagem grátis e dê nome ao seu dotBot grátis.", "q2t": "Escolha 5 golpes", "q2d": "Você tem {s} segundos para travar um golpe por turno, ou toque em AUTO.", "q3t": "Assista à luta", "q3d": "Os dois bots jogam 5 turnos ao mesmo tempo. Energia e contra-ataques decidem quem vence.", "q4t": "Ganhe e suba de nível", "q4d": "{p} partidas válidas por bot por dia dão XP. Zera às 07:00 GMT+7.", "oa": "Abrir tudo", "ca": "Fechar tudo", "toc": "Conteúdo"}, "pcm": {"qh": "Start for 1 minute", "qs": "Di whole game for 4 steps. Tap any section below to see di details.", "q1t": "Get your bot", "q1d": "Connect your wallet, sign di free message and name your free dotBot.", "q2t": "Pick 5 moves", "q2d": "You get {s} seconds to lock one move for each turn, or press AUTO.", "q3t": "Watch di fight", "q3d": "Both bots dey play 5 turns at once. Energy and counters dey decide who win.", "q4t": "Earn and level up", "q4d": "{p} counted matches per bot every day dey give XP. E dey reset 07:00 GMT+7.", "oa": "Open all", "ca": "Close all", "toc": "Contents"}, "id": {"qh": "Mulai dalam 1 menit", "qs": "Seluruh game dalam 4 langkah. Ketuk bagian mana pun di bawah untuk detailnya.", "q1t": "Dapatkan bot", "q1d": "Hubungkan dompet, tanda tangani pesan gratis, dan beri nama dotBot gratismu.", "q2t": "Pilih 5 jurus", "q2d": "Kamu punya {s} detik untuk mengunci satu jurus per giliran, atau tekan AUTO.", "q3t": "Tonton pertarungan", "q3d": "Kedua bot memainkan 5 giliran bersamaan. Energi dan counter menentukan pemenang.", "q4t": "Dapatkan XP dan naik level", "q4d": "{p} pertandingan terhitung per bot per hari memberi XP. Reset pukul 07:00 GMT+7.", "oa": "Buka semua", "ca": "Tutup semua", "toc": "Daftar isi"}, "uk": {"qh": "Почни за 1 хвилину", "qs": "Уся гра в 4 кроках. Торкнись будь-якого розділу нижче, щоб побачити деталі.", "q1t": "Отримай бота", "q1d": "Підключи гаманець, підпиши безкоштовне повідомлення і дай ім’я своєму безкоштовному dotBot.", "q2t": "Обери 5 ходів", "q2d": "У тебе {s} секунд, щоб зафіксувати хід на кожен раунд, або натисни AUTO.", "q3t": "Дивись бій", "q3d": "Обидва боти грають 5 раундів одночасно. Енергія і контратаки вирішують, хто переможе.", "q4t": "Заробляй і підвищуй рівень", "q4d": "{p} залікових матчів на бота щодня дають XP. Скидання о 07:00 GMT+7.", "oa": "Відкрити все", "ca": "Згорнути все", "toc": "Зміст"}, "fil": {"qh": "Magsimula sa 1 minuto", "qs": "Ang buong laro sa 4 na hakbang. I-tap ang anumang seksyon sa ibaba para sa detalye.", "q1t": "Kunin ang bot mo", "q1d": "I-connect ang wallet, pirmahan ang libreng mensahe at pangalanan ang libre mong dotBot.", "q2t": "Pumili ng 5 galaw", "q2d": "May {s} segundo ka para i-lock ang isang galaw bawat turn, o pindutin ang AUTO.", "q3t": "Panoorin ang laban", "q3d": "Sabay na naglalaro ng 5 turn ang dalawang bot. Energy at counter ang nagpapasya kung sino ang mananalo.", "q4t": "Kumita at mag-level up", "q4d": "{p} bilang na laban bawat bot araw-araw ang nagbibigay ng XP. Nire-reset tuwing 07:00 GMT+7.", "oa": "Buksan lahat", "ca": "Isara lahat", "toc": "Nilalaman"}, "ru": {"qh": "Начни за 1 минуту", "qs": "Вся игра в 4 шагах. Нажми на любой раздел ниже, чтобы увидеть детали.", "q1t": "Получи бота", "q1d": "Подключи кошелёк, подпиши бесплатное сообщение и дай имя своему бесплатному dotBot.", "q2t": "Выбери 5 ходов", "q2d": "У тебя {s} секунд, чтобы зафиксировать ход на каждый раунд, или нажми AUTO.", "q3t": "Смотри бой", "q3d": "Оба бота играют 5 раундов одновременно. Энергия и контрудары решают, кто победит.", "q4t": "Получай XP и расти", "q4d": "{p} зачётных матчей на бота в день дают XP. Сброс в 07:00 GMT+7.", "oa": "Открыть всё", "ca": "Свернуть всё", "toc": "Содержание"}};
+  const GD_IC = { "0": "🚀", "0b": "🌐", "1": "⏱️", "2": "⚡", "3": "💥", "3b": "📖", "4": "🔍", "5": "🏅", "6": "🎁", "7": "📈", "8": "🔋", "9": "📦", "10": "🎖️", "11": "🚪", "11b": "💬", "11c": "🏆", "12": "✅", "13": "🌄", "14": "👤" };
+  function dressGuide(body) {
+    if (!body || body.querySelector(".gd-hero")) return;
+    const lg = (window.I18N && I18N.lang) || "en", L = Object.assign({}, GDL.en, GDL[lg] || {});
+    const ps = (S.V2 && S.V2.pickSec) || 20, pl = (S.V31 && S.V31.rewards && S.V31.rewards.playsPerBotPerDay) || 20;
+    if (!S.gdOpen) S.gdOpen = new Set();
+    const secs = [...body.querySelectorAll(":scope > .g-sec, :scope > div > .g-sec")].filter(el => !el.closest(".gd-sec"));
+    secs.forEach((el, i) => {
+      const h = el.querySelector("h2"); if (!h) return;
+      const m = /^\s*(\d+[bc]?)\s*·\s*/.exec(h.textContent), key = m ? m[1] : (/sound|声|âm/i.test(h.textContent) ? "snd" : "x" + i);
+      const ic = GD_IC[key] || (m ? "📘" : "🔊");
+      const tag = h.querySelector(".sim-tag"); if (tag) tag.remove();
+      if (m) h.innerHTML = h.innerHTML.replace(/^\s*\d+[bc]?\s*·\s*/, "");
+      const bd = document.createElement("div"); bd.className = "gd-b";
+      while (h.nextSibling) bd.appendChild(h.nextSibling);
+      if (tag) bd.prepend(tag);
+      bd.querySelectorAll("table").forEach(t => { if (!t.parentElement.classList.contains("gd-tw")) { const w = document.createElement("div"); w.className = "gd-tw"; t.replaceWith(w); w.appendChild(t); } });
+      const hb = document.createElement("button"); hb.type = "button"; hb.className = "gd-h";
+      hb.innerHTML = `<span class="gd-ic" aria-hidden="true">${ic}</span>${m ? `<span class="gd-n">${esc(key)}</span>` : ""}<span class="gd-t"></span><span class="gd-ch" aria-hidden="true">›</span>`;
+      hb.querySelector(".gd-t").innerHTML = h.innerHTML;
+      h.innerHTML = ""; h.appendChild(hb);
+      el.appendChild(bd); el.classList.add("gd-sec"); el.dataset.gk = key;
+      const set = o => { el.classList.toggle("open", o); hb.setAttribute("aria-expanded", o ? "true" : "false"); if (o) S.gdOpen.add(key); else S.gdOpen.delete(key); };
+      set(S.gdOpen.has(key));
+      hb.onclick = () => set(!el.classList.contains("open"));
+    });
+    const st = [["🤖", L.q1t, L.q1d], ["🎯", L.q2t, L.q2d.replace("{s}", ps)], ["⚔️", L.q3t, L.q3d], ["⭐", L.q4t, L.q4d.replace("{p}", pl)]];
+    const hero = document.createElement("div"); hero.className = "gd-hero";
+    hero.innerHTML = `<div class="gd-hh"><div><div class="gd-ht">${esc(L.qh)}</div><div class="gd-hs">${esc(L.qs)}</div></div><button type="button" class="btn gd-all"></button></div><div class="gd-steps">${st.map((x, i) => `<div class="gd-step"><div class="gd-sn">${i + 1}</div><div class="gd-si" aria-hidden="true">${x[0]}</div><div class="gd-stt">${esc(x[1])}</div><div class="gd-sd">${esc(x[2])}</div></div>`).join("")}</div>`;
+    body.prepend(hero);
+    const all = hero.querySelector(".gd-all"), lab = () => { const any = body.querySelectorAll(".gd-sec:not(.open)").length; all.textContent = any ? "⊕ " + L.oa : "⊖ " + L.ca; };
+    all.onclick = () => { const open = body.querySelectorAll(".gd-sec:not(.open)").length > 0; body.querySelectorAll(".gd-sec").forEach(s => { if (s.classList.contains("open") !== open) s.querySelector(".gd-h").click(); }); lab(); };
+    body.addEventListener("click", e => { if (e.target.closest(".gd-h")) lab(); });
+    lab();
+  }
   /** lite How to play 11c: monthly rank "Arena Pioneer Cup" (user 2026-11-10 08:11), EN + ZH */
   function monthlyGuide(zh) {
     const E = Object.assign({}, MONTH, ON.ml && ON.ml.event || {}), w = `${mFmtDate(E.startAt, zh)} → ${mFmtDate(E.endAt, zh)} (GMT+7)`;
@@ -7717,7 +7799,7 @@ window.DBGuideI18n = {"hi":{"start":"<div class=\"g-sec\"><h2>0 · जल्द�
     const qb = Q.get("bot"); selectBot((qb && S.preview.find(b => b.id === qb)) || (S.mine && S.mine[0]) || S.preview[Math.floor(Math.random() * S.preview.length)]);
     setInterval(() => { if (S.phase === "lobby" && S.arenaPick === "random") { heroT++; heroPreview(); } }, 6000);
     $("#rulesBody").innerHTML = rulesHtml(); bindSoundPreview($("#rulesBody"));
-    $("#guideBody").innerHTML = LITE ? liteGuide(guideHtml()) : guideHtml(); bindSoundPreview($("#guideBody"));
+    $("#guideBody").innerHTML = LITE ? liteGuide(guideHtml()) : guideHtml(); bindSoundPreview($("#guideBody")); dressGuide($("#guideBody"));
     parseChallenge(); renderProgress();
     S.onlineReady = onlineInit().catch(e => { console.warn("online init", e); });
     window.addEventListener("hashchange", () => { if (/^#ch=/.test(location.hash)) { parseChallenge(); if (S.phase !== "lobby") toLobby(); } });
@@ -7781,7 +7863,7 @@ window.DBGuideI18n = {"hi":{"start":"<div class=\"g-sec\"><h2>0 · जल्द�
     document.addEventListener("keydown", e => { if (S.phase === "pick" && e.key === "Enter" && !e.target.closest(".mv,.slot,button")) lockIn(); });
     // v3.4.2 language / theme: the observer in i18n.js translates rendered text; the guide + rules have their own 中文 HTML
     if (window.I18N) I18N.onChange(() => { try { renderMonthly(); } catch (_) {} });
-    if (window.I18N) I18N.onChange(() => { $("#rulesBody").innerHTML = rulesHtml(); bindSoundPreview($("#rulesBody")); $("#guideBody").innerHTML = LITE ? liteGuide(guideHtml()) : guideHtml(); bindSoundPreview($("#guideBody")); renderAllMeta(); renderSpecial(); updateFindLabel(); if (S.phase === "result" && S.cardReady) renderCard().then(url => { $("#cardImg").src = url; S.cardUrl = url; }); });
+    if (window.I18N) I18N.onChange(() => { $("#rulesBody").innerHTML = rulesHtml(); bindSoundPreview($("#rulesBody")); $("#guideBody").innerHTML = LITE ? liteGuide(guideHtml()) : guideHtml(); bindSoundPreview($("#guideBody")); dressGuide($("#guideBody")); renderAllMeta(); renderSpecial(); updateFindLabel(); if (S.phase === "result" && S.cardReady) renderCard().then(url => { $("#cardImg").src = url; S.cardUrl = url; }); });
     window.__B3sel = selOf; // test hook (function selector)
     window.__B3on = { api, refreshMe, refreshLists, checkHealth, signIn, signOut, ON, LV, openRoom, onlineRoom, liveLeave, flipLog, closeRoomView, renderRooms, liveSend, RM, RQ, CHAT, SR, quitMatch, roomSearch, loadWeek, loadQuests, XQ, closeMyRoom, reopenRoom };
     S.loaded = true;
