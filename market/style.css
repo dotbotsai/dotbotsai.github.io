@@ -430,3 +430,8 @@ footer a { color: var(--text-2); }
 /* language toggle */
 .lang-btn { font-size: 14px; font-weight: 650; letter-spacing: .02em; }
 [data-lang="zh"] body { word-break: normal; line-break: strict; }
+
+/* First Round badge */
+.chip.fr { background: rgba(255, 200, 60, .14); color: #ffd56b; border-color: rgba(255, 200, 60, .38); }
+.card .fr-tag { height: 20px; font-size: 11px; padding: 0 7px; margin-left: auto; }
+[data-theme="light"] .chip.fr { background: #fff4d6; color: #8a5a00; border-color: #f0cf7a; }

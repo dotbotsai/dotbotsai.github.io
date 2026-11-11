@@ -36,7 +36,7 @@
     "Withdraw": "提取", "Wrong network": "网络错误",
     "Rarity tier": "稀有度等级", "Tier": "稀有度", "Head": "头部", "Eyes": "眼睛", "Antenna": "天线", "Mouth": "嘴巴", "Accessory": "配饰", "Type": "类型",
     "Not listed": "未挂单", "Remove from cart": "移出购物车", "Add to cart": "加入购物车", "Make offer": "出价",
-    "In wallet": "在钱包中", "Yours": "你的",
+    "In wallet": "在钱包中", "Yours": "你的", "First Round": "首轮",
     "No bot of this tier has been minted yet.": "这个等级还没有机器人被铸造。", "No bots match": "没有符合条件的机器人",
     "Try removing a filter or clearing the search.": "试试移除筛选条件或清空搜索。", "Clear all": "全部清除",
     "Price change": "改价", "Listing cancelled": "挂单已取消", "Sale · offer": "成交 · 出价", "Sale · collection offer": "成交 · 系列出价",

@@ -336,6 +336,9 @@
     return list.sort(sorters[S.sort] || sorters.price_asc);
   }
   function bestOfferFor(id) { let best = null; for (const o of S.offers) if (o.tokenId === id && o.expiry > nowSec() && (!best || o.price > best.price)) best = o; return best; }
+  // First Round: bots minted in the first public round of dotBots V3.2 (closed 11 Nov 2026, 17:00 GMT+7). Team bots are not included.
+  const FIRST_ROUND = new Set([101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133]);
+  const frChip = (id, cls) => FIRST_ROUND.has(id) ? `<span class="chip fr ${cls || ""}">First Round</span>` : "";
   function card(id, opts = {}) {
     const b = S.bots.get(id), l = S.listings.get(id), bo = bestOfferFor(id), mine = isMe(holderOf(id));
     const inCart = S.cart.has(id), sel = opts.select ? S.sel.has(id) : inCart;
@@ -345,7 +348,7 @@
     const tag = opts.mine ? `<span class="chip owned-tag ${l ? "orange" : ""}">${l ? "Listed" : "In wallet"}</span>` : mine ? `<span class="chip owned-tag">Yours</span>` : "";
     return `<div class="card ${sel ? "sel" : ""}" tabindex="0" data-id="${id}" data-test="card-${id}">
       <div class="media">${imgTag(id)}<span class="tier">${tierChip(b.traits.Tier)}</span>${(l && !mine) || opts.select ? `<span class="check" data-act="${opts.select ? "select" : "cart"}" data-id="${id}">${sel ? icon.check : ""}</span>` : ""}${tag}</div>
-      <div class="body"><div class="name" title="${esc(nameOf(b))}">${esc(nameOf(b))}</div><div class="sub"><span>#${id}</span><span>Rank ${b.rank}</span></div>
+      <div class="body"><div class="name" title="${esc(nameOf(b))}">${esc(nameOf(b))}</div><div class="sub"><span>#${id}</span><span>Rank ${b.rank}</span>${frChip(id, "fr-tag")}</div>
       <div class="price">${price}</div><div class="offer">${bo ? "Best offer " + DB.fmt(bo.price) + " " + esc(sym()) : ""}</div></div>${bar}</div>`;
   }
   function skeletons(n) { return Array.from({ length: n }, () => `<div class="card skeleton"><div class="media"><div class="skel"></div></div><div class="body"><div class="skel line" style="width:70%"></div><div class="skel line" style="width:40%"></div><div class="skel line" style="width:55%;height:16px;margin-top:14px"></div></div></div>`).join(""); }
@@ -579,7 +582,7 @@
       <div class="dleft"><div class="big">${imgTag(id)}</div>
         <div class="dtraits"><div class="section-h">Traits</div><div class="traits">${traits}</div></div></div>
       <div class="dinfo">
-        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">${tierChip(b.traits.Tier)}<span class="chip">Rank ${b.rank} of ${N}</span><span class="chip">#${id}</span></div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">${tierChip(b.traits.Tier)}<span class="chip">Rank ${b.rank} of ${N}</span><span class="chip">#${id}</span>${frChip(id)}</div>
         <h2>${esc(nameOf(b))}</h2>
         <div class="owner-line"><span>Owned by <a href="${esc(DB.addrUrl(holder) || "#")}" target="_blank" rel="noopener">${esc(mine ? "you" : DB.short(holder))}</a></span>${l ? `<span>Held in market escrow while listed</span>` : ""}</div>
         <div class="pricebox">${priceBlock}<div class="actions">${actions}</div><div class="feeline">${feeLine}</div></div>
