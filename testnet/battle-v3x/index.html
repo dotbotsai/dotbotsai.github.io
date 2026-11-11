@@ -1216,6 +1216,9 @@ html[data-theme="light"] .cupx-t b,html[data-theme="light"] .cupx-p.p1 .cupx-pn,
 .mlx-tbl tr.me td{background:rgba(34,197,94,.16)!important;font-weight:700}
 .ml-card .ml-me{font-size:15px;padding:10px 12px;border:1px solid rgba(34,197,94,.45)}
 @media (max-width:520px){.mlx-pod{gap:6px}.mlx-nm{font-size:.9rem}}
+/* Vietnamese (user 2026-11-11 17:32): bundled Geist is a latin subset without ẫ ể đ ơ ư..., so letters fell back glyph-by-glyph and words looked broken. Skip Geist for vi. */
+html:lang(vi) { --sans: system-ui, -apple-system, "Segoe UI", "Roboto", "Noto Sans", "Helvetica Neue", Arial, sans-serif; }
+.lang-menu [lang="vi"] { font-family: system-ui, -apple-system, "Segoe UI", "Roboto", "Noto Sans", Arial, sans-serif; }
 
 </style>
 <script>(function(){var C=["zh","hi","en","ur","vi","pt-BR","pcm","id","uk","fil","ru"],M={zh:"zh",hi:"hi",en:"en",ur:"ur",vi:"vi",pt:"pt-BR",pcm:"pcm",id:"id","in":"id",uk:"uk",fil:"fil",tl:"fil",ru:"ru"},H={zh:"zh-CN"};function n(x){x=String(x||"").toLowerCase();if(!x)return null;for(var i=0;i<C.length;i++)if(C[i].toLowerCase()===x)return C[i];return M[x.split(/[-_]/)[0]]||null;}var t,l;try{var q=new URLSearchParams(location.search);t=q.get("theme");l=n(q.get("lang"));if(t==="light"||t==="dark")localStorage.setItem("db34.theme",t);if(l)localStorage.setItem("db34.lang",l);t=localStorage.getItem("db34.theme");l=n(localStorage.getItem("db34.lang"));}catch(e){}if(!l){var L=(navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language]);for(var j=0;j<L.length&&!l;j++)l=n(L[j]);}l=l||"en";var d=document.documentElement;d.setAttribute("data-theme",t==="light"?"light":"dark");d.setAttribute("data-lang",l);d.setAttribute("lang",H[l]||l);d.setAttribute("dir",l==="ur"?"rtl":"ltr");})();</script>
