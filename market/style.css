@@ -435,3 +435,13 @@ footer a { color: var(--text-2); }
 .chip.fr { background: rgba(255, 200, 60, .14); color: #ffd56b; border-color: rgba(255, 200, 60, .38); }
 .card .fr-tag { height: 20px; font-size: 11px; padding: 0 7px; margin-left: auto; }
 [data-theme="light"] .chip.fr { background: #fff4d6; color: #8a5a00; border-color: #f0cf7a; }
+
+/* language menu */
+.lang-wrap { position: relative; display: inline-flex; }
+.lang-btn { width: auto; min-width: 42px; padding: 0 8px; }
+.lang-menu { position: absolute; top: calc(100% + 6px); right: 0; z-index: 60; margin: 0; padding: 6px; list-style: none; min-width: 168px; max-height: 70vh; overflow: auto; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-s); box-shadow: var(--shadow); }
+.lang-menu button { display: block; width: 100%; text-align: left; padding: 8px 10px; border: 0; border-radius: 8px; background: none; cursor: pointer; font-size: 14px; }
+.lang-menu button[dir="rtl"] { text-align: right; }
+.lang-menu button:hover { background: var(--card-2); }
+.lang-menu button[aria-checked="true"] { color: var(--accent); font-weight: 650; }
+[dir="rtl"] .lang-menu { right: auto; left: 0; }
