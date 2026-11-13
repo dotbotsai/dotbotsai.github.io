@@ -445,3 +445,4 @@ footer a { color: var(--text-2); }
 .lang-menu button:hover { background: var(--card-2); }
 .lang-menu button[aria-checked="true"] { color: var(--accent); font-weight: 650; }
 [dir="rtl"] .lang-menu { right: auto; left: 0; }
+.hero-links a { text-underline-offset: 4px; text-decoration-thickness: 1px; }
