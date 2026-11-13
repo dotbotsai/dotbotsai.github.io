@@ -616,10 +616,6 @@
     $("#confirmBuy").onclick = async () => { closeModal(); await runTx("Buy " + nameOf(S.bots.get(id)), async () => DB.market(true).buy(id, { value: l.price }), () => "The bot is in your wallet."); };
   }
 
-  async function holderShareNote(id) {
-    try { const p = await DB.bots().pendingOf(id); if (p > 0n) return `<div class="notice warn" style="margin:0"><span class="grow">This bot has <b class="mono">${DB.fmt(p)} ${esc(sym())}</b> unclaimed holder share. It moves with the bot to the next owner.</span><button class="btn sm" id="claimFirst">Claim it first</button></div>`; } catch (_) {}
-    return "";
-  }
   async function openList(id, reprice) {
     const l = S.listings.get(id);
     const fl = floor();
@@ -627,7 +623,6 @@
       <label>Price<div class="input-suffix"><input class="input mono" id="priceIn" inputmode="decimal" placeholder="0.00" value="${reprice && l ? esc(ethers.formatEther(l.price)) : ""}"><span>${esc(sym())}</span></div></label>
       ${fl != null ? `<div class="dim" style="font-size:13px">Floor right now: <span class="mono">${DB.fmt(fl)} ${esc(sym())}</span> · <a href="#" id="useFloor" style="color:var(--link-warm)">use floor</a></div>` : ""}
       <div class="breakdown" id="lbd"></div>
-      <div id="hsNote"></div>
       <div class="feeline">${reprice ? "Only the price changes; the bot stays in escrow." : "Your bot moves into the market contract (escrow) in one transaction. No token approval is requested. You can cancel any time, also while the market is paused."}</div>
       <div style="display:flex;gap:10px">${backTo(id)}<button class="btn primary" style="flex:1" id="doList" disabled>${reprice ? "Update price" : "List bot"}</button></div></div></div>`, true);
     watchImgs($("#mcontent")); wireBack();
@@ -639,7 +634,6 @@
     };
     inp.oninput = upd; upd(); inp.focus();
     if ($("#useFloor")) $("#useFloor").onclick = e => { e.preventDefault(); inp.value = ethers.formatEther(fl); upd(); };
-    if (!reprice) holderShareNote(id).then(h => { const n = $("#hsNote"); if (!n) return; n.innerHTML = h; const c = $("#claimFirst"); if (c) c.onclick = () => runTx("Claim holder share", async () => DB.bots(true).claim([id])).then(() => openList(id)); });
     go.onclick = async () => {
       const p = parseAmt(inp.value); if (!p) return;
       closeModal();
@@ -676,10 +670,8 @@
     const id = o.tokenId, l = S.listings.get(id);
     openModal(miniHead(id, "Accept offer") + `<div class="breakdown"><div><span>Offer</span><span>${DB.fmt(o.price)} ${esc(sym())}</span></div><div><span class="dim">Market fee ${feePct()}</span><span class="dim">−${DB.fmt(feeOf(o.price))}</span></div><div class="tot"><span>You receive</span><span>${DB.fmt(o.price - feeOf(o.price))} ${esc(sym())}</span></div></div>
       <div class="feeline" style="margin-top:10px">From <span class="mono">${esc(DB.short(o.buyer))}</span>, expires ${until(o.expiry)}. ${l ? "Your listing closes and the bot goes to the buyer." : "One transaction sends the bot from your wallet through the market to the buyer. No token approval is requested."}</div>
-      <div id="hsNote" style="margin-top:10px"></div>
       <div style="display:flex;gap:10px;margin-top:16px">${backTo(id)}<button class="btn primary" style="flex:1" id="doAccept">Accept ${DB.fmt(o.price)} ${esc(sym())}</button></div></div>`, true);
     watchImgs($("#mcontent")); wireBack();
-    holderShareNote(id).then(h => { const n = $("#hsNote"); if (n) { n.innerHTML = h; const c = $("#claimFirst"); if (c) c.onclick = () => runTx("Claim holder share", async () => DB.bots(true).claim([id])); } });
     $("#doAccept").onclick = async () => {
       closeModal();
       if (l) await runTx("Accept offer", async () => DB.market(true).acceptOfferForListed(offerId, o.price), () => "Sold.");

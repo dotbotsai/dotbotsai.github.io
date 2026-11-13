@@ -71,8 +71,6 @@
     "Complete purchase": "完成购买", "You pay": "你支付",
     "Plus network gas. The bot moves to your wallet in the same transaction.": "另需网络 Gas。机器人会在同一笔交易中转入你的钱包。",
     "The bot is in your wallet.": "机器人已在你的钱包中。", "This bot has": "这个机器人有",
-    "unclaimed holder share. It moves with the bot to the next owner.": "未领取的持有人分成。它会随机器人转给下一位持有人。",
-    "Claim it first": "先领取", "Claim holder share": "领取持有人分成",
     "Only the price changes; the bot stays in escrow.": "只修改价格，机器人仍在托管中。",
     "Your bot moves into the market contract (escrow) in one transaction. No token approval is requested. You can cancel any time, also while the market is paused.": "你的机器人会在一笔交易中转入市场合约托管。无需代币授权。你可以随时取消，市场暂停时也可以。",
     "Update price": "更新价格", "List bot": "挂单", "Listing price": "挂单价格", "You receive": "你将收到",
