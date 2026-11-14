@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><script>window.__DB_ONLINE={"base":"https://api.dotbots.app","sitekey":"0x4AAAAAAF5WcrSZDEVqqLyd"};</script>
+<meta charset="utf-8"><script>window.__DB_ONLINE={"base":"https://api.dotbots.app","sitekey":"0x4AAAAAAF5WcrSZDEVqqLyd","ph":{"key":"phc_AAiNx7DCJGWvZH9N4tFxdXCjzX43qCBaBmWsE6FaT6zq","host":"https://us.i.posthog.com"}};</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
 <meta name="theme-color" content="#0e0f13">
@@ -1680,6 +1680,57 @@ html[data-theme="light"] .off-links .ol-scam{background:rgba(224,140,0,.1);borde
   <div class="modal-b" id="crateBody"></div>
 </dialog>
 
+<script>/* telemetry.js */
+/* telemetry.js — anonymous gameplay stats + error capture (PostHog capture API, no SDK, no cookies).
+   user "duyệt" 2026-11-14 21:13 GMT+7 (PostHog free plan). OFF unless window.__DB_ONLINE.ph = {key:"phc_…", host:"https://us.i.posthog.com"}.
+   Sends: random anonymous id (localStorage db34.anon, never the wallet, never the bot name), event name, path shape, status/error code, lang, screen size.
+   Never sends: wallet address, signatures, tokens, X handle, chat text. Respects Do Not Track. Caps: 300 events + 20 errors per page load. */
+(function () {
+  "use strict";
+  var cfg = (window.__DB_ONLINE && window.__DB_ONLINE.ph) || null;
+  var noop = { track: function () {}, api: function () {}, error: function () {}, on: false };
+  if (!cfg || !cfg.key || !/^phc_[A-Za-z0-9_-]{10,}$/.test(cfg.key) || !/^https:\/\/(us|eu)\.i\.posthog\.com$/.test(cfg.host || "")) { window.dbT = noop; return; }
+  try { if (navigator.doNotTrack === "1" || window.doNotTrack === "1") { window.dbT = noop; return; } } catch (_) {}
+  var URL_ = cfg.host + "/i/v0/e/", sent = 0, errs = 0, MAXE = 300, MAXERR = 20;
+  function rid() { var a = new Uint8Array(12); (window.crypto || {}).getRandomValues ? crypto.getRandomValues(a) : a.forEach(function (_, i) { a[i] = Math.random() * 256; }); return Array.prototype.map.call(a, function (b) { return ("0" + b.toString(16)).slice(-2); }).join(""); }
+  var anon; try { anon = localStorage.getItem("db34.anon"); if (!anon) { anon = "a_" + rid(); localStorage.setItem("db34.anon", anon); } } catch (_) { anon = "a_" + rid(); }
+  var sid = "s_" + rid();
+  function base() {
+    var d = document.documentElement;
+    return { $process_person_profile: false, $session_id: sid, $current_url: location.origin + location.pathname, lang: d.getAttribute("data-lang") || "", sw: screen.width, sh: screen.height, mobile: /Mobi|Android/i.test(navigator.userAgent) };
+  }
+  function send(event, props) {
+    if (sent >= MAXE) return; sent++;
+    var p = base(); for (var k in props || {}) p[k] = props[k];
+    var body = JSON.stringify({ api_key: cfg.key, event: event, distinct_id: anon, properties: p, timestamp: new Date().toISOString() });
+    try { if (navigator.sendBeacon && navigator.sendBeacon(URL_, new Blob([body], { type: "text/plain" }))) return; } catch (_) {}
+    try { fetch(URL_, { method: "POST", body: body, keepalive: true, credentials: "omit", headers: { "Content-Type": "text/plain" } }).catch(function () {}); } catch (_) {}
+  }
+  // /cup/poll, /bot/0x…/x, /room/AbC123 -> /cup/poll, /bot/:id/x, /room/:id ; poll noise dropped
+  function shape(path) { return String(path || "").split("?")[0].replace(/\/(0x[0-9a-fA-F]+|[0-9]+|[A-Za-z0-9_-]{8,})(?=\/|$)/g, "/:id").slice(0, 80); }
+  var QUIET = /\/(poll|health|me|state)$/;
+  function clip(s, n) { return String(s == null ? "" : s).replace(/0x[0-9a-fA-F]{40}/g, "0x…").slice(0, n); }
+  function error(type, msg, stack, extra) {
+    if (errs >= MAXERR) return; errs++;
+    var p = { $exception_list: [{ type: clip(type || "Error", 60), value: clip(msg, 300), mechanism: { handled: false, synthetic: false } }], $exception_type: clip(type || "Error", 60), $exception_message: clip(msg, 300), stack: clip(stack, 1500) };
+    for (var k in extra || {}) p[k] = extra[k];
+    send("$exception", p);
+  }
+  window.addEventListener("error", function (e) { if (!e || !e.message) return; error((e.error && e.error.name) || "Error", e.message, (e.error && e.error.stack) || (e.filename + ":" + e.lineno + ":" + e.colno)); });
+  window.addEventListener("unhandledrejection", function (e) { var r = e && e.reason; if (r && r.code && r.status !== undefined) return; /* ApiErr already counted as api_fail */ error((r && r.name) || "UnhandledRejection", (r && r.message) || String(r), r && r.stack); });
+  window.dbT = {
+    on: true,
+    track: function (name, props) { send(clip(name, 40), props); },
+    api: function (method, path, status, code) {
+      var s = shape(path); if (QUIET.test(s) && status < 400) return;
+      send(status >= 400 || code ? "api_fail" : "api_ok", { method: method, path: s, status: status, code: clip(code || "", 40) });
+      if (status >= 500 || code === "server_error" || code === "network") error("ServerError", (code || "http_" + status) + " " + method + " " + s, "", { path: s });
+    }
+  };
+  send("$pageview", { referrer_host: (function () { try { return document.referrer ? new URL(document.referrer).host : ""; } catch (_) { return ""; } })() });
+})();
+
+</script>
 <script>/* i18n.js */
 /* dotBots Bot Battle v3.4.3 - language (11 languages: 中文 हिन्दी English اردو Tiếng Việt Português Naija Indonesia Українська Filipino Русский; v3.4.2 had EN / 中文) + theme (dark / light) for the whole page.
  * Language: the page is written in English; in 中文 mode a MutationObserver translates every visible text node and the
@@ -6307,16 +6358,18 @@ window.DBGuideI18n = {"hi":{"start":"<div class=\"g-sec\"><h2>0 · जल्द�
     const ac = new AbortController(), t = setTimeout(() => ac.abort(), opt.timeout || 9000);
     let r;
     try { r = await fetch(ON.base + path, { method, headers: h, body: body === undefined ? undefined : JSON.stringify(body), credentials: "omit", cache: "no-store", signal: ac.signal }); }
-    catch (e) { clearTimeout(t); setUp(false); throw new ApiErr(0, "network", "Server unreachable"); }
+    catch (e) { clearTimeout(t); setUp(false); window.dbT && dbT.api(method, path, 0, "network"); throw new ApiErr(0, "network", "Server unreachable"); }
     clearTimeout(t);
     let j = null; try { j = await r.json(); } catch (_) {}
-    if (r.status >= 500 && (!j || !j.error || j.error === "internal")) { setUp(false); throw new ApiErr(r.status, "server_error", "Server error"); }
+    if (r.status >= 500 && (!j || !j.error || j.error === "internal")) { setUp(false); window.dbT && dbT.api(method, path, r.status, "server_error"); throw new ApiErr(r.status, "server_error", "Server error"); }
     if (!ON.up) setUp(true);
     if (!r.ok || !j || j.ok === false) {
       const code = (j && j.error) || "http_" + r.status;
+      window.dbT && dbT.api(method, path, r.status, code);
       if (code === "session_expired" || code === "bad_session" || code === "session_revoked" || code === "no_session") clearSession();
       throw new ApiErr(r.status, code, (j && j.message) || code, j);
     }
+    window.dbT && dbT.api(method, path, r.status, "");
     return j;
   }
   const ERR_TXT = {
