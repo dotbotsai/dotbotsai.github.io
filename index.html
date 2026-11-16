@@ -423,6 +423,7 @@ tbody th .dot { display: flex; width: fit-content; }
 .x-count__label, .x-count__date { font-size: var(--size-small); color: var(--hero-text-muted); }
 .x-count__time { font: var(--type-lede); font-variant-numeric: tabular-nums; font-weight: 700; letter-spacing: 0.02em; }
 .x-count .btn { margin-top: 8px; }
+.x-count__btns { display: flex; flex-wrap: wrap; gap: 8px; }
 .x-count__note { max-width: 46ch; color: var(--hero-text-muted); font-size: var(--size-body); line-height: 1.45; }
 .hero__credit {
   position: absolute;
@@ -1013,10 +1014,10 @@ tr.is-highlight > :last-child { box-shadow: 12px 0 var(--fill-tertiary); }
             <p class="hero__sub" data-zh="每个 .ai Agent ID 只能铸造唯一一个机器人，胸前印着它的名号。图像与元数据 100% 存储在 BNB 链上。">Every .ai Agent ID can mint exactly one bot, with its handle printed on its chest. Art and metadata 100% on-chain on BNB Chain.</p>
             <p class="hero__meta" data-zh="最多 2,222 个">2,222 bots max</p>
             <div class="x-count" id="mintCount">
-              <p class="x-count__label" data-zh="第二轮：11月16日 20:00（GMT+7）">Round 2: Nov 16, 20:00 (GMT+7)</p>
-              <p class="x-count__time" data-zh="第一轮已结束">First round closed</p>
+              <p class="x-count__label" data-zh="FCFS：先到先得">FCFS: first come, first served</p>
+              <p class="x-count__time" data-zh="第二轮已开售">Round 2 is live</p>
               <p class="x-count__note" data-zh="第二轮已于2026年11月16日（周一）20:00（GMT+7）开售，每个 bot 统一 $10。你仍可以在 dotBots 市场买卖机器人。">Round 2 sales opened Mon, Nov 16, 2026, 20:00 (GMT+7) at a flat $10 per bot. You can still buy and sell dotBots on the Market.</p>
-              <a class="btn" data-zh="打开市场" href="market/">Open Market</a>
+              <div class="x-count__btns"><a class="btn" data-zh="如何铸造" href="#mintHow">How to mint</a><a class="btn" data-zh="打开市场" href="market/">Open Market</a></div>
             </div>
           </div>
         </section>
