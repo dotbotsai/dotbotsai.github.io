@@ -7684,11 +7684,22 @@ window.DBGuideI18n = {};
   const RM_TIMEOUT = "Time's up: no next match. No penalty.";
   function rmClear() { clearInterval(RM.t); RMS.clear(); rematchBar(); }
   function rmShown() { // called by finish() for every result screen
+    try { cupTeamNextBtn(); } catch (_) {}
     const live = !!(S.lastServerMatch && RMS.armedFor(S.lastServerMatch));
     if (!live) { if (RM.pend || RM.live || RM.off) rmClear(); return; }
     RMS.shown("live", RM_TIMEOUT);
     clearInterval(RM.t); if (RM.live) RM.t = setInterval(() => { if (!RMS.tick(RM_TIMEOUT)) clearInterval(RM.t); rematchBar(); }, 250);
     rematchBar();
+  }
+  /* fix 2026-11-17 : a Cup match vs dotBot Team
+     has no room, so the room bar's "Continue the tournament" never showed and Rematch / New opponent are hidden. Same button, same action. */
+  function cupTeamNextBtn() {
+    const old = $("#cupTeamNext"); if (old) old.remove();
+    if (!(S.wasTeamCup && S.phase === "result")) return;
+    const row = document.querySelector("#result .res-actions"); if (!row) return;
+    const b = document.createElement("button"); b.className = "btn primary"; b.id = "cupTeamNext"; b.textContent = "🏆 " + CUPT("Continue the tournament", "继续锦标赛");
+    b.onclick = () => { if (b.disabled) return; b.disabled = true; toLobby(); setTimeout(() => cupJoin(false), 0); };
+    row.insertBefore(b, row.firstChild);
   }
   function rmOverlay() {
     let el = $("#rmOverlay"); if (!el) { el = document.createElement("div"); el.id = "rmOverlay"; el.className = "rm-ov hidden"; el.setAttribute("role", "dialog"); el.setAttribute("aria-live", "polite"); el.setAttribute("aria-label", "Next match"); document.body.appendChild(el); }
@@ -8327,7 +8338,7 @@ window.DBGuideI18n = {};
     window.__B3on = { api, refreshMe, refreshLists, checkHealth, signIn, signOut, ON, LV, openRoom, onlineRoom, liveLeave, flipLog, closeRoomView, renderRooms, liveSend, RM, RQ, CHAT, SR, quitMatch, roomSearch, loadWeek, loadQuests, XQ, closeMyRoom, reopenRoom };
     S.loaded = true;
   }
-  function toLobby() { S.livePractice = false; S.liveCup = false; pracBar(); if (LV.cup && LV.cup.done) cupExitRoom(); ["#rematchBtn", "#newOppBtn"].forEach(q => { const el = $(q); if (el) el.classList.remove("hidden"); }); rmClear(); if (onUp()) setTimeout(refreshLists, 50); clearTimeout(CH.poll); S.chainMatch = null; clearInterval(S.timer); clearTimeout(vsTimer); stopConfetti(); S.phase = "lobby"; show("lobby"); hud(null); $("#strip").innerHTML = ""; $("#phaseTag").textContent = ""; heroPreview(); renderHudTag(); }
+  function toLobby() { S.livePractice = false; S.liveCup = false; S.wasTeamCup = false; { const t = $("#cupTeamNext"); if (t) t.remove(); } pracBar(); if (LV.cup && LV.cup.done) cupExitRoom(); ["#rematchBtn", "#newOppBtn"].forEach(q => { const el = $(q); if (el) el.classList.remove("hidden"); }); rmClear(); if (onUp()) setTimeout(refreshLists, 50); clearTimeout(CH.poll); S.chainMatch = null; clearInterval(S.timer); clearTimeout(vsTimer); stopConfetti(); S.phase = "lobby"; show("lobby"); hud(null); $("#strip").innerHTML = ""; $("#phaseTag").textContent = ""; heroPreview(); renderHudTag(); }
   init().catch(e => { console.error(e); document.body.insertAdjacentHTML("beforeend", `<div style="padding:20px;color:#ff8b8f">Could not start: ${esc(e.message || e)}</div>`); });
 })();
 
