@@ -7037,7 +7037,7 @@ window.DBGuideI18n = {};
   }
   function renderLeaderboard() { // item 2: weekly PvP board (live rooms only, no AI)
     const card = $("#lbCard"); if (!card) return;
-    card.classList.add("hidden"); return; // user 2026-11-17 23:27: hide the Weekly PvP leaderboard
+    card.classList.add("hidden"); try { renderMonthly(); } catch (_) {} return; // user 2026-11-17 23:27: hide the Weekly PvP leaderboard (Cup rank card still renders here)
     const lc = $("#lbChip"); if (lc) { lc.textContent = onUp() ? "online" : "offline"; lc.className = "chip " + (onUp() ? "ok" : "warn"); } // M7: chip follows the server state
     const box = $("#lbBody"); if (!box || !online()) return;
     if (!onUp()) { box.innerHTML = `<div class="empty small">Leaderboard needs the server (offline right now).</div>`; return; }
