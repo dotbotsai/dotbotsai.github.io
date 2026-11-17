@@ -4923,6 +4923,8 @@ window.DBGuideI18n = {};
     }
     return {
       THEMES, IDS, enable, setArena, setVolume, render,
+      /** 2026-11-17 iPhone: resume a context a touch could not start (pointerdown is not a user activation on touch) or iOS interrupted */
+      unlock() { if (!ac || !enabled || ac.state === "running" || document.hidden) return; try { ac.resume().then(() => { if (cur) cur.nextT = ac.currentTime + .05; run(); }).catch(() => {}); } catch (_) {} },
       get enabled() { return enabled; }, get volume() { return vol; }, get arena() { return arena; },
       stats() { return { enabled, theme: cur ? cur.id : null, arena, ctxState: ac ? ac.state : "none", live, created, buses, changes, master: master ? master.gain.value : 0, bpm: cur ? cur.th.bpm : null, volume: vol }; },
     };
@@ -5035,6 +5037,7 @@ window.DBGuideI18n = {};
     return {
       SKILLS: Object.keys(SKILL), recipe,
       play(n) { S.sfxLog.push(n); if (S.sfxLog.length > 400) S.sfxLog.splice(0, 100); if (!S.sound) return; const r = recipe(n); if (!r) return; try { const a = ctx(); if (a) play_(a, a.destination, a.currentTime, r); } catch (_) {} },
+      unlock() { if (ac && ac.state !== "running" && !document.hidden) try { ac.resume().catch(() => {}); } catch (_) {} },
       preview(n) { const was = S.sound; S.sound = true; this.play(n); S.sound = was; }, // explicit "listen" button in the rules: plays even when muted
       /** render a sound offline (tests): returns { rms, sig } where sig is a short fingerprint of the waveform */
       async render(n) { const r = recipe(n); if (!r) return null; const O = window.OfflineAudioContext || window.webkitOfflineAudioContext; const a = new O(1, 22050, 22050); play_(a, a.destination, 0, r); const buf = await a.startRendering(); const d = buf.getChannelData(0);
@@ -7759,7 +7762,7 @@ window.DBGuideI18n = {};
              the server never locks a player out for a failure that came from a server error (it requeues them at their place).
      item 2: the FIRST Cup queue join of this tab session waits a random 0–60 s (countdown) so a Cup-start rush is spread out. Only load
              spreading, nothing to cheat: the deadline is drawn once per tab session (sessionStorage) and re-queues never wait. */
-  const CUP_JOIN_RETRIES = 6, CUP_ENTER_RETRIES = 4, CUP_DELAY_MAX_MS = 60000, CUP_DELAY_KEY = "dbCupJoinAt";
+  const CUP_JOIN_RETRIES = 6, CUP_ENTER_RETRIES = 4, CUP_DELAY_MAX_MS = 0 /* spread OFF 2026-11-17 12:53 GMT+7: user wants join -> 10 s -> dotBot Team, no extra wait */, CUP_DELAY_KEY = "dbCupJoinAt";
   const cupJit = () => 2000 + Math.floor(Math.random() * 3001);
   const cupRetryable = e => !!e && (e.code === "network" || e.code === "server_error" || e.code === "internal" || e.code === "rate_limited" || e.status >= 500);
   function cupDelayLeft() {
@@ -7910,11 +7913,13 @@ window.DBGuideI18n = {};
     const left = st === "upcoming" ? E.startAt - nowC : st === "live" ? E.endAt - nowC : 0;
     const tl = Math.max(0, left), tD = Math.floor(tl / 864e5), tH = Math.floor(tl % 864e5 / 36e5), tM = Math.floor(tl % 36e5 / 6e4);
     const tiles = st === "final" ? "" : `<div class="cupx-cd" aria-label="${esc(when)}">${[[tD, CUPT("days", "天")], [tH, CUPT("hours", "时")], [tM, CUPT("min", "分")]].map(([n, u]) => `<div class="cupx-t"><b>${String(n).padStart(2, "0")}</b><i>${esc(u)}</i></div>`).join("")}</div>`;
-    const pod = st !== "final" && (E.prizes || []).length ? `<div class="cupx-prz"><div class="cupx-prz-t">🎁 ${esc(CUPT("Cup prizes", "杯赛奖品"))}</div>${E.prizes.map((p, i) => `<div class="cupx-p p${i + 1}"><span class="cupx-m">${medal[i] || "#" + p.pos}</span><span class="cupx-pn">${esc(zhL ? p.zh : TX(p.en))}</span></div>`).join("")}${CUP_BOT_IMG.length ? `<div class="cupx-pod">${[1, 0, 2, 3].filter(i => CUP_BOT_IMG[i] && E.prizes[i]).map(i => `<div class="cupx-pb r${i + 1}"><img src="${CUP_BOT_IMG[i][1]}" alt="dotBot #${CUP_BOT_IMG[i][0]}" title="dotBot #${CUP_BOT_IMG[i][0]}" loading="lazy"><div class="cupx-ped">${i < 3 ? i + 1 : "★"}</div></div>`).join("")}</div>` : ""}<div class="cupx-prz-n">${esc(CUPT("Free to play. Prizes are sent after team review.", "免费参加。奖品经团队审核后发放。"))}</div></div>` : "";
+    const pod = st !== "final" && (E.prizes || []).length ? `<div class="cupx-prz"><div class="cupx-prz-t">🎁 ${esc(CUPT("Cup prizes", "杯赛奖品"))}</div>${E.prizes.map((p, i) => `<div class="cupx-p p${i + 1}"><span class="cupx-m">${medal[i] || "#" + p.pos}</span><span class="cupx-pn">${esc(zhL ? p.zh : TX(p.en))}</span></div>`).join("")}${CUP_BOT_IMG.length ? `<div class="cupx-pod">${[1, 0, 2, 3].filter(i => CUP_BOT_IMG[i] && E.prizes[i]).map(i => `<div class="cupx-pb r${i + 1}"><img src="${CUP_BOT_IMG[i][1]}" alt="dotBot #${CUP_BOT_IMG[i][0]}" title="dotBot #${CUP_BOT_IMG[i][0]}" decoding="sync"><div class="cupx-ped">${i < 3 ? i + 1 : "★"}</div></div>`).join("")}</div>` : ""}<div class="cupx-prz-n">${esc(CUPT("Free to play. Prizes are sent after team review.", "免费参加。奖品经团队审核后发放。"))}</div></div>` : "";
     const top3 = (ON.ml && ON.ml.rows || []).slice(0, 3);
     const lead = st !== "upcoming" && top3.length ? `<div class="cupx-lead">${top3.map((r, i) => `<span class="cupx-lr">${medal[i]} <b>${esc(r.name)}</b>${r.fr ? " " + frChip(CUPT("First Round", "首轮")) : ""} <span class="dim">${r.wins}${esc(CUPT("W", "胜"))} · ${r.xp != null ? r.xp : 0} XP</span></span>`).join("")}</div>` : "";
     const rsT = ($(".cupx-rules", el) || {}).scrollTop || 0;
+    const podOld = $(".cupx-pod", el); // user 2026-11-17 12:59: prize bots blinked; the banner re-renders every 1 s while queued, so keep the same <img> nodes
     el.innerHTML = `<div class="cupx"><div class="cupx-main"><div class="cup-ev-k">${esc(CUPT("TOURNAMENT", "锦标赛"))}</div><div class="cupx-n">🏆 ${esc(zhL ? E.nameZh : TX(E.name))}</div>${st === "final" ? `<span class="chip cup-ev-s">${esc(when)}</span>` : `<div class="cupx-cdl${st === "live" ? " live" : ""}">${st === "live" ? "● " + esc(CUPT("Live", "进行中")) + " · " + esc(CUPT("ends in", "剩余")) : esc(CUPT("Starts in", "距离开始"))}</div>`}${tiles}<div class="cupx-act">${btn}</div>${body ? `<div class="cupx-b small">${body}</div>` : ""}<div class="cupx-sub"><a href="#mlCard" class="btn cupx-lb cup-ev-lb">📊 ${esc(CUPT("Leaderboard", "排行榜"))} ↓</a><button type="button" class="btn cupx-lb cupx-rb" aria-expanded="${S.cupRulesOpen ? "true" : "false"}">📜 ${esc(S.cupRulesOpen ? CUPT("Hide rules", "收起规则") : CUPT("View Cup rules", "查看杯赛规则"))} ${S.cupRulesOpen ? "↑" : "↓"}</button></div>${facts}${lead}</div>${pod}</div>${S.cupRulesOpen ? `<div class="cupx-rules guide">${cupRulesHtml(zhL)}</div>` : ""}`;
+    const podNew = $(".cupx-pod", el); if (podOld && podNew && podOld.innerHTML === podNew.innerHTML) podNew.replaceWith(podOld);
     const g = $("#cupGo", el); if (g) g.onclick = () => cupJoin(false);
     const lbl = $(".cup-ev-lb", el); if (lbl) lbl.onclick = e => { e.preventDefault(); const m = $("#mlCard"); if (m) m.scrollIntoView({ block: "start", behavior: REDUCED ? "auto" : "smooth" }); };
     const c = $("#cupCancel", el); if (c) c.onclick = () => cupCancel();
@@ -8324,8 +8329,17 @@ window.DBGuideI18n = {};
     $("#musicVol").value = vol0; if (MUSIC) MUSIC.setVolume(vol0 / 100);
     setMusic(false, false);
     let wantMusic = false; try { wantMusic = localStorage.getItem("db32.music") === "1"; } catch (_) {}
-    if (wantMusic) { const first = e => { if (e.target && e.target.closest && e.target.closest("#musicBtn")) return; document.removeEventListener("pointerdown", first, true); if (!S.music) setMusic(true); }; document.addEventListener("pointerdown", first, true); }
+    if (wantMusic) { const first = e => { if (e.target && e.target.closest && e.target.closest("#musicBtn")) return; document.removeEventListener("pointerdown", first, true); if (!S.music) { wantMusic = false; setMusic(true); } }; document.addEventListener("pointerdown", first, true); }
     $("#musicBtn").onclick = () => setMusic(!S.music);
+    /* 2026-11-17 iPhone audio: (1) touch pointerdown is not a user activation, so a saved "music on" could stay silent: also start it on
+       pointerup / touchend / click; (2) every gesture resumes a suspended or iOS-interrupted context (SFX + music); (3) iOS mutes WebAudio when the
+       ring/silent switch is on: ask for the "playback" audio session (Safari 16.4+) once sound or music is on, like a game or video. */
+    const audioGesture = e => {
+      if (wantMusic && !S.music && !(e.target && e.target.closest && e.target.closest("#musicBtn"))) { wantMusic = false; setMusic(true); }
+      if (S.sound || S.music) { try { if (navigator.audioSession && navigator.audioSession.type !== "playback") navigator.audioSession.type = "playback"; } catch (_) {} }
+      try { SFX.unlock(); } catch (_) {} try { if (MUSIC && MUSIC.unlock) MUSIC.unlock(); } catch (_) {}
+    };
+    ["pointerup", "touchend", "click", "keydown"].forEach(ev => document.addEventListener(ev, audioGesture, { capture: true, passive: true }));
     $("#musicVol").oninput = e => { const v = +e.target.value; if (MUSIC) MUSIC.setVolume(v / 100); try { localStorage.setItem("db32.musicVol", String(v)); } catch (_) {} if (!S.music && v > 0 && e.isTrusted) setMusic(true); };
     setInterval(tickCountdowns, 1000);
     $("#soundBtn").onclick = () => { setSound(!S.sound); SFX.play("tap"); };
