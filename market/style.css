@@ -446,3 +446,5 @@ footer a { color: var(--text-2); }
 .lang-menu button[aria-checked="true"] { color: var(--accent); font-weight: 650; }
 [dir="rtl"] .lang-menu { right: auto; left: 0; }
 .hero-links a { text-underline-offset: 4px; text-decoration-thickness: 1px; }
+
+@media (max-width: 900px) { .topbar, .statsbar { backdrop-filter: none; -webkit-backdrop-filter: none; } .topbar { background: rgb(14, 15, 19); } .statsbar { background: rgb(14, 15, 19); } [data-theme="light"] .topbar, [data-theme="light"] .statsbar { background: rgb(245, 245, 247); } }

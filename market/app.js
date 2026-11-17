@@ -76,7 +76,7 @@
       const r = await sent.wait();
       if (!r || r.status !== 1) throw new Error("Transaction failed on chain.");
       t.update("ok", label + " · confirmed", (after ? after(r) + " " : "") + txLink(r.hash), 9000);
-      await refresh();
+      S.lastScan = 0; await refresh();
       return r;
     } catch (e) {
       console.warn(e);
@@ -154,15 +154,27 @@
     }
     // bots: owner (every refresh), traits + handle (once)
     const ids = Array.from({ length: maxId }, (_, i) => i + 1);
-    await DB.pool(ids, 10, async id => {
+    const fullScan = !S.loaded || maxId !== S.lastMaxId || Date.now() - (S.lastScan || 0) > 300000;
+    if (fullScan) { S.lastMaxId = maxId; S.lastScan = Date.now(); }
+    await DB.pool(fullScan ? ids : [], 10, async id => {
       let rec = S.bots.get(id);
       let owner = null;
       try { owner = await b.ownerOf(id); } catch (_) { owner = null; }
       if (!owner) { if (rec) rec.burned = true; return; }
       if (!rec) {
-        const [tr, h] = await Promise.all([b.traitsOf(id), b.handleOfToken(id).catch(() => "")]);
-        rec = { id, traits: DB.traitsFromStruct(tr), handle: h };
-        rec.traits.Type = h ? "Named" : "Team";
+        const tk = "dbm2t:" + cacheKey(id); let cached = null;
+        try { cached = JSON.parse(localStorage.getItem(tk) || "null"); } catch (_) {}
+        if (cached && cached.traits && cached.handle) rec = { id, traits: cached.traits, handle: cached.handle };
+        else if (cached && cached.traits) { // Team bot: a gift claim can name it later, so always re-read the handle
+          const h = await b.handleOfToken(id).catch(() => "");
+          rec = { id, traits: cached.traits, handle: h };
+          if (h) { try { localStorage.setItem(tk, JSON.stringify({ traits: rec.traits, handle: h })); } catch (_) {} }
+        } else {
+          const [tr, h] = await Promise.all([b.traitsOf(id), b.handleOfToken(id).catch(() => "")]);
+          rec = { id, traits: DB.traitsFromStruct(tr), handle: h };
+          try { localStorage.setItem(tk, JSON.stringify({ traits: rec.traits, handle: h })); } catch (_) {}
+        }
+        rec.traits.Type = rec.handle ? "Named" : "Team";
         S.bots.set(id, rec);
       }
       rec.owner = owner; rec.burned = false;
@@ -194,7 +206,24 @@
     if (S.blockTimes.has(bn)) return S.blockTimes.get(bn);
     const blk = await DB.read.getBlock(bn); const t = blk ? blk.timestamp : 0; S.blockTimes.set(bn, t); return t;
   }
+  function evKey() { return `dbm2e:${DB.cfg.chainId}:${DB.cfg.addresses.market.toLowerCase()}:${DB.cfg.deployBlock || 0}`; }
+  function evRestore() {
+    try {
+      const c = JSON.parse(localStorage.getItem(evKey()) || "null", (k, v) => (v && typeof v === "object" && typeof v.$b === "string") ? BigInt(v.$b) : v);
+      if (!c || !Array.isArray(c.events) || !c.lastBlock) return;
+      S.events = c.events; S.lastBlock = c.lastBlock;
+      for (const e of S.events) if (e.name === "Listed") S.listedAt.set(Number(e.args.tokenId), e.time * 1e6 + e.idx);
+      S.eventsLoaded = true;
+    } catch (_) {}
+  }
+  function evSave() {
+    try {
+      const plain = S.events.map(e => { const args = {}; if (e.args) for (const k of Object.keys(e.args.toObject ? e.args.toObject() : e.args)) args[k] = e.args[k]; return { name: e.name, args, block: e.block, tx: e.tx, idx: e.idx, time: e.time }; });
+      localStorage.setItem(evKey(), JSON.stringify({ lastBlock: S.lastBlock, events: plain }, (k, v) => typeof v === "bigint" ? { $b: v.toString() } : v));
+    } catch (_) {}
+  }
   async function loadEvents() {
+    if (!S.lastBlock) evRestore();
     const latest = await DB.read.getBlockNumber();
     const from = S.lastBlock ? S.lastBlock + 1 : Number(DB.cfg.deployBlock || 0);
     if (from > latest) return;
@@ -210,6 +239,7 @@
     S.lastBlock = latest;
     for (const e of evs) if (e.name === "Listed") S.listedAt.set(Number(e.args.tokenId), e.time * 1e6 + e.idx);
     S.eventsLoaded = true;
+    if (evs.length || !S.evSaved || latest - S.evSaved > 2000) { S.evSaved = latest; evSave(); }
   }
 
   let refreshing = null;
@@ -354,12 +384,12 @@
   function skeletons(n) { return Array.from({ length: n }, () => `<div class="card skeleton"><div class="media"><div class="skel"></div></div><div class="body"><div class="skel line" style="width:70%"></div><div class="skel line" style="width:40%"></div><div class="skel line" style="width:55%;height:16px;margin-top:14px"></div></div></div>`).join(""); }
   function renderGrid() {
     const g = $("#grid");
-    if (!S.loaded) { g.innerHTML = skeletons(12); return; }
+    if (!S.loaded) { g.innerHTML = skeletons(12); g.__h = null; return; }
     const list = filtered();
     $("#resultCount").textContent = `${list.length} ${list.length === 1 ? "bot" : "bots"}`;
-    if (!list.length) { const zt = [...(S.filters.traits.Tier || [])].filter(v => !((S.traitCounts && S.traitCounts.Tier) || {})[v]); g.innerHTML = zt.length ? `<div class="empty" style="grid-column:1/-1"><h3>No ${esc(zt.join(" / "))} bots yet</h3>No bot of this tier has been minted yet.</div>` : `<div class="empty" style="grid-column:1/-1"><h3>No bots match</h3>Try removing a filter or clearing the search.</div>`; return; }
-    g.innerHTML = list.map(id => card(id)).join("");
-    watchImgs(g);
+    if (!list.length) { g.__h = null; const zt = [...(S.filters.traits.Tier || [])].filter(v => !((S.traitCounts && S.traitCounts.Tier) || {})[v]); g.innerHTML = zt.length ? `<div class="empty" style="grid-column:1/-1"><h3>No ${esc(zt.join(" / "))} bots yet</h3>No bot of this tier has been minted yet.</div>` : `<div class="empty" style="grid-column:1/-1"><h3>No bots match</h3>Try removing a filter or clearing the search.</div>`; return; }
+    const gh = list.map(id => card(id)).join("");
+    if (g.__h !== gh) { g.innerHTML = gh; g.__h = gh; watchImgs(g); }
     const buyable = [...S.listings.entries()].filter(([, l]) => !isMe(l.seller)).length;
     const r = $("#sweepRange"); r.max = String(Math.min(buyable, 50)); r.value = String(Math.min(S.cart.size, Number(r.max))); $("#sweepN").textContent = r.value;
   }
@@ -810,7 +840,7 @@
     $("#pUnit").textContent = C.nativeSymbol;
     $("#footAddr").innerHTML = DB.addrUrl(C.addresses.market) ? `market <a href="${esc(DB.addrUrl(C.addresses.market))}" target="_blank" rel="noopener" class="mono">${esc(DB.short(C.addresses.market))}</a> · collection <a href="${esc(DB.addrUrl(C.addresses.collection))}" target="_blank" rel="noopener" class="mono">${esc(DB.short(C.addresses.collection))}</a>` : `market <span class="mono">${esc(DB.short(C.addresses.market))}</span>`;
     $("#heroLinks").innerHTML = `${DB.addrUrl(C.addresses.market) ? `<a class="chip" href="${esc(DB.addrUrl(C.addresses.market))}" target="_blank" rel="noopener">Market contract ${icon.ext}</a><a class="chip" href="${esc(DB.addrUrl(C.addresses.collection))}" target="_blank" rel="noopener">Collection contract ${icon.ext}</a>` : ""}<span class="chip">No token approvals</span><span class="chip">Fully on-chain art</span>`;
-    DB.on(() => { S.sel.clear(); S.offerSel.clear(); refresh(); });
+    DB.on(() => { S.sel.clear(); S.offerSel.clear(); S.lastScan = 0; refresh(); });
     $("#connect").onclick = () => DB.account ? setView("mine") : connect();
     $$(".tab").forEach(t => t.onclick = () => setView(t.dataset.t));
     $("#mclose").onclick = closeModal;
@@ -844,7 +874,8 @@
     $$("#actChips button").forEach(b => b.onclick = () => { S.actFilter = b.dataset.a; $$("#actChips button").forEach(x => x.classList.toggle("on", x === b)); renderActivity(); });
     window.addEventListener("hashchange", routeFromHash);
     const sb = $("#statsbar");
-    const obs = () => sb.classList.toggle("stuck", sb.getBoundingClientRect().top <= parseInt(getComputedStyle(document.documentElement).getPropertyValue("--top-h")) + 1);
+    const topH = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--top-h")) || 0; let obsQ = false;
+    const obs = () => { if (obsQ) return; obsQ = true; requestAnimationFrame(() => { obsQ = false; sb.classList.toggle("stuck", sb.getBoundingClientRect().top <= topH + 1); }); };
     window.addEventListener("scroll", obs, { passive: true });
     renderWallet();
     await refresh();
