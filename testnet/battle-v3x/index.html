@@ -5457,6 +5457,8 @@ window.DBGuideI18n = {};
     if (left <= 0) {
       clearInterval(S.timer);
       // fix 6 (user 2026-11-09 22:43): in a live room a player who picked NOTHING is not auto-filled: that match is lost (server decides)
+      // fix 2026-11-17 : Cup vs dotBot Team with no move picked = loss (FACTS L61), never AUTO-filled
+      if (!S.plan.length && S.serverMatch && S.serverMatch.kind === "team") return teamNoPick();
       if (isLive() && !S.plan.length) { S.missedPick = true; $("#picker").classList.add("hidden"); $("#watch").classList.remove("hidden"); $("#phaseTag").textContent = "REFEREE"; $("#watchTxt").textContent = "You didn't pick in time — match lost. Waiting for the referee…"; toast("You didn't pick in time — match lost"); return; }
       S.timedOut = S.plan.length < S.V2.turns; if (S.plan.length < S.V2.turns) S.plan = S.M.autoFill(S.match.S, S.plan, S.rng); lockIn();
     }
@@ -7648,6 +7650,13 @@ window.DBGuideI18n = {};
   }
 
   /* ---- 5: quit mid-match (versus countdown or pick) ---- */
+  async function teamNoPick() {
+    const sm = S.serverMatch; S.missedPick = true;
+    $("#picker").classList.add("hidden"); $("#watch").classList.remove("hidden"); $("#phaseTag").textContent = "REFEREE"; $("#watchTxt").textContent = "You didn't pick in time — match lost. Waiting for the referee…";
+    toast("You didn't pick in time — match lost");
+    for (let i = 0; i < 3; i++) { try { await api("POST", "/match/quit", { matchId: sm.id, noPick: 1 }); break; } catch (e) { if (e && e.code === "no_match") break; await new Promise(r => setTimeout(r, 1500)); } } // a lost request is settled by the server's 15-min no-pick forfeit (same rule)
+    cupTeamDone(); S.serverMatch = null; refreshMe().catch(() => {}); toLobby();
+  }
   function quitAllowed() { return ["versus", "pick"].includes(S.phase) && !!S.match; }
   async function quitMatch() {
     if (!quitAllowed()) return;
@@ -7814,7 +7823,11 @@ window.DBGuideI18n = {};
     if (j.serverNow) CQ.skew = j.serverNow - Date.now();
     if (j.status === "queued") {
       CQ.st = "queued"; CQ.level = j.level; CQ.since = j.since;
-      clearTimeout(CQ.t); CQ.t = setTimeout(cupPoll, Math.round((j.pollMs || 6000) * (0.85 + Math.random() * 0.3)));
+      let wait = Math.round((j.pollMs || 6000) * (0.85 + Math.random() * 0.3));
+      // 2026-11-17 user: the dotBot Team match came at ~13 s; poll once right after the server's team wait (waitSec + 0.5 s) so it lands at ~10.5 s
+      const tm = ON.health && ON.health.rules && ON.health.rules.team;
+      if (tm && tm.on && tm.waitSec > 0 && j.since && j.serverNow) { const due = j.since + tm.waitSec * 1000 + 500 - j.serverNow; if (due > 0 && due < wait) wait = due; }
+      clearTimeout(CQ.t); CQ.t = setTimeout(cupPoll, wait);
       cupTick();
     } else if (j.status === "matched") { cupStop(); cupEnter(j); }
     else if (j.status === "team") { cupStop(); cupTeamStart(j); }
