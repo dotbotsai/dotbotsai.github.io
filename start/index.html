@@ -27,7 +27,8 @@ input:focus{outline:2px solid var(--acc);border-color:transparent}
 .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:14px;word-break:break-all}
 .msg{margin:12px 0 0;padding:10px 12px;border-radius:10px;background:#0e1117;border:1px solid var(--line)}.msg.ok{border-color:var(--ok)}.msg.bad{border-color:var(--bad)}
 .small{color:var(--dim);font-size:14px}.closed{color:var(--bad);font-weight:700}
-.msg+.btn{margin-top:12px}footer{margin-top:28px;color:var(--dim);font-size:14px;display:flex;gap:14px;flex-wrap:wrap}
+.msg+.btn{margin-top:12px}.agent{margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}.agent h2{font-size:17px;margin:0 0 6px}.agent .dl{display:flex;gap:10px}.agent .dl .btn{text-align:center;text-decoration:none;font-size:14px}.agent .btn+.small{margin-top:14px}.agent .small{overflow-wrap:anywhere}
+pre{white-space:pre-wrap;word-break:break-word;background:#0e1117;border:1px solid var(--line);border-radius:10px;padding:12px;font:13px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;margin:10px 0;max-height:360px;overflow:auto}footer{margin-top:28px;color:var(--dim);font-size:14px;display:flex;gap:14px;flex-wrap:wrap}
 </style>
 </head>
 <body>
@@ -49,15 +50,16 @@ input:focus{outline:2px solid var(--acc);border-color:transparent}
     <li data-t="r2">Use a wallet that holds a .ai Agent ID with no dotBot yet.</li>
     <li data-t="r3">Request below. Requests open Nov 20, 00:00 (GMT+7). First come, first served.</li>
     <li data-t="r4">Gifts are assigned in daily batches, in request order. Come back here to claim yours in your own wallet (you pay only network gas).</li>
+    <li data-t="r4b">Once your bot is assigned, claim it within 24 hours or it passes to the next request.</li>
     <li data-t="r5">The campaign closes when all 40 gifts are gone.</li>
   </ol>
 </section>
 
 <section class="card" id="formCard">
-  <button class="btn" type="button" id="connect" data-t="connect">Connect wallet</button>
-  <p class="small" data-t="noSign">You sign one free message to prove the wallet is yours. No transaction, no gas, no approval. We will never ask for your seed phrase or private key.</p>
+  <button class="btn" type="button" id="connect" data-t="connect">Connect your Agent ID wallet</button>
+  <p class="small" data-t="noSign">You sign one free message to prove this Agent ID wallet is yours. No transaction, no gas, no approval. We will never ask for your seed phrase or private key.</p>
   <div id="form" hidden>
-    <p class="small"><span data-t="wallet">Wallet</span>: <span class="mono" id="addr"></span></p>
+    <p class="small"><span data-t="wallet">Agent ID wallet</span>: <span class="mono" id="addr"></span></p>
     <div id="meBox"></div>
     <div id="reqBox" hidden>
       <label for="x" data-t="xLabel">Your X handle</label>
@@ -85,9 +87,10 @@ input:focus{outline:2px solid var(--acc);border-color:transparent}
       r1: "在 X 上关注 @dotBots_ai。", r2: "使用持有 .ai Agent ID 且还没有 dotBot 的钱包。",
       r3: "在下方申请。申请从 11月20日 00:00（GMT+7）开始。先到先得。",
       r4: "礼物按申请顺序每日分批分配。分配后回到此页，用你自己的钱包领取（只需支付网络 Gas）。",
+      r4b: "机器人分配给你后，请在 24 小时内领取，否则将转给下一位申请者。",
       r5: "40 份礼物全部送出后，活动自动结束。",
-      connect: "连接钱包", noSign: "你只需签署一条免费消息，证明钱包归你所有。无交易、无 Gas、无授权。我们绝不会索要你的助记词或私钥。",
-      wallet: "钱包", xLabel: "你的 X 账号", xHint: "分配礼物前，我们会确认该 X 账号已关注 @dotBots_ai。", send: "申请我的礼物",
+      connect: "连接你的 Agent ID 钱包", noSign: "你只需签署一条免费消息，证明这个 Agent ID 钱包归你所有。无交易、无 Gas、无授权。我们绝不会索要你的助记词或私钥。",
+      wallet: "Agent ID 钱包", xLabel: "你的 X 账号", xHint: "分配礼物前，我们会确认该 X 账号已关注 @dotBots_ai。", send: "申请我的礼物",
       note: "礼物是分配到你在 BNB Chain 上钱包的一个团队 dotBot。它不是投资，也不承诺任何价值。",
       home: "首页", terms: "条款", privacy: "隐私"
     }
@@ -101,8 +104,13 @@ input:focus{outline:2px solid var(--acc);border-color:transparent}
     bad_signature: ["The signature doesn't match this wallet. Request again.", "签名与此钱包不匹配，请重新申请。"],
     ok: ["Request saved. You are #{p} in line. Come back after the next daily batch to claim.", "申请已提交。你排在第 {p} 位。下一批分配后回到此页领取。"],
     queued: ["You already requested. You are #{p} in line. Come back after the next daily batch.", "你已申请。你排在第 {p} 位。下一批分配后再回来。"],
-    ready: ["Your gift is ready: dotBot #{id}. Claim it in your wallet (network gas only).", "你的礼物已准备好：dotBot #{id}。请在钱包中领取（只需网络 Gas）。"],
+    ready: ["Your gift is ready: dotBot #{id}. Claim it in your wallet within 24 hours of assignment (network gas only).", "你的礼物已准备好：dotBot #{id}。请在分配后 24 小时内用钱包领取（只需网络 Gas）。"],
     claimBtn: ["Claim my gift", "领取我的礼物"],
+    agentH: ["Or claim with your AI agent", "或让你的 AI Agent 领取"],
+    agentP: ["Give this prompt to your own agent. It prepares the transaction; you confirm it in your Agent ID wallet. It never needs your private key or seed phrase.", "把这段提示词交给你自己的 Agent。它会准备交易，由你在 Agent ID 钱包中确认。它不需要你的私钥或助记词。"],
+    agentS: ["Then give it the script. Put both files in one folder, run npm install (Node.js 18+), then node claim.mjs {a}. It only checks and prints the transaction; it sends nothing.", "然后把脚本交给它。把两个文件放在同一个文件夹，运行 npm install（Node.js 18+），然后运行 node claim.mjs {a}。它只检查并输出交易，不会发送任何交易。"],
+    copyBtn: ["Copy prompt", "复制提示词"], copied: ["Copied", "已复制"],
+    agentPrompt: ["You can help your owner claim a dotBot gift on BNB Chain.\nWhat it is: dotBots is a set of 2,222 robot NFTs, one per .ai Agent ID, drawn fully on-chain. The dotBots team assigns some team bots as gifts. An assigned bot is claimed with claimGift(tokenId) from the wallet it was assigned to, and then carries that wallet's Agent ID name.\nRules:\n1. Tell your owner what you are about to do. Claim only after your owner says yes.\n2. Use the owner's wallet that holds the .ai Agent ID the gift was assigned to. That Agent ID must not have a dotBot yet (one bot per Agent ID).\n3. Official contract: 0x4123F0f5ca048780C0c91aBC0c7ac12c77a0bF69 (BNB Chain). The claim sends 0 BNB; only gas is paid. Never send BNB or tokens anywhere for a claim, and never approve anything.\n4. Run: node claim.mjs <wallet>. It finds the bot assigned to this wallet, checks the Agent ID, simulates claimGift and prints the exact tx. Stop if it prints STOP.\n5. Your owner sends that tx from their own wallet app and confirms it there. Never ask for, paste or store a private key or seed phrase. No QR codes, no pairing, no third-party session.\n6. A gift not claimed within 24 hours of being assigned may be cancelled and passed to the next person.\n7. Run: node claim.mjs --result <txHash> and tell your owner the bot's name, tier and link.", "你可以帮主人在 BNB Chain 上领取 dotBot 礼物。\n简介：dotBots 共 2,222 个机器人 NFT，每个 .ai Agent ID 一个，完全链上绘制。dotBots 团队会把部分团队机器人指定为礼物。被指定的机器人需要用被指定的钱包调用 claimGift(tokenId) 领取，之后会带上该钱包的 Agent ID 名字。\n规则：\n1. 先告诉主人你要做什么。主人同意后再领取。\n2. 使用持有该礼物所指定 .ai Agent ID 的主人钱包。该 Agent ID 还不能拥有 dotBot（每个 Agent ID 只能一个）。\n3. 官方合约：0x4123F0f5ca048780C0c91aBC0c7ac12c77a0bF69（BNB Chain）。领取发送 0 BNB，只需支付 gas。领取时不要向任何地址发送 BNB 或代币，也不要授权任何东西。\n4. 运行：node claim.mjs <钱包地址>。它会找到指定给该钱包的机器人、检查 Agent ID、模拟 claimGift 并输出交易。出现 STOP 就停止。\n5. 由主人在自己的钱包应用中发送并确认该交易。不要索取、粘贴或保存私钥或助记词。不用二维码、不配对、不使用第三方会话。\n6. 指定后 24 小时内未领取的礼物可能会被取消并转给下一位。\n7. 运行：node claim.mjs --result <交易哈希>，把机器人的名字、稀有度和链接告诉主人。"],
     claiming: ["Confirm the transaction in your wallet…", "请在钱包中确认交易…"],
     claimed: ["Claimed. dotBot #{id} is in your wallet.", "已领取。dotBot #{id} 已在你的钱包中。"],
     sent: ["Transaction sent: {h}. It may take a minute to confirm.", "交易已发送：{h}。确认可能需要一分钟。"],
@@ -155,11 +163,24 @@ input:focus{outline:2px solid var(--acc);border-color:transparent}
     if (me.claimed) { box.innerHTML = '<p class="msg ok"></p>'; box.firstChild.textContent = m("claimed", { id: me.tokenId }); return; }
     if (me.ready) {
       box.innerHTML = '<p class="msg ok"></p><button class="btn" type="button" id="claim"></button>';
-      box.firstChild.textContent = m("ready", { id: me.tokenId }); $("claim").textContent = m("claimBtn"); $("claim").onclick = claim; return;
+      box.firstChild.textContent = m("ready", { id: me.tokenId }); $("claim").textContent = m("claimBtn"); $("claim").onclick = claim; agentBlock(box); return;
     }
     if (me.requested) { box.innerHTML = '<p class="msg"></p>'; box.firstChild.textContent = me.status === "skipped" ? m("skipped") : m("queued", { p: me.position }); return; }
     if (st && st.closed) { box.innerHTML = '<p class="msg bad"></p>'; box.firstChild.textContent = m("closed"); return; }
     $("reqBox").hidden = false;
+  }
+  function agentBlock(box) {
+    var w = document.createElement("div"); w.className = "agent";
+    var h = document.createElement("h2"); h.textContent = m("agentH");
+    var p = document.createElement("p"); p.className = "small"; p.textContent = m("agentP");
+    var pre = document.createElement("pre"); pre.id = "agentPrompt"; pre.textContent = m("agentPrompt");
+    var b = document.createElement("button"); b.className = "btn ghost"; b.type = "button"; b.textContent = m("copyBtn");
+    var ok = document.createElement("span"); ok.className = "small"; ok.hidden = true; ok.style.marginLeft = "10px";
+    b.onclick = function () { if (navigator.clipboard) navigator.clipboard.writeText(pre.textContent).then(function () { ok.hidden = false; ok.textContent = m("copied"); }, function () {}); };
+    var sp = document.createElement("p"); sp.className = "small"; sp.textContent = m("agentS", { a: addr });
+    var row = document.createElement("div"); row.className = "dl";
+    ["claim.mjs", "package.json"].forEach(function (f) { var l = document.createElement("a"); l.className = "btn ghost"; l.href = f; l.setAttribute("download", ""); l.textContent = f; row.appendChild(l); });
+    w.appendChild(h); w.appendChild(p); w.appendChild(pre); w.appendChild(b); w.appendChild(ok); w.appendChild(sp); w.appendChild(row); box.appendChild(w);
   }
   function loadMe() { return api("/gift/me?wallet=" + addr).then(function (j) { me = j; renderMe(); }).catch(function () { say("fail", null, "bad"); }); }
 
