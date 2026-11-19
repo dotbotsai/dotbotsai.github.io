@@ -5,6 +5,7 @@
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
   const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const RISK = `<div class="risk-note flow-risk" role="note">Trading carries risk. Prices can drop, and on-chain trades can\'t be undone. Check the bot, price and fee before you sign. Nothing here is financial advice.</div>`;
   const TIERS = ["Common", "Uncommon", "Rare", "Epic", "Legendary"];
   const TIER_CLASS = { Common: "", Uncommon: "green", Rare: "blue", Epic: "purple", Legendary: "legendary" };
   const TRAIT_KEYS = ["Tier", "Head", "Eyes", "Antenna", "Mouth", "Accessory", "Type"];
@@ -641,7 +642,7 @@
     const l = S.listings.get(id); if (!l) return toast("err", "Not listed", "This bot is not listed any more.", 6000);
     if (!DB.account) return connect().then(() => DB.account && openBuy(id));
     openModal(miniHead(id, "Complete purchase") + `<div class="breakdown"><div><span>Price</span><span>${DB.fmt(l.price)} ${esc(sym())}</span></div><div><span class="dim">Market fee ${feePct()} (taken from the seller, nothing extra for you)</span><span class="dim">${DB.fmt((l.price * l.fee) / 10000n)}</span></div><div class="tot"><span>You pay</span><span>${DB.fmt(l.price)} ${esc(sym())} <span class="dim" style="font-weight:500">${esc(usd(l.price))}</span></span></div></div>
-      <div class="feeline">Plus network gas. The bot moves to your wallet in the same transaction.</div><div class="actions" style="display:flex;gap:10px;margin-top:16px">${backTo(id)}<button class="btn primary" style="flex:1" id="confirmBuy">Buy for ${DB.fmt(l.price)} ${esc(sym())}</button></div></div>`, true);
+      <div class="feeline">Plus network gas. The bot moves to your wallet in the same transaction.</div>${RISK}<div class="actions" style="display:flex;gap:10px;margin-top:16px">${backTo(id)}<button class="btn primary" style="flex:1" id="confirmBuy">Buy for ${DB.fmt(l.price)} ${esc(sym())}</button></div></div>`, true);
     watchImgs($("#mcontent")); wireBack();
     $("#confirmBuy").onclick = async () => { closeModal(); await runTx("Buy " + nameOf(S.bots.get(id)), async () => DB.market(true).buy(id, { value: l.price }), () => "The bot is in your wallet."); };
   }
@@ -654,7 +655,7 @@
       ${fl != null ? `<div class="dim" style="font-size:13px">Floor right now: <span class="mono">${DB.fmt(fl)} ${esc(sym())}</span> · <a href="#" id="useFloor" style="color:var(--link-warm)">use floor</a></div>` : ""}
       <div class="breakdown" id="lbd"></div>
       <div class="feeline">${reprice ? "Only the price changes; the bot stays in escrow." : "Your bot moves into the market contract (escrow) in one transaction. No token approval is requested. You can cancel any time, also while the market is paused."}</div>
-      <div style="display:flex;gap:10px">${backTo(id)}<button class="btn primary" style="flex:1" id="doList" disabled>${reprice ? "Update price" : "List bot"}</button></div></div></div>`, true);
+      ${RISK}<div style="display:flex;gap:10px">${backTo(id)}<button class="btn primary" style="flex:1" id="doList" disabled>${reprice ? "Update price" : "List bot"}</button></div></div></div>`, true);
     watchImgs($("#mcontent")); wireBack();
     const inp = $("#priceIn"), bd = $("#lbd"), go = $("#doList");
     const upd = () => {
@@ -682,7 +683,7 @@
       <label>Expires after${expirySelect(3)}</label>
       <div class="breakdown" id="obd"></div>
       <div class="feeline">Your BNB is held by the market contract until the owner accepts, you cancel, or it expires (then anyone can trigger the refund to you). Cancel any time, also while paused. Minimum offer 0.0001.</div>
-      <div style="display:flex;gap:10px">${backTo(id)}<button class="btn primary" style="flex:1" id="doOffer" disabled>Make offer</button></div></div></div>`, true);
+      ${RISK}<div style="display:flex;gap:10px">${backTo(id)}<button class="btn primary" style="flex:1" id="doOffer" disabled>Make offer</button></div></div></div>`, true);
     watchImgs($("#mcontent")); wireBack();
     const inp = $("#offIn"), bd = $("#obd"), go = $("#doOffer");
     const upd = () => { const p = parseAmt(inp.value); go.disabled = !p || p < 10n ** 14n; bd.innerHTML = `<div><span>You send now (held in escrow)</span><span>${p ? DB.fmt(p) + " " + esc(sym()) : "—"}</span></div><div><span class="dim">Market fee ${feePct()}, from the seller's side if accepted</span><span class="dim">${p ? DB.fmt(feeOf(p)) : "—"}</span></div><div class="tot"><span>Owner receives if accepted</span><span>${p ? DB.fmt(p - feeOf(p)) + " " + esc(sym()) : "—"}</span></div>`; };
@@ -700,7 +701,7 @@
     const id = o.tokenId, l = S.listings.get(id);
     openModal(miniHead(id, "Accept offer") + `<div class="breakdown"><div><span>Offer</span><span>${DB.fmt(o.price)} ${esc(sym())}</span></div><div><span class="dim">Market fee ${feePct()}</span><span class="dim">−${DB.fmt(feeOf(o.price))}</span></div><div class="tot"><span>You receive</span><span>${DB.fmt(o.price - feeOf(o.price))} ${esc(sym())}</span></div></div>
       <div class="feeline" style="margin-top:10px">From <span class="mono">${esc(DB.short(o.buyer))}</span>, expires ${until(o.expiry)}. ${l ? "Your listing closes and the bot goes to the buyer." : "One transaction sends the bot from your wallet through the market to the buyer. No token approval is requested."}</div>
-      <div style="display:flex;gap:10px;margin-top:16px">${backTo(id)}<button class="btn primary" style="flex:1" id="doAccept">Accept ${DB.fmt(o.price)} ${esc(sym())}</button></div></div>`, true);
+      ${RISK}<div style="display:flex;gap:10px;margin-top:16px">${backTo(id)}<button class="btn primary" style="flex:1" id="doAccept">Accept ${DB.fmt(o.price)} ${esc(sym())}</button></div></div>`, true);
     watchImgs($("#mcontent")); wireBack();
     $("#doAccept").onclick = async () => {
       closeModal();
@@ -719,7 +720,7 @@
       <label>Bot to sell<select class="input" id="fillPick">${mine.map(id => `<option value="${id}" ${id === pick ? "selected" : ""}>#${id} · ${esc(nameOf(S.bots.get(id)))} · ${esc(S.bots.get(id).traits.Tier)}${S.listings.has(id) ? " · listed" : ""}</option>`).join("")}</select></label>
       <div class="breakdown"><div><span>Offer (each)</span><span>${DB.fmt(c.each)} ${esc(sym())}</span></div><div><span class="dim">Market fee ${feePct()}</span><span class="dim">−${DB.fmt(feeOf(c.each))}</span></div><div class="tot"><span>You receive</span><span>${DB.fmt(c.each - feeOf(c.each))} ${esc(sym())}</span></div></div>
       <div class="feeline">${c.remaining} left in this offer · expires ${until(c.expiry)}. One transaction, no token approval.</div>
-      <div style="display:flex;gap:10px"><button class="btn ghost" id="fillCancel">Close</button><button class="btn primary" style="flex:1" id="doFill">Accept ${DB.fmt(c.each)} ${esc(sym())}</button></div></div></div>`, true);
+      ${RISK}<div style="display:flex;gap:10px"><button class="btn ghost" id="fillCancel">Close</button><button class="btn primary" style="flex:1" id="doFill">Accept ${DB.fmt(c.each)} ${esc(sym())}</button></div></div></div>`, true);
     $("#fillCancel").onclick = closeModal;
     $("#doFill").onclick = async () => {
       const id = Number($("#fillPick").value); closeModal();
@@ -738,7 +739,7 @@
       <label>Expires after${expirySelect(3)}</label>
       <div class="breakdown" id="cbd"></div>
       <div class="feeline">The total is held by the market contract. Cancel any time to get back whatever is not filled yet. Market fee ${feePct()} comes out of what each seller receives.</div>
-      <div style="display:flex;gap:10px"><button class="btn ghost" id="cClose">Close</button><button class="btn primary" style="flex:1" id="doColl" disabled>Make collection offer</button></div></div></div>`, true);
+      ${RISK}<div style="display:flex;gap:10px"><button class="btn ghost" id="cClose">Close</button><button class="btn primary" style="flex:1" id="doColl" disabled>Make collection offer</button></div></div></div>`, true);
     $("#cClose").onclick = closeModal;
     const e = $("#ceIn"), q = $("#cqIn"), bd = $("#cbd"), go = $("#doColl");
     const val = () => { const p = parseAmt(e.value), n = /^\d+$/.test(q.value) ? Number(q.value) : 0; return [p, n]; };
@@ -774,7 +775,7 @@
       return `<div class="cart-item ${gone ? "gone" : ""}" data-test="cart-item">${imgTag(id)}<div class="grow"><div class="nm">${esc(nameOf(b))}</div><div class="dim" style="font-size:12px">#${id} · ${esc(b.traits.Tier)}</div>${gone ? `<div style="font-size:12px;color:var(--red-text)">${l ? "Your own listing, will be skipped" : "No longer listed, will be skipped"}</div>` : ""}</div><div class="mono" style="text-align:right;font-weight:650">${l ? DB.fmt(l.price) : "—"}</div><button class="btn xs ghost" data-rm="${id}" aria-label="Remove">✕</button></div>`; }).join("")
       : `<div class="empty" style="margin-top:20px"><h3>Your cart is empty</h3>Add listed bots, or use the Sweep slider to pick the cheapest ones.</div>`;
     $("#cartFoot").innerHTML = n ? `<div class="breakdown"><div><span>${live.length} bot${live.length === 1 ? "" : "s"} to buy</span><span>${DB.fmt(total)} ${esc(sym())}</span></div><div><span class="dim">Market fee ${feePct()} (taken from sellers, nothing extra for you)</span><span class="dim">${DB.fmt(feeOf(total))}</span></div><div class="tot"><span>You pay</span><span>${DB.fmt(total)} ${esc(sym())} <span class="dim" style="font-weight:500">${esc(usd(total))}</span></span></div></div>
-      <div class="feeline">One transaction. Anything sold before it lands is skipped and its BNB comes back in the same transaction.</div><button class="btn primary block" style="margin-top:12px" id="sweepGo" ${live.length && !S.paused ? "" : "disabled"}>${S.paused ? "Trading paused" : `Buy ${live.length} item${live.length === 1 ? "" : "s"}`}</button>` : "";
+      <div class="feeline">One transaction. Anything sold before it lands is skipped and its BNB comes back in the same transaction.</div>${RISK}<button class="btn primary block" style="margin-top:12px" id="sweepGo" ${live.length && !S.paused ? "" : "disabled"}>${S.paused ? "Trading paused" : `Buy ${live.length} item${live.length === 1 ? "" : "s"}`}</button>` : "";
     watchImgs($("#cartBody"));
     $$("[data-rm]", $("#cartBody")).forEach(b => b.onclick = () => toggleCart(Number(b.dataset.rm)));
     if ($("#sweepGo")) $("#sweepGo").onclick = sweep;
