@@ -12,6 +12,7 @@
     "Search": "搜索", "Search bots": "搜索机器人", "Search by bot #": "按机器人编号搜索",
     "Reading chain…": "正在读取链上数据…", "Switch to light mode": "切换到浅色模式", "Switch to dark mode": "切换到深色模式",
     "no real value": "无真实价值",
+    "Trading carries risk. Prices can drop, and on-chain trades can't be undone. Check the bot, price and fee before you sign. Nothing here is financial advice.": "交易有风险。价格可能下跌，链上交易无法撤销。签名前请核对机器人、价格和费用。本页内容不构成投资建议。",
     "Floor price": "地板价", "Top offer": "最高出价", "Total volume": "总成交额", "Sales": "成交", "Listed": "已挂单",
     "Owners": "持有人", "Bots": "机器人", "Market fee": "市场手续费",
     "Items": "藏品", "Collection offers": "系列出价", "Activity": "动态", "Analytics": "数据分析", "My bots": "我的机器人", "My offers": "我的出价",
