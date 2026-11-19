@@ -88,6 +88,7 @@ img { display: block; }
 .hero-title h1 { margin: 0; font-size: 32px; letter-spacing: -.02em; line-height: 1.1; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .chip { display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 9px; border-radius: 999px; font-size: 12px; font-weight: 600; background: var(--card-2); color: var(--text-2); border: 1px solid var(--line); white-space: nowrap; }
 .chip.orange { background: var(--accent-wash); color: #ffb08a; border-color: rgba(255, 77, 0, .35); }
+.chip.legendary { background: rgba(255, 216, 77, .12); color: #FFD84D; border-color: rgba(255, 216, 77, .45); }
 .chip.green { background: rgba(34, 194, 122, .12); color: #7fe0b2; border-color: rgba(34, 194, 122, .3); }
 .chip.amber { background: rgba(255, 176, 32, .12); color: #ffd27a; border-color: rgba(255, 176, 32, .3); }
 .chip.red { background: rgba(241, 85, 91, .12); color: #ffa3a6; border-color: rgba(241, 85, 91, .3); }

@@ -6,7 +6,7 @@
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
   const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const TIERS = ["Common", "Uncommon", "Rare", "Epic", "Legendary"];
-  const TIER_CLASS = { Common: "", Uncommon: "green", Rare: "blue", Epic: "purple", Legendary: "orange" };
+  const TIER_CLASS = { Common: "", Uncommon: "green", Rare: "blue", Epic: "purple", Legendary: "legendary" };
   const TRAIT_KEYS = ["Tier", "Head", "Eyes", "Antenna", "Mouth", "Accessory", "Type"];
   const OP_ACCEPT = 2, OP_COLL = 3;
   const EXPIRY = [["1 hour", 3600], ["1 day", 86400], ["3 days", 3 * 86400], ["7 days", 7 * 86400], ["30 days", 30 * 86400]];
@@ -33,7 +33,7 @@
   const until = t => { const d = Number(t) - nowSec(); if (d <= 0) return "expired"; if (d < 3600) return "in " + Math.max(1, Math.floor(d / 60)) + "m"; if (d < 86400) return "in " + Math.floor(d / 3600) + "h"; return "in " + Math.floor(d / 86400) + "d"; };
   const tierChip = t => `<span class="chip tier-chip" style="${tierStyle(t)}">${esc(t)}</span>`;
   function tierStyle(t) {
-    const c = { Common: ["#e4e5ea", "rgba(255,255,255,.22)"], Uncommon: ["#7fe8b6", "rgba(34,194,122,.55)"], Rare: ["#a9ccff", "rgba(80,150,255,.6)"], Epic: ["#d6bcff", "rgba(170,110,255,.65)"], Legendary: ["#ffb48f", "rgba(255,77,0,.75)"] }[t] || ["#e4e5ea", "rgba(255,255,255,.22)"];
+    const c = { Common: ["#e4e5ea", "rgba(255,255,255,.22)"], Uncommon: ["#7fe8b6", "rgba(34,194,122,.55)"], Rare: ["#a9ccff", "rgba(80,150,255,.6)"], Epic: ["#d6bcff", "rgba(170,110,255,.65)"], Legendary: ["#FFD84D", "rgba(255,216,77,.75)"] }[t] || ["#e4e5ea", "rgba(255,255,255,.22)"];
     return `background:rgba(14,15,19,.82);color:${c[0]};border-color:${c[1]}`;
   }
   function parseAmt(str) {
@@ -325,11 +325,11 @@
     if (!S.traitCounts) return;
     const open = new Set($$("#traitFilters .fgroup.open").map(g => g.dataset.k));
     const first = !$("#traitFilters").children.length;
-    const order = ["Tier", "Type", "Head", "Eyes", "Antenna", "Mouth", "Accessory"];
+    const order = ["Tier", "Head", "Type", "Eyes", "Antenna", "Mouth", "Accessory"];
     $("#traitFilters").innerHTML = order.map(k => {
       const vals = (k === "Tier" ? TIERS.slice() : Object.keys(S.traitCounts[k] || {})).sort((a, b) => k === "Tier" ? TIERS.indexOf(a) - TIERS.indexOf(b) : (S.traitCounts[k][b] - S.traitCounts[k][a]) || a.localeCompare(b));
       const sel = S.filters.traits[k] || new Set();
-      const isOpen = first ? k === "Tier" : open.has(k);
+      const isOpen = first ? (k === "Tier" || k === "Head") : open.has(k);
       return `<div class="fgroup ${isOpen ? "open" : ""}" data-k="${k}"><button>${k === "Tier" ? "Rarity tier" : esc(k)} <span style="margin-left:auto;margin-right:8px" class="dim mono">${sel.size ? sel.size : ""}</span><svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></button><div class="fbody">${vals.map(v => `<label class="opt"><input type="checkbox" data-k="${k}" data-v="${esc(v)}" ${sel.has(v) ? "checked" : ""}><span>${esc(v)}</span><span class="n">${(S.traitCounts[k] || {})[v] || 0}</span></label>`).join("")}</div></div>`;
     }).join("");
     $$("#traitFilters input").forEach(i => i.onchange = () => {
