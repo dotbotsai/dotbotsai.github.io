@@ -351,7 +351,7 @@
       if (min && l.price < min) return false;
       if (max && l.price > max) return false;
       for (const k in F.traits) if (!F.traits[k].has(b.traits[k])) return false;
-      if (q) { if (/^\d+$/.test(q)) { if (String(id) !== q && !(b.handle || "").toLowerCase().includes(q)) return false; } else if (!(b.handle || "").toLowerCase().includes(q) && !nameOf(b).toLowerCase().includes(q)) return false; }
+      if (q && String(id) !== q) return false;
       return true;
     });
     const P = id => S.listings.get(id) ? S.listings.get(id).price : null;
@@ -614,7 +614,7 @@
       <div class="dinfo">
         <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">${tierChip(b.traits.Tier)}<span class="chip">Rank ${b.rank} of ${N}</span><span class="chip">#${id}</span>${frChip(id)}</div>
         <h2>${esc(nameOf(b))}</h2>
-        <div class="owner-line"><span>Owned by <a href="${esc(DB.addrUrl(holder) || "#")}" target="_blank" rel="noopener">${esc(mine ? "you" : DB.short(holder))}</a></span>${l ? `<span>Held in market escrow while listed</span>` : ""}</div>
+        ${mine || l ? `<div class="owner-line">${mine ? `<span>Owned by <a href="${esc(DB.addrUrl(holder) || "#")}" target="_blank" rel="noopener">you</a></span>` : ""}${l ? `<span>Held in market escrow while listed</span>` : ""}</div>` : ""}
         <div class="pricebox">${priceBlock}<div class="actions">${actions}</div><div class="feeline">${feeLine}</div></div>
         <div class="section-h">Offers</div><div class="rows">${collRow}${offerRows}</div>
         <div class="section-h">Market history</div><div class="rows hist-scroll">${histRows}</div>
