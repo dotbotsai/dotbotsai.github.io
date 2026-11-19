@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src https://gift.dotbots.app; base-uri 'none'; form-action 'none'; object-src 'none'"/>
+<meta name="referrer" content="no-referrer"/>
+<title>Request a gift · dotBots</title>
+<meta name="description" content="Follow @dotBots_ai, have a .ai Agent ID with no dotBot yet, and request one of 40 dotBot gifts. First come, first served."/>
+<style>
+:root{--bg:#0b0d12;--card:#141821;--line:#262c3a;--text:#e9edf5;--dim:#9aa4b8;--acc:#FFD84D;--ok:#22c27a;--bad:#ff6b6b}
+*{box-sizing:border-box}[hidden]{display:none!important}html,body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif}
+a{color:var(--acc)}main{max-width:620px;margin:0 auto;padding:28px 18px 60px}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:22px}
+.brand{font-weight:800;letter-spacing:.3px;color:var(--text);text-decoration:none;font-size:18px}
+.lang{display:flex;gap:6px}.lang button{background:none;border:1px solid var(--line);color:var(--dim);border-radius:8px;padding:5px 10px;cursor:pointer;font:inherit;font-size:14px}
+.lang button[aria-pressed=true]{color:var(--text);border-color:var(--acc)}
+h1{font-size:28px;line-height:1.2;margin:0 0 8px}.lead{color:var(--dim);margin:0 0 20px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:16px}
+.count{display:flex;align-items:baseline;gap:10px}.count b{font-size:34px;color:var(--acc);font-variant-numeric:tabular-nums}
+.count span{color:var(--dim)}.bar{height:8px;background:#0e1117;border-radius:6px;overflow:hidden;margin-top:10px}.bar i{display:block;height:100%;background:var(--acc);width:0}
+ol{margin:0;padding-left:20px}ol li{margin:6px 0}
+.btn{display:inline-block;background:var(--acc);color:#111;border:0;border-radius:10px;padding:12px 18px;font:inherit;font-weight:700;cursor:pointer;width:100%}
+.btn[disabled]{opacity:.45;cursor:not-allowed}.btn.ghost{background:none;color:var(--text);border:1px solid var(--line)}
+label{display:block;font-weight:600;margin:14px 0 6px}input{width:100%;background:#0e1117;border:1px solid var(--line);color:var(--text);border-radius:10px;padding:11px 12px;font:inherit}
+input:focus{outline:2px solid var(--acc);border-color:transparent}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:14px;word-break:break-all}
+.msg{margin:12px 0 0;padding:10px 12px;border-radius:10px;background:#0e1117;border:1px solid var(--line)}.msg.ok{border-color:var(--ok)}.msg.bad{border-color:var(--bad)}
+.small{color:var(--dim);font-size:14px}.closed{color:var(--bad);font-weight:700}
+.msg+.btn{margin-top:12px}footer{margin-top:28px;color:var(--dim);font-size:14px;display:flex;gap:14px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<main>
+<header><a class="brand" href="/">dotBots</a><div class="lang" role="group" aria-label="Language"><button type="button" data-l="en" aria-pressed="true">EN</button><button type="button" data-l="zh" aria-pressed="false">中文</button></div></header>
+
+<h1 data-t="h1">Request a gift</h1>
+<p class="lead" data-t="lead">40 dotBots are waiting for new owners. One gift per .ai Agent ID that has no dotBot yet. First come, first served.</p>
+
+<section class="card" aria-live="polite">
+  <div class="count"><b id="left">–</b><span data-t="ofTotal">of 40 gifts left</span></div>
+  <div class="bar"><i id="bar"></i></div>
+  <p class="small" id="stateLine" data-t="opens">Requests open Nov 20, 00:00 (GMT+7).</p>
+</section>
+
+<section class="card">
+  <ol>
+    <li data-t="r1">Follow @dotBots_ai on X.</li>
+    <li data-t="r2">Use a wallet that holds a .ai Agent ID with no dotBot yet.</li>
+    <li data-t="r3">Request below. Requests open Nov 20, 00:00 (GMT+7). First come, first served.</li>
+    <li data-t="r4">Gifts are assigned in daily batches, in request order. Come back here to claim yours in your own wallet (you pay only network gas).</li>
+    <li data-t="r5">The campaign closes when all 40 gifts are gone.</li>
+  </ol>
+</section>
+
+<section class="card" id="formCard">
+  <button class="btn" type="button" id="connect" data-t="connect">Connect wallet</button>
+  <p class="small" data-t="noSign">You sign one free message to prove the wallet is yours. No transaction, no gas, no approval. We will never ask for your seed phrase or private key.</p>
+  <div id="form" hidden>
+    <p class="small"><span data-t="wallet">Wallet</span>: <span class="mono" id="addr"></span></p>
+    <div id="meBox"></div>
+    <div id="reqBox" hidden>
+      <label for="x" data-t="xLabel">Your X handle</label>
+      <input id="x" type="text" inputmode="text" autocomplete="off" maxlength="16" placeholder="@yourhandle"/>
+      <p class="small" data-t="xHint">We check that this X account follows @dotBots_ai before the gift is assigned.</p>
+      <button class="btn" type="button" id="send" data-t="send">Request my gift</button>
+    </div>
+    <p class="msg" id="msg" hidden></p>
+  </div>
+</section>
+
+<p class="small" data-t="note">A gift is a team dotBot assigned to your wallet on BNB Chain. It is not an investment and has no promised value.</p>
+<footer><a href="/" data-t="home">Home</a><a href="/terms/" data-t="terms">Terms</a><a href="/privacy/" data-t="privacy">Privacy</a></footer>
+</main>
+<script>
+(function () {
+  "use strict";
+  var API = "https://gift.dotbots.app", COLLECTION = "0x4123F0f5ca048780C0c91aBC0c7ac12c77a0bF69", CLAIM = "0x78cbf86c", BSC = "0x38";
+  var T = {
+    en: {},
+    zh: {
+      h1: "领取礼物", lead: "40 个 dotBot 等待新主人。每个还没有 dotBot 的 .ai Agent ID 可领取一份礼物。先到先得。",
+      ofTotal: "/ 40 份礼物剩余", opens: "申请开放时间：11月20日 00:00（GMT+7）。", openNow: "正在接受申请。先到先得。",
+      closedNow: "已结束：40 份礼物已全部送出。",
+      r1: "在 X 上关注 @dotBots_ai。", r2: "使用持有 .ai Agent ID 且还没有 dotBot 的钱包。",
+      r3: "在下方申请。申请从 11月20日 00:00（GMT+7）开始。先到先得。",
+      r4: "礼物按申请顺序每日分批分配。分配后回到此页，用你自己的钱包领取（只需支付网络 Gas）。",
+      r5: "40 份礼物全部送出后，活动自动结束。",
+      connect: "连接钱包", noSign: "你只需签署一条免费消息，证明钱包归你所有。无交易、无 Gas、无授权。我们绝不会索要你的助记词或私钥。",
+      wallet: "钱包", xLabel: "你的 X 账号", xHint: "分配礼物前，我们会确认该 X 账号已关注 @dotBots_ai。", send: "申请我的礼物",
+      note: "礼物是分配到你在 BNB Chain 上钱包的一个团队 dotBot。它不是投资，也不承诺任何价值。",
+      home: "首页", terms: "条款", privacy: "隐私"
+    }
+  };
+  var M = {
+    noWallet: ["No wallet found in this browser. Open this page in your wallet app's browser.", "此浏览器未检测到钱包。请在钱包 App 的浏览器中打开本页。"],
+    rejected: ["Connection cancelled.", "已取消连接。"],
+    signing: ["Sign the free message in your wallet (no gas)…", "请在钱包中签署免费消息（无 Gas）…"],
+    sending: ["Sending your request…", "正在提交申请…"],
+    sig_expired: ["The signature expired. Request again.", "签名已过期，请重新申请。"],
+    bad_signature: ["The signature doesn't match this wallet. Request again.", "签名与此钱包不匹配，请重新申请。"],
+    ok: ["Request saved. You are #{p} in line. Come back after the next daily batch to claim.", "申请已提交。你排在第 {p} 位。下一批分配后回到此页领取。"],
+    queued: ["You already requested. You are #{p} in line. Come back after the next daily batch.", "你已申请。你排在第 {p} 位。下一批分配后再回来。"],
+    ready: ["Your gift is ready: dotBot #{id}. Claim it in your wallet (network gas only).", "你的礼物已准备好：dotBot #{id}。请在钱包中领取（只需网络 Gas）。"],
+    claimBtn: ["Claim my gift", "领取我的礼物"],
+    claiming: ["Confirm the transaction in your wallet…", "请在钱包中确认交易…"],
+    claimed: ["Claimed. dotBot #{id} is in your wallet.", "已领取。dotBot #{id} 已在你的钱包中。"],
+    sent: ["Transaction sent: {h}. It may take a minute to confirm.", "交易已发送：{h}。确认可能需要一分钟。"],
+    skipped: ["This request was not eligible at assignment time.", "该申请在分配时不符合条件。"],
+    switchNet: ["Switch your wallet to BNB Smart Chain and try again.", "请将钱包切换到 BNB Smart Chain 后重试。"],
+    badX: ["Enter your X handle (letters, numbers, _ up to 15).", "请输入你的 X 账号（字母、数字、下划线，最多 15 位）。"],
+    not_open: ["Requests open Nov 20, 00:00 (GMT+7).", "申请从 11月20日 00:00（GMT+7）开始。"],
+    closed: ["Closed: all 40 gifts are gone.", "已结束：40 份礼物已全部送出。"],
+    no_agent_id: ["This wallet has no .ai Agent ID.", "此钱包没有 .ai Agent ID。"],
+    handle_used: ["This Agent ID already has a dotBot. One gift per Agent ID with no dotBot.", "此 Agent ID 已拥有 dotBot。每个没有 dotBot 的 Agent ID 限领一份。"],
+    already_requested: ["This wallet or Agent ID already requested.", "此钱包或 Agent ID 已申请。"],
+    x_taken: ["This X handle already requested.", "此 X 账号已申请。"],
+    not_eligible: ["This wallet can't request a gift.", "此钱包无法申请礼物。"],
+    rate_limited: ["Too many tries. Wait a bit and try again.", "尝试次数过多，请稍后再试。"],
+    chain_error: ["Couldn't read the chain right now. Try again in a minute.", "暂时无法读取链上数据，请一分钟后重试。"],
+    bad_input: ["Check your X handle and try again.", "请检查 X 账号后重试。"],
+    fail: ["Something went wrong. Try again in a minute.", "出错了，请一分钟后重试。"]
+  };
+  var lang = "en", st = null, me = null, addr = null;
+  var $ = function (id) { return document.getElementById(id); };
+  var EN = {}; document.querySelectorAll("[data-t]").forEach(function (el) { EN[el.dataset.t] = el.textContent; });
+  function t(k) { return lang === "zh" && T.zh[k] ? T.zh[k] : EN[k] || (k === "openNow" ? "Requests are open now. First come, first served." : k === "closedNow" ? "Closed: all 40 gifts are gone." : k); }
+  function m(k, v) { var s = (M[k] || M.fail)[lang === "zh" ? 1 : 0]; for (var x in v || {}) s = s.split("{" + x + "}").join(String(v[x])); return s; }
+  function say(k, v, cls) { var p = $("msg"); p.hidden = false; p.className = "msg" + (cls ? " " + cls : ""); p.textContent = m(k, v); }
+  function setLang(l) {
+    lang = l; document.documentElement.lang = l === "zh" ? "zh-CN" : "en";
+    document.querySelectorAll(".lang button").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.l === l)); });
+    document.querySelectorAll("[data-t]").forEach(function (el) { el.textContent = t(el.dataset.t); });
+    renderStatus(); renderMe();
+  }
+  document.querySelectorAll(".lang button").forEach(function (b) { b.addEventListener("click", function () { setLang(b.dataset.l); }); });
+
+  function api(path, opt) { return fetch(API + path, Object.assign({ cache: "no-store", credentials: "omit" }, opt || {})).then(function (r) { return r.json(); }); }
+  function renderStatus() {
+    if (!st) return;
+    $("left").textContent = String(st.left);
+    $("bar").style.width = Math.round(((st.total - st.left) / st.total) * 100) + "%";
+    var line = $("stateLine");
+    if (st.closed) { line.textContent = t("closedNow"); line.className = "closed"; }
+    else if (st.open) { line.textContent = t("openNow"); line.className = "small"; }
+    else { line.textContent = t("opens"); line.className = "small"; }
+    $("send").disabled = !st.open;
+  }
+  function loadStatus() { return api("/gift/status").then(function (j) { if (typeof j.left === "number") { st = j; renderStatus(); } }).catch(function () {}); }
+
+  function renderMe() {
+    var box = $("meBox"); if (!addr) return;
+    box.innerHTML = ""; $("reqBox").hidden = true;
+    if (!me) return;
+    if (me.claimed) { box.innerHTML = '<p class="msg ok"></p>'; box.firstChild.textContent = m("claimed", { id: me.tokenId }); return; }
+    if (me.ready) {
+      box.innerHTML = '<p class="msg ok"></p><button class="btn" type="button" id="claim"></button>';
+      box.firstChild.textContent = m("ready", { id: me.tokenId }); $("claim").textContent = m("claimBtn"); $("claim").onclick = claim; return;
+    }
+    if (me.requested) { box.innerHTML = '<p class="msg"></p>'; box.firstChild.textContent = me.status === "skipped" ? m("skipped") : m("queued", { p: me.position }); return; }
+    if (st && st.closed) { box.innerHTML = '<p class="msg bad"></p>'; box.firstChild.textContent = m("closed"); return; }
+    $("reqBox").hidden = false;
+  }
+  function loadMe() { return api("/gift/me?wallet=" + addr).then(function (j) { me = j; renderMe(); }).catch(function () { say("fail", null, "bad"); }); }
+
+  $("connect").addEventListener("click", function () {
+    var eth = window.ethereum; if (!eth) { say("noWallet", null, "bad"); $("form").hidden = false; return; }
+    eth.request({ method: "eth_requestAccounts" }).then(function (a) {
+      addr = String(a && a[0] || "").toLowerCase(); if (!/^0x[0-9a-f]{40}$/.test(addr)) throw 0;
+      $("addr").textContent = addr; $("form").hidden = false; $("connect").hidden = true; $("msg").hidden = true; return loadMe();
+    }).catch(function () { $("form").hidden = false; say("rejected", null, "bad"); });
+  });
+  $("send").addEventListener("click", function () {
+    var x = $("x").value.trim().replace(/^@/, "");
+    if (!/^[A-Za-z0-9_]{1,15}$/.test(x)) { say("badX", null, "bad"); return; }
+    $("send").disabled = true; say("signing");
+    var xl = x.toLowerCase(), d = new Date(), p2 = function (n) { return String(n).padStart(2, "0"); };
+    var issued = d.getUTCFullYear() + "-" + p2(d.getUTCMonth() + 1) + "-" + p2(d.getUTCDate()) + "T" + p2(d.getUTCHours()) + ":" + p2(d.getUTCMinutes()) + ":" + p2(d.getUTCSeconds()) + "Z";
+    var msg = "dotBots gift request\nWallet: " + addr + "\nX: @" + xl + "\nIssued: " + issued + "\nNo gas. No approval. This only proves you own this wallet.";
+    window.ethereum.request({ method: "personal_sign", params: [msg, addr] })
+      .catch(function () { throw { cancelled: true }; })
+      .then(function (sig) { say("sending"); return api("/gift/request", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ wallet: addr, x: xl, issued: issued, sig: sig }) }); })
+      .then(function (j) {
+        if (j.ok) { say("ok", { p: j.position }, "ok"); me = { requested: true, position: j.position, status: "queued" }; st = Object.assign(st || {}, { left: j.left, total: j.total, closed: j.left === 0, open: j.left > 0 }); renderStatus(); $("reqBox").hidden = true; return; }
+        say(j.error, null, "bad"); if (j.error === "closed") loadStatus(); $("send").disabled = !(st && st.open);
+      }).catch(function (e) { say(e && e.cancelled ? "rejected" : "fail", null, "bad"); $("send").disabled = false; });
+  });
+  function claim() {
+    var eth = window.ethereum, id = Number(me.tokenId);
+    var data = CLAIM + id.toString(16).padStart(64, "0");
+    eth.request({ method: "eth_chainId" }).then(function (c) {
+      if (String(c).toLowerCase() !== BSC) { say("switchNet", null, "bad"); return; }
+      say("claiming");
+      return eth.request({ method: "eth_sendTransaction", params: [{ from: addr, to: COLLECTION, data: data, value: "0x0" }] }).then(function (h) { say("sent", { h: h }, "ok"); setTimeout(loadMe, 15000); });
+    }).catch(function () { say("rejected", null, "bad"); });
+  }
+  loadStatus(); setInterval(loadStatus, 30000);
+})();
+</script>
+</body>
+</html>
