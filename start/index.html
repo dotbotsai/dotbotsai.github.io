@@ -18,7 +18,7 @@ header{display:flex;justify-content:space-between;align-items:center;gap:12px;ma
 h1{font-size:28px;line-height:1.2;margin:0 0 8px}.lead{color:var(--dim);margin:0 0 20px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:16px}
 .count{display:flex;align-items:baseline;gap:10px}.count b{font-size:34px;color:var(--acc);font-variant-numeric:tabular-nums}
-.count span{color:var(--dim)}.bar{height:8px;background:#0e1117;border-radius:6px;overflow:hidden;margin-top:10px}.bar i{display:block;height:100%;background:var(--acc);width:0}
+.count span{color:var(--dim)}.count span:empty{display:none}.bar{height:8px;background:#0e1117;border-radius:6px;overflow:hidden;margin-top:10px}.bar i{display:block;height:100%;background:var(--acc);width:0}
 ol{margin:0;padding-left:20px}ol li{margin:6px 0}
 .btn{display:inline-block;background:var(--acc);color:#111;border:0;border-radius:10px;padding:12px 18px;font:inherit;font-weight:700;cursor:pointer;width:100%}
 .btn[disabled]{opacity:.45;cursor:not-allowed}.btn.ghost{background:none;color:var(--text);border:1px solid var(--line)}
@@ -39,7 +39,7 @@ pre{white-space:pre-wrap;word-break:break-word;background:#0e1117;border:1px sol
 <p class="lead" data-t="lead">40 dotBots are waiting for new owners. One gift per .ai Agent ID that has no dotBot yet. First come, first served.</p>
 
 <section class="card" aria-live="polite">
-  <div class="count"><b id="left">–</b><span data-t="ofTotal">of 40 gifts left</span></div>
+  <div class="count"><span data-t="reqPre"></span><b id="left">–</b><span data-t="ofTotal">of 40 gifts requested</span></div>
   <div class="bar"><i id="bar"></i></div>
   <p class="small" id="stateLine" data-t="opens">Requests open Nov 20, 00:00 (GMT+7).</p>
 </section>
@@ -82,7 +82,7 @@ pre{white-space:pre-wrap;word-break:break-word;background:#0e1117;border:1px sol
     en: {},
     zh: {
       h1: "领取礼物", lead: "40 个 dotBot 等待新主人。每个还没有 dotBot 的 .ai Agent ID 可领取一份礼物。先到先得。",
-      ofTotal: "/ 40 份礼物剩余", opens: "申请开放时间：11月20日 00:00（GMT+7）。", openNow: "正在接受申请。先到先得。",
+      reqPre: "已申请", ofTotal: "/ 40", opens: "申请开放时间：11月20日 00:00（GMT+7）。", openNow: "正在接受申请。先到先得。",
       closedNow: "已结束：40 份礼物已全部送出。",
       r1: "在 X 上关注 @dotBots_ai。", r2: "使用持有 .ai Agent ID 且还没有 dotBot 的钱包。",
       r3: "在下方申请。申请从 11月20日 00:00（GMT+7）开始。先到先得。",
@@ -132,7 +132,7 @@ pre{white-space:pre-wrap;word-break:break-word;background:#0e1117;border:1px sol
   var lang = "en", st = null, me = null, addr = null;
   var $ = function (id) { return document.getElementById(id); };
   var EN = {}; document.querySelectorAll("[data-t]").forEach(function (el) { EN[el.dataset.t] = el.textContent; });
-  function t(k) { return lang === "zh" && T.zh[k] ? T.zh[k] : EN[k] || (k === "openNow" ? "Requests are open now. First come, first served." : k === "closedNow" ? "Closed: all 40 gifts are gone." : k); }
+  function t(k) { if (k === "reqPre") return lang === "zh" ? T.zh.reqPre : ""; return lang === "zh" && T.zh[k] ? T.zh[k] : EN[k] || (k === "openNow" ? "Requests are open now. First come, first served." : k === "closedNow" ? "Closed: all 40 gifts are gone." : k); }
   function m(k, v) { var s = (M[k] || M.fail)[lang === "zh" ? 1 : 0]; for (var x in v || {}) s = s.split("{" + x + "}").join(String(v[x])); return s; }
   function say(k, v, cls) { var p = $("msg"); p.hidden = false; p.className = "msg" + (cls ? " " + cls : ""); p.textContent = m(k, v); }
   function setLang(l) {
@@ -146,8 +146,9 @@ pre{white-space:pre-wrap;word-break:break-word;background:#0e1117;border:1px sol
   function api(path, opt) { return fetch(API + path, Object.assign({ cache: "no-store", credentials: "omit" }, opt || {})).then(function (r) { return r.json(); }); }
   function renderStatus() {
     if (!st) return;
-    $("left").textContent = String(st.left);
-    $("bar").style.width = Math.round(((st.total - st.left) / st.total) * 100) + "%";
+    var taken = st.total - st.left;
+    $("left").textContent = String(taken);
+    $("bar").style.width = Math.round((taken / st.total) * 100) + "%";
     var line = $("stateLine");
     if (st.closed) { line.textContent = t("closedNow"); line.className = "closed"; }
     else if (st.open) { line.textContent = t("openNow"); line.className = "small"; }
