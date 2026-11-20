@@ -1,0 +1,19 @@
+{
+  "name": "Super-rare Gun",
+  "description": "A Super-rare gun for dotBots.",
+  "image": "https://dotbots.app/items/img/43.png",
+  "attributes": [
+    {
+      "trait_type": "Category",
+      "value": "Weapon"
+    },
+    {
+      "trait_type": "Type",
+      "value": "Gun"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Super-rare"
+    }
+  ]
+}

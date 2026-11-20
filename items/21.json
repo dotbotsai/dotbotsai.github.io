@@ -1,0 +1,19 @@
+{
+  "name": "Common Sword",
+  "description": "A Common sword for dotBots.",
+  "image": "https://dotbots.app/items/img/21.png",
+  "attributes": [
+    {
+      "trait_type": "Category",
+      "value": "Weapon"
+    },
+    {
+      "trait_type": "Type",
+      "value": "Sword"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Common"
+    }
+  ]
+}

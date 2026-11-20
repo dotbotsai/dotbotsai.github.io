@@ -1,0 +1,19 @@
+{
+  "name": "Super-rare Axe",
+  "description": "A Super-rare axe for dotBots.",
+  "image": "https://dotbots.app/items/img/33.png",
+  "attributes": [
+    {
+      "trait_type": "Category",
+      "value": "Weapon"
+    },
+    {
+      "trait_type": "Type",
+      "value": "Axe"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Super-rare"
+    }
+  ]
+}

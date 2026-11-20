@@ -1,0 +1,19 @@
+{
+  "name": "Rare Bow",
+  "description": "A Rare bow for dotBots.",
+  "image": "https://dotbots.app/items/img/52.png",
+  "attributes": [
+    {
+      "trait_type": "Category",
+      "value": "Weapon"
+    },
+    {
+      "trait_type": "Type",
+      "value": "Bow"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Rare"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "name": "Rare Knife",
+  "description": "A Rare knife for dotBots.",
+  "image": "https://dotbots.app/items/img/12.png",
+  "attributes": [
+    {
+      "trait_type": "Category",
+      "value": "Weapon"
+    },
+    {
+      "trait_type": "Type",
+      "value": "Knife"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Rare"
+    }
+  ]
+}

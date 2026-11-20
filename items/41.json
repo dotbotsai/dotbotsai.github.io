@@ -1,0 +1,19 @@
+{
+  "name": "Common Gun",
+  "description": "A Common gun for dotBots.",
+  "image": "https://dotbots.app/items/img/41.png",
+  "attributes": [
+    {
+      "trait_type": "Category",
+      "value": "Weapon"
+    },
+    {
+      "trait_type": "Type",
+      "value": "Gun"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Common"
+    }
+  ]
+}

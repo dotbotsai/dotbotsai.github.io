@@ -1,0 +1,19 @@
+{
+  "name": "Common Bow",
+  "description": "A Common bow for dotBots.",
+  "image": "https://dotbots.app/items/img/51.png",
+  "attributes": [
+    {
+      "trait_type": "Category",
+      "value": "Weapon"
+    },
+    {
+      "trait_type": "Type",
+      "value": "Bow"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Common"
+    }
+  ]
+}
