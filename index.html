@@ -873,6 +873,15 @@ tr.is-highlight > :last-child { box-shadow: 12px 0 var(--fill-tertiary); }
 .jg__of{font:700 16px var(--font-mono,ui-monospace,monospace);color:rgba(245,245,247,.6)}
 .jg__bar{width:100%;height:10px;border-radius:999px;overflow:hidden;background:rgba(255,255,255,.1);border:1px solid rgba(255,77,0,.35)}
 #jgFill{display:block;height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,#ff4d00,#ffb020);transition:width .6s ease}
+.jg__bar{position:relative}.jg__bar s{position:absolute;top:0;bottom:0;width:2px;margin-left:-1px;background:rgba(255,255,255,.45)}
+.jg__tiers{list-style:none;margin:2px 0 0;padding:0;width:100%;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.jg__tiers li{display:grid;gap:2px;justify-items:center;text-align:center;padding:7px 4px;border-radius:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,176,32,.28)}
+.jg__tiers b{font:800 15px/1.1 var(--font-mono,ui-monospace,monospace);color:#fff}
+.jg__tiers span{font-size:12px;font-weight:700;color:#ffb020;white-space:nowrap}
+.jg__tiers li.is-on{background:rgba(255,176,32,.18);border-color:#ffb020}
+.jg__pool{font-size:clamp(40px,5vw,60px)!important;white-space:nowrap}
+@media (max-width:480px){.jg__pool{font-size:clamp(28px,9.4vw,44px)!important}}
+.jg__tlbl{margin:0;width:100%;text-align:center;font-size:12px;color:rgba(245,245,247,.6)}
 .jg__sub{margin:2px 0 0;font-size:13px;color:rgba(245,245,247,.75)}
 .jg__btn{margin-top:6px;display:inline-block;padding:9px 16px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,176,32,.6);color:#ffb020;font-weight:700;font-size:14px;text-decoration:none}
 .jg__btn:hover{background:rgba(255,176,32,.14)}
@@ -1044,12 +1053,14 @@ tr.is-highlight > :last-child { box-shadow: 12px 0 var(--fill-tertiary); }
           <div class="jg" id="joinGate">
             <div class="jg__txt">
               <span class="jg__eye" data-zh="主网杯 · 奖池">Mainnet Cup · Prize pool</span>
-              <p class="jg__pool">1,850 USDT</p>
+              <p class="jg__pool" data-zh="最高 1,850 USDT">Up to 1,850 USDT</p>
               <p class="jg__safe" data-zh="已在链上，存放于团队 Safe 多签钱包。">Already on-chain in the team Safe.</p>
-              <h3 class="jg__h" data-zh="1,000 位持有人加入，奖励杯即开启">Unlocks when 1,000 holders join</h3>
+              <h3 class="jg__h" data-zh="持有人越多，奖池越大">The more holders, the bigger the prize</h3>
               <div class="jg__row"><span class="jg__n" id="jgN">—</span><span class="jg__of">/ 1,000</span></div>
-              <div class="jg__bar" role="progressbar" aria-valuemin="0" aria-valuemax="1000" id="jgBar"><i id="jgFill"></i></div>
-              <p class="jg__sub" data-zh="从 #134 起每铸造 1 个机器人计 1 位持有人。持有人可参加主网 Bot Battle 奖励杯（日期待定）。">Every bot minted from #134 counts as 1 holder. Holders play the Mainnet Bot Battle Prize Cup (date TBA).</p>
+              <div class="jg__bar" role="progressbar" aria-valuemin="0" aria-valuemax="1000" id="jgBar"><i id="jgFill"></i><s style="left:25%"></s><s style="left:50%"></s><s style="left:75%"></s></div>
+              <ol class="jg__tiers" id="jgTiers" dir="ltr"><li data-t="250"><b>250</b><span>460 USDT</span></li><li data-t="500"><b>500</b><span>925 USDT</span></li><li data-t="750"><b>750</b><span>1,375 USDT</span></li><li data-t="1000"><b>1,000</b><span>1,850 USDT</span></li></ol>
+              <p class="jg__tlbl" data-zh="持有人数 → 开启的奖池">Holders → prize pool unlocked</p>
+              <p class="jg__sub" data-zh="从 #134 起每铸造 1 个机器人计 1 位持有人。自主网奖励杯开赛日起计 15 天，按达到的最高档位发奖；不足 250 位则奖池不开启。持有人可参加主网 Bot Battle 奖励杯（日期待定）。">Every bot minted from #134 counts as 1 holder. We count for 15 days from the Mainnet Cup start; the highest tier reached is the prize pool. Under 250 holders, no pool opens. Holders play the Mainnet Bot Battle Prize Cup (date TBA).</p>
               <a class="jg__btn" href="https://bscscan.com/address/0xA9c76FeEcdA249BbE14d3a330a3739821f69d910#tokentxns" target="_blank" rel="noopener noreferrer" data-zh="在 BscScan 查看">Verify on BscScan</a>
             </div>
             <div class="jg__bots" aria-hidden="true">
@@ -1828,7 +1839,7 @@ tr.is-highlight > :last-child { box-shadow: 12px 0 var(--fill-tertiary); }
             $("sAlive").textContent = Number(v.liveSupply).toLocaleString("en-US");
             $("sFusions").textContent = Number(v.fusions).toLocaleString("en-US");
             (function () { var GOAL = 1000, n = Number(v.publicMinted) - FIRST_ROUND.length; n = n < 0 ? 0 : n; var shown = n > GOAL ? GOAL : n;
-              $("jgN").textContent = shown.toLocaleString("en-US"); $("jgFill").style.width = (shown / GOAL * 100).toFixed(1) + "%"; $("jgBar").setAttribute("aria-valuenow", String(shown)); })();
+              $("jgN").textContent = shown.toLocaleString("en-US"); $("jgFill").style.width = (shown / GOAL * 100).toFixed(1) + "%"; $("jgBar").setAttribute("aria-valuenow", String(shown)); [].forEach.call(document.querySelectorAll("#jgTiers li"), function (li) { li.classList.toggle("is-on", shown >= Number(li.getAttribute("data-t"))); }); })();
             $("fFee").textContent = usd(v.fusionFeeUsd);
             $("fFeeBnb").textContent = bnb(v.fusionPrice);
             chainMintOpen = v.mintOpen === 1n; window.dbMintOpen = chainMintOpen;
