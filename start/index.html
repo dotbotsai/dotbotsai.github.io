@@ -27,7 +27,7 @@ input:focus{outline:2px solid var(--acc);border-color:transparent}
 .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:14px;word-break:break-all}
 .msg{margin:12px 0 0;padding:10px 12px;border-radius:10px;background:#0e1117;border:1px solid var(--line)}.msg.ok{border-color:var(--ok)}.msg.bad{border-color:var(--bad)}
 .small{color:var(--dim);font-size:14px}.closed{color:var(--bad);font-weight:700}
-.msg+.btn{margin-top:12px}.agent{margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}.agent h2{font-size:17px;margin:0 0 6px}.agent .dl{display:flex;gap:10px}.agent .dl .btn{text-align:center;text-decoration:none;font-size:14px}.agent .btn+.small{margin-top:14px}.agent .small{overflow-wrap:anywhere}
+.nw{border-color:var(--acc)}.nw h2{font-size:17px;margin:0 0 8px}.nw ol{margin-bottom:12px}.nw .mono{display:block;margin:0 0 12px;padding:9px 12px;background:#0e1117;border:1px solid var(--line);border-radius:10px;user-select:all}.msg+.btn{margin-top:12px}.agent{margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}.agent h2{font-size:17px;margin:0 0 6px}.agent .dl{display:flex;gap:10px}.agent .dl .btn{text-align:center;text-decoration:none;font-size:14px}.agent .btn+.small{margin-top:14px}.agent .small{overflow-wrap:anywhere}
 pre{white-space:pre-wrap;word-break:break-word;background:#0e1117;border:1px solid var(--line);border-radius:10px;padding:12px;font:13px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;margin:10px 0;max-height:360px;overflow:auto}footer{margin-top:28px;color:var(--dim);font-size:14px;display:flex;gap:14px;flex-wrap:wrap}
 </style>
 </head>
@@ -42,6 +42,17 @@ pre{white-space:pre-wrap;word-break:break-word;background:#0e1117;border:1px sol
   <div class="count"><span data-t="reqPre"></span><b id="left">–</b><span data-t="ofTotal">of 40 gifts requested</span></div>
   <div class="bar"><i id="bar"></i></div>
   <p class="small" id="stateLine" data-t="opens">Requests open Nov 20, 00:00 (GMT+7).</p>
+</section>
+
+<section class="card nw" id="noWal" hidden>
+  <h2 data-t="nwH">No wallet found in this browser</h2>
+  <ol>
+    <li data-t="nw1">Open Binance Wallet in the Binance app on your phone.</li>
+    <li data-t="nw2">Tap Discover.</li>
+    <li data-t="nw3">Paste the link below into the search bar and open it.</li>
+  </ol>
+  <span class="mono" id="nwLink">dotbots.app/start/</span>
+  <button class="btn ghost" type="button" id="nwCopy" data-t="nwCopy">Copy link</button>
 </section>
 
 <section class="card">
@@ -59,7 +70,7 @@ pre{white-space:pre-wrap;word-break:break-word;background:#0e1117;border:1px sol
   <button class="btn" type="button" id="connect" data-t="connect">Connect your Agent ID wallet</button>
   <p class="small" data-t="noSign">You sign one free message to prove this Agent ID wallet is yours. No transaction, no gas, no approval. We will never ask for your seed phrase or private key.</p>
   <div id="form" hidden>
-    <p class="small"><span data-t="wallet">Agent ID wallet</span>: <span class="mono" id="addr"></span></p>
+    <p class="small" id="addrLine" hidden><span data-t="wallet">Agent ID wallet</span>: <span class="mono" id="addr"></span></p>
     <div id="meBox"></div>
     <div id="reqBox" hidden>
       <label for="x" data-t="xLabel">Your X handle</label>
@@ -92,12 +103,16 @@ pre{white-space:pre-wrap;word-break:break-word;background:#0e1117;border:1px sol
       connect: "连接你的 Agent ID 钱包", noSign: "你只需签署一条免费消息，证明这个 Agent ID 钱包归你所有。无交易、无 Gas、无授权。我们绝不会索要你的助记词或私钥。",
       wallet: "Agent ID 钱包", xLabel: "你的 X 账号", xHint: "分配礼物前，我们会确认该 X 账号已关注 @dotBots_ai。", send: "申请我的礼物",
       note: "礼物是分配到你在 BNB Chain 上钱包的一个团队 dotBot。它不是投资，也不承诺任何价值。",
-      home: "首页", terms: "条款", privacy: "隐私"
+      home: "首页", terms: "条款", privacy: "隐私",
+      nwH: "此浏览器未检测到钱包", nw1: "在手机上打开 Binance App 中的 Binance Wallet。", nw2: "点击「发现」。", nw3: "把下方链接粘贴到搜索栏并打开。", nwCopy: "复制链接"
     }
   };
   var M = {
-    noWallet: ["No wallet found in this browser. Open this page in your wallet app's browser.", "此浏览器未检测到钱包。请在钱包 App 的浏览器中打开本页。"],
+    noWallet: ["No wallet found in this browser. Follow the 3 steps above.", "此浏览器未检测到钱包。请按上方 3 个步骤操作。"],
     rejected: ["Connection cancelled.", "已取消连接。"],
+    reqCancelled: ["Request cancelled. Nothing was sent.", "已取消申请，未提交任何内容。"],
+    claimCancelled: ["Claim cancelled. No transaction was sent.", "已取消领取，未发送任何交易。"],
+    linkCopied: ["Link copied", "链接已复制"],
     signing: ["Sign the free message in your wallet (no gas)…", "请在钱包中签署免费消息（无 Gas）…"],
     sending: ["Sending your request…", "正在提交申请…"],
     sig_expired: ["The signature expired. Request again.", "签名已过期，请重新申请。"],
@@ -131,6 +146,8 @@ pre{white-space:pre-wrap;word-break:break-word;background:#0e1117;border:1px sol
   };
   var lang = "en", st = null, me = null, addr = null;
   var $ = function (id) { return document.getElementById(id); };
+  function wal() { var b = window.binancew3w; return (b && b.ethereum) || window.ethereum || null; }
+  function showNoWal() { $("noWal").hidden = false; }
   var EN = {}; document.querySelectorAll("[data-t]").forEach(function (el) { EN[el.dataset.t] = el.textContent; });
   function t(k) { if (k === "reqPre") return lang === "zh" ? T.zh.reqPre : ""; return lang === "zh" && T.zh[k] ? T.zh[k] : EN[k] || (k === "openNow" ? "Requests are open now. First come, first served." : k === "closedNow" ? "Closed: all 40 gifts are gone." : k); }
   function m(k, v) { var s = (M[k] || M.fail)[lang === "zh" ? 1 : 0]; for (var x in v || {}) s = s.split("{" + x + "}").join(String(v[x])); return s; }
@@ -186,10 +203,10 @@ pre{white-space:pre-wrap;word-break:break-word;background:#0e1117;border:1px sol
   function loadMe() { return api("/gift/me?wallet=" + addr).then(function (j) { me = j; renderMe(); }).catch(function () { say("fail", null, "bad"); }); }
 
   $("connect").addEventListener("click", function () {
-    var eth = window.ethereum; if (!eth) { say("noWallet", null, "bad"); $("form").hidden = false; return; }
+    var eth = wal(); if (!eth) { showNoWal(); say("noWallet", null, "bad"); $("form").hidden = false; return; }
     eth.request({ method: "eth_requestAccounts" }).then(function (a) {
       addr = String(a && a[0] || "").toLowerCase(); if (!/^0x[0-9a-f]{40}$/.test(addr)) throw 0;
-      $("addr").textContent = addr; $("form").hidden = false; $("connect").hidden = true; $("msg").hidden = true; return loadMe();
+      $("addr").textContent = addr; $("addrLine").hidden = false; $("form").hidden = false; $("connect").hidden = true; $("msg").hidden = true; return loadMe();
     }).catch(function () { $("form").hidden = false; say("rejected", null, "bad"); });
   });
   $("send").addEventListener("click", function () {
@@ -199,23 +216,30 @@ pre{white-space:pre-wrap;word-break:break-word;background:#0e1117;border:1px sol
     var xl = x.toLowerCase(), d = new Date(), p2 = function (n) { return String(n).padStart(2, "0"); };
     var issued = d.getUTCFullYear() + "-" + p2(d.getUTCMonth() + 1) + "-" + p2(d.getUTCDate()) + "T" + p2(d.getUTCHours()) + ":" + p2(d.getUTCMinutes()) + ":" + p2(d.getUTCSeconds()) + "Z";
     var msg = "dotBots gift request\nWallet: " + addr + "\nX: @" + xl + "\nIssued: " + issued + "\nNo gas. No approval. This only proves you own this wallet.";
-    window.ethereum.request({ method: "personal_sign", params: [msg, addr] })
+    wal().request({ method: "personal_sign", params: [msg, addr] })
       .catch(function () { throw { cancelled: true }; })
       .then(function (sig) { say("sending"); return api("/gift/request", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ wallet: addr, x: xl, issued: issued, sig: sig }) }); })
       .then(function (j) {
         if (j.ok) { say("ok", { p: j.position }, "ok"); me = { requested: true, position: j.position, status: "queued" }; st = Object.assign(st || {}, { left: j.left, total: j.total, closed: j.left === 0, open: j.left > 0 }); renderStatus(); $("reqBox").hidden = true; return; }
         say(j.error, null, "bad"); if (j.error === "closed") loadStatus(); $("send").disabled = !(st && st.open);
-      }).catch(function (e) { say(e && e.cancelled ? "rejected" : "fail", null, "bad"); $("send").disabled = false; });
+      }).catch(function (e) { say(e && e.cancelled ? "reqCancelled" : "fail", null, "bad"); $("send").disabled = false; });
   });
   function claim() {
-    var eth = window.ethereum, id = Number(me.tokenId);
+    var eth = wal(), id = Number(me.tokenId);
     var data = CLAIM + id.toString(16).padStart(64, "0");
     eth.request({ method: "eth_chainId" }).then(function (c) {
       if (String(c).toLowerCase() !== BSC) { say("switchNet", null, "bad"); return; }
       say("claiming");
       return eth.request({ method: "eth_sendTransaction", params: [{ from: addr, to: COLLECTION, data: data, value: "0x0" }] }).then(function (h) { say("sent", { h: h }, "ok"); setTimeout(loadMe, 15000); });
-    }).catch(function () { say("rejected", null, "bad"); });
+    }).catch(function () { say("claimCancelled", null, "bad"); });
   }
+  $("nwCopy").addEventListener("click", function () {
+    var u = "https://dotbots.app/start/", b = $("nwCopy");
+    var done = function () { b.textContent = m("linkCopied"); setTimeout(function () { b.textContent = t("nwCopy"); }, 2000); };
+    var fb = function () { var r = document.createRange(); r.selectNodeContents($("nwLink")); var s2 = getSelection(); s2.removeAllRanges(); s2.addRange(r); try { if (document.execCommand("copy")) done(); } catch (e) {} };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(u).then(done, fb); else fb();
+  });
+  window.addEventListener("load", function () { setTimeout(function () { if (!wal()) showNoWal(); }, 800); });
   loadStatus(); setInterval(loadStatus, 30000);
 })();
 </script>
