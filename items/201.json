@@ -1,0 +1,9 @@
+{
+  "name": "Season 1 Pass",
+  "description": "A Season 1 Pass for dotBots. Use it in the game to open the Season 1 reward track.",
+  "image": "https://dotbots.app/items/img/201.png",
+  "attributes": [
+    { "trait_type": "Category", "value": "Season Pass" },
+    { "trait_type": "Season", "value": "1" }
+  ]
+}
