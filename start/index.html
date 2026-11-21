@@ -39,7 +39,7 @@ pre{white-space:pre-wrap;word-break:break-word;background:#0e1117;border:1px sol
 <p class="lead" data-t="lead">40 dotBots are waiting for new owners. One gift per .ai Agent ID that has no dotBot yet. First come, first served.</p>
 
 <section class="card" aria-live="polite">
-  <div class="count" id="countRow" hidden><span data-t="reqPre"></span><b id="left"></b><span data-t="ofTotal">gifts left</span></div>
+  <div class="count" id="countRow" hidden><span data-t="reqPre"></span><b id="left"></b><span data-t="ofTotal">of 40 gifts requested</span></div>
   <div class="bar"><i id="bar"></i></div>
   <p class="small" id="stateLine" data-t="opens">Requests open Nov 20, 00:00 (GMT+7).</p>
 </section>
@@ -62,7 +62,6 @@ pre{white-space:pre-wrap;word-break:break-word;background:#0e1117;border:1px sol
     <li data-t="r3">Request below. First come, first served.</li>
     <li data-t="r4">Gifts are assigned in daily batches, in request order. Come back here to claim yours in your own wallet (you pay only network gas).</li>
     <li data-t="r4b">Once your bot is assigned, claim it within 72 hours or it passes to the next request.</li>
-    <li data-t="rX">Can't connect a wallet here? Reply with your .ai Agent ID name under our gift post on X (@dotBots_ai). We check it on chain and add you to the same queue. You still claim in your own wallet.</li>
     <li data-t="r5">The campaign closes when all 40 gifts are gone.</li>
   </ol>
 </section>
@@ -103,13 +102,12 @@ pre{white-space:pre-wrap;word-break:break-word;background:#0e1117;border:1px sol
     en: {},
     zh: {
       h1: "领取礼物", lead: "40 个 dotBot 等待新主人。每个还没有 dotBot 的 .ai Agent ID 可领取一份礼物。先到先得。",
-      reqPre: "剩余 ", ofTotal: " 份礼物", opens: "申请开放时间：11月20日 00:00（GMT+7）。", openNow: "正在接受申请。先到先得。",
+      reqPre: "已申请", ofTotal: "/ 40", opens: "申请开放时间：11月20日 00:00（GMT+7）。", openNow: "正在接受申请。先到先得。",
       closedNow: "已结束：40 份礼物已全部送出。",
       r1: "在 X 上关注 @dotBots_ai。", r2: "使用持有 .ai Agent ID 且还没有 dotBot 的钱包。",
       r3: "在下方申请。先到先得。",
       r4: "礼物按申请顺序每日分批分配。分配后回到此页，用你自己的钱包领取（只需支付网络 Gas）。",
       r4b: "机器人分配给你后，请在 72 小时内领取，否则将转给下一位申请者。",
-      rX: "无法在这里连接钱包？在 X（@dotBots_ai）的礼物帖下回复你的 .ai Agent ID 名字。我们会在链上核对，并把你加入同一队列。领取仍需用你自己的钱包。",
       r5: "40 份礼物全部送出后，活动自动结束。",
       connect: "连接你的 Agent ID 钱包", noSign: "你只需签署一条免费消息，证明这个 Agent ID 钱包归你所有。无交易、无 Gas、无授权。我们绝不会索要你的助记词或私钥。",
       wallet: "Agent ID 钱包", xLabel: "你的 X 账号", xHint: "分配礼物前，我们会确认该 X 账号已关注 @dotBots_ai。", send: "申请我的礼物",
@@ -174,8 +172,9 @@ pre{white-space:pre-wrap;word-break:break-word;background:#0e1117;border:1px sol
   function api(path, opt) { return fetch(API + path, Object.assign({ cache: "no-store", credentials: "omit" }, opt || {})).then(function (r) { return r.json(); }); }
   function renderStatus() {
     if (!st) return;
-    $("left").textContent = String(st.left);
-    $("bar").style.width = Math.round((st.left / st.total) * 100) + "%";
+    var taken = st.total - st.left;
+    $("left").textContent = String(taken);
+    $("bar").style.width = Math.round((taken / st.total) * 100) + "%";
     $("countRow").hidden = false;
     var line = $("stateLine");
     if (st.closed) { line.textContent = t("closedNow"); line.className = "closed"; }
