@@ -36,12 +36,10 @@ pre{white-space:pre-wrap;word-break:break-word;background:#0e1117;border:1px sol
 <header><a class="brand" href="/">dotBots</a><div class="lang" role="group" aria-label="Language"><button type="button" data-l="en" aria-pressed="true">EN</button><button type="button" data-l="zh" aria-pressed="false">中文</button></div></header>
 
 <h1 data-t="h1">Request a gift</h1>
-<p class="lead" data-t="lead">40 dotBots are waiting for new owners. One gift per .ai Agent ID that has no dotBot yet. First come, first served.</p>
+<p class="lead" data-t="lead" hidden>40 dotBots are waiting for new owners. One gift per .ai Agent ID that has no dotBot yet. First come, first served.</p>
 
 <section class="card" aria-live="polite">
-  <div class="count" id="countRow" hidden><span data-t="reqPre"></span><b id="left"></b><span data-t="ofTotal">of 40 gifts requested</span></div>
-  <div class="bar"><i id="bar"></i></div>
-  <p class="small" id="stateLine" data-t="opens">Requests open Nov 20, 00:00 (GMT+7).</p>
+  <p class="small" id="stateLine" data-t="closedOff">Gift requests are closed.</p>
 </section>
 
 <section class="card nw" id="noWal" hidden>
@@ -55,7 +53,7 @@ pre{white-space:pre-wrap;word-break:break-word;background:#0e1117;border:1px sol
   <button class="btn ghost" type="button" id="nwCopy" data-t="nwCopy">Copy link</button>
 </section>
 
-<section class="card">
+<section class="card" hidden>
   <ol>
     <li data-t="r1">Follow @dotBots_ai on X.</li>
     <li data-t="r2">Use a wallet that holds a .ai Agent ID with no dotBot yet.</li>
@@ -66,7 +64,7 @@ pre{white-space:pre-wrap;word-break:break-word;background:#0e1117;border:1px sol
   </ol>
 </section>
 
-<section class="card agent" id="agentCard">
+<section class="card agent" id="agentCard" hidden>
   <h2 id="agentH"></h2>
   <p class="small" id="agentP"></p>
   <pre id="agentPrompt"></pre>
@@ -75,7 +73,7 @@ pre{white-space:pre-wrap;word-break:break-word;background:#0e1117;border:1px sol
   <div class="dl"><a class="btn ghost" href="claim.mjs" download>claim.mjs</a><a class="btn ghost" href="package.json" download>package.json</a></div>
 </section>
 
-<section class="card" id="formCard">
+<section class="card" id="formCard" hidden>
   <button class="btn" type="button" id="connect" data-t="connect">Connect your Agent ID wallet</button>
   <p class="small" data-t="noSign">You sign one free message to prove this Agent ID wallet is yours. No transaction, no gas, no approval. We will never ask for your seed phrase or private key.</p>
   <div id="form" hidden>
@@ -97,6 +95,7 @@ pre{white-space:pre-wrap;word-break:break-word;background:#0e1117;border:1px sol
 <script>
 (function () {
   "use strict";
+  var CLOSED = true;
   var API = "https://gift.dotbots.app", COLLECTION = "0x4123F0f5ca048780C0c91aBC0c7ac12c77a0bF69", CLAIM = "0x78cbf86c", BSC = "0x38";
   var T = {
     en: {},
@@ -104,6 +103,7 @@ pre{white-space:pre-wrap;word-break:break-word;background:#0e1117;border:1px sol
       h1: "领取礼物", lead: "40 个 dotBot 等待新主人。每个还没有 dotBot 的 .ai Agent ID 可领取一份礼物。先到先得。",
       reqPre: "已申请", ofTotal: "/ 40", opens: "申请开放时间：11月20日 00:00（GMT+7）。", openNow: "正在接受申请。先到先得。",
       closedNow: "已结束：40 份礼物已全部送出。",
+      closedOff: "礼物申请已关闭。",
       r1: "在 X 上关注 @dotBots_ai。", r2: "使用持有 .ai Agent ID 且还没有 dotBot 的钱包。",
       r3: "在下方申请。先到先得。",
       r4: "礼物按申请顺序每日分批分配。分配后回到此页，用你自己的钱包领取（只需支付网络 Gas）。",
@@ -241,8 +241,8 @@ pre{white-space:pre-wrap;word-break:break-word;background:#0e1117;border:1px sol
     var fb = function () { var r = document.createRange(); r.selectNodeContents($("nwLink")); var s2 = getSelection(); s2.removeAllRanges(); s2.addRange(r); try { if (document.execCommand("copy")) done(); } catch (e) {} };
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(u).then(done, fb); else fb();
   });
-  window.addEventListener("load", function () { setTimeout(function () { if (!wal()) showNoWal(); }, 800); });
-  renderAgent(); loadStatus(); setInterval(loadStatus, 30000);
+  if (!CLOSED) window.addEventListener("load", function () { setTimeout(function () { if (!wal()) showNoWal(); }, 800); });
+  renderAgent(); if (!CLOSED) { loadStatus(); setInterval(loadStatus, 30000); }
 })();
 </script>
 </body>
