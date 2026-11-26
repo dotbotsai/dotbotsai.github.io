@@ -1045,7 +1045,7 @@ tr.is-highlight > :last-child { box-shadow: 12px 0 var(--fill-tertiary); }
               <p class="x-count__label" data-zh="FCFS：先到先得">FCFS: first come, first served</p>
               <p class="x-count__time" data-zh="第二轮已开售">Round 2 is live</p>
               <p class="x-count__note" data-zh="第二轮已于2026年11月16日（周一）20:00（GMT+7）开售，每个 bot 统一 $10。你仍可以在 dotBots 市场买卖机器人。">Round 2 sales opened Mon, Nov 16, 2026, 20:00 (GMT+7) at a flat $10 per bot. You can still buy and sell dotBots on the Market.</p>
-              <div class="x-count__btns"><a class="btn x-gift" data-zh="领取礼物" href="start/">Request a gift</a><a class="btn" data-zh="如何铸造" href="#mintHow">How to mint</a><a class="btn" data-zh="打开市场" href="market/">Open Market</a></div>
+              <div class="x-count__btns"><a class="btn" data-zh="如何铸造" href="#mintHow">How to mint</a><a class="btn" data-zh="打开市场" href="market/">Open Market</a></div>
             </div>
           </div>
         </section>
@@ -1475,7 +1475,6 @@ tr.is-highlight > :last-child { box-shadow: 12px 0 var(--fill-tertiary); }
     if (header) {
       header.innerHTML = '<nav class="seg" aria-label="Sections">' +
         each(sections, function (s) { return '<a href="#' + esc(s.id) + '">' + esc(s.getAttribute("data-nav")) + "</a>"; }) + "</nav>" +
-        '<a class="nav-gift" href="start/" data-zh="礼物">Gift</a>' +
         '<a class="nav-cta" href="market/" data-zh="市场">Market</a>' +
         '<button class="theme-btn" id="theme-btn" type="button" aria-label="Switch to dark theme"></button>';
     }
