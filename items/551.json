@@ -1,0 +1,19 @@
+{
+  "name": "Common Bow Repair",
+  "description": "Restores a broken Common bow to full in the dotBots game. Uses only, can't be sold.",
+  "image": "https://dotbots.app/items/img/51.png",
+  "attributes": [
+    {
+      "trait_type": "Category",
+      "value": "Weapon Repair"
+    },
+    {
+      "trait_type": "Type",
+      "value": "Bow"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Common"
+    }
+  ]
+}

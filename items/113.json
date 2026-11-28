@@ -1,0 +1,19 @@
+{
+  "name": "Super Rare EMP",
+  "description": "A Super Rare EMP Legend Skill for dotBots.",
+  "image": "https://dotbots.app/items/img/113.png",
+  "attributes": [
+    {
+      "trait_type": "Category",
+      "value": "Legend Skill"
+    },
+    {
+      "trait_type": "Skill",
+      "value": "EMP"
+    },
+    {
+      "trait_type": "Grade",
+      "value": "Super Rare"
+    }
+  ]
+}

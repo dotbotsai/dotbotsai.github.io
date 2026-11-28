@@ -1,0 +1,19 @@
+{
+  "name": "Rare Sword Repair",
+  "description": "Restores a broken Rare sword to full in the dotBots game. Uses only, can't be sold.",
+  "image": "https://dotbots.app/items/img/22.png",
+  "attributes": [
+    {
+      "trait_type": "Category",
+      "value": "Weapon Repair"
+    },
+    {
+      "trait_type": "Type",
+      "value": "Sword"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Rare"
+    }
+  ]
+}

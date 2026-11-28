@@ -1,0 +1,15 @@
+{
+  "name": "Hologram Skin",
+  "description": "Hologram skin for dotBots. Cosmetic only: it changes the look, not the power.",
+  "image": "https://dotbots.app/items/img/71.png",
+  "attributes": [
+    {
+      "trait_type": "Category",
+      "value": "Skin"
+    },
+    {
+      "trait_type": "Skin",
+      "value": "Hologram"
+    }
+  ]
+}

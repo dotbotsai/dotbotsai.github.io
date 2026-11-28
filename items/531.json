@@ -1,0 +1,19 @@
+{
+  "name": "Common Axe Repair",
+  "description": "Restores a broken Common axe to full in the dotBots game. Uses only, can't be sold.",
+  "image": "https://dotbots.app/items/img/31.png",
+  "attributes": [
+    {
+      "trait_type": "Category",
+      "value": "Weapon Repair"
+    },
+    {
+      "trait_type": "Type",
+      "value": "Axe"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Common"
+    }
+  ]
+}

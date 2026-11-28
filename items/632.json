@@ -1,0 +1,19 @@
+{
+  "name": "Rare Thunder · 1 use",
+  "description": "One counted match with the Rare Thunder Legend Skill in the dotBots game. Uses only, can't be sold.",
+  "image": "https://dotbots.app/items/img/132.png",
+  "attributes": [
+    {
+      "trait_type": "Category",
+      "value": "Legend Skill Use"
+    },
+    {
+      "trait_type": "Skill",
+      "value": "Thunder"
+    },
+    {
+      "trait_type": "Grade",
+      "value": "Rare"
+    }
+  ]
+}

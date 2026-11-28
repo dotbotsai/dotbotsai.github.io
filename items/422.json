@@ -1,0 +1,19 @@
+{
+  "name": "Rare Sword · 1 use",
+  "description": "One use of a Rare sword in a counted dotBots match. Uses only, can't be sold.",
+  "image": "https://dotbots.app/items/img/22.png",
+  "attributes": [
+    {
+      "trait_type": "Category",
+      "value": "Weapon Use"
+    },
+    {
+      "trait_type": "Type",
+      "value": "Sword"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Rare"
+    }
+  ]
+}

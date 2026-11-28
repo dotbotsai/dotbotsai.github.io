@@ -1,0 +1,19 @@
+{
+  "name": "Rare Gravity Field",
+  "description": "A Rare Gravity Field Legend Skill for dotBots.",
+  "image": "https://dotbots.app/items/img/142.png",
+  "attributes": [
+    {
+      "trait_type": "Category",
+      "value": "Legend Skill"
+    },
+    {
+      "trait_type": "Skill",
+      "value": "Gravity Field"
+    },
+    {
+      "trait_type": "Grade",
+      "value": "Rare"
+    }
+  ]
+}

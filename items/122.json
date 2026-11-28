@@ -1,0 +1,19 @@
+{
+  "name": "Rare Drone Swarm",
+  "description": "A Rare Drone Swarm Legend Skill for dotBots.",
+  "image": "https://dotbots.app/items/img/122.png",
+  "attributes": [
+    {
+      "trait_type": "Category",
+      "value": "Legend Skill"
+    },
+    {
+      "trait_type": "Skill",
+      "value": "Drone Swarm"
+    },
+    {
+      "trait_type": "Grade",
+      "value": "Rare"
+    }
+  ]
+}

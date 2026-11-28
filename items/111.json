@@ -1,0 +1,19 @@
+{
+  "name": "Normal EMP",
+  "description": "A Normal EMP Legend Skill for dotBots.",
+  "image": "https://dotbots.app/items/img/111.png",
+  "attributes": [
+    {
+      "trait_type": "Category",
+      "value": "Legend Skill"
+    },
+    {
+      "trait_type": "Skill",
+      "value": "EMP"
+    },
+    {
+      "trait_type": "Grade",
+      "value": "Normal"
+    }
+  ]
+}

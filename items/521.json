@@ -1,0 +1,19 @@
+{
+  "name": "Common Sword Repair",
+  "description": "Restores a broken Common sword to full in the dotBots game. Uses only, can't be sold.",
+  "image": "https://dotbots.app/items/img/21.png",
+  "attributes": [
+    {
+      "trait_type": "Category",
+      "value": "Weapon Repair"
+    },
+    {
+      "trait_type": "Type",
+      "value": "Sword"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Common"
+    }
+  ]
+}

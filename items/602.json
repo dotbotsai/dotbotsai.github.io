@@ -1,0 +1,19 @@
+{
+  "name": "Rare Railgun · 1 use",
+  "description": "One counted match with the Rare Railgun Legend Skill in the dotBots game. Uses only, can't be sold.",
+  "image": "https://dotbots.app/items/img/102.png",
+  "attributes": [
+    {
+      "trait_type": "Category",
+      "value": "Legend Skill Use"
+    },
+    {
+      "trait_type": "Skill",
+      "value": "Railgun"
+    },
+    {
+      "trait_type": "Grade",
+      "value": "Rare"
+    }
+  ]
+}

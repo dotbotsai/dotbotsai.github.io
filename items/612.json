@@ -1,0 +1,19 @@
+{
+  "name": "Rare EMP · 1 use",
+  "description": "One counted match with the Rare EMP Legend Skill in the dotBots game. Uses only, can't be sold.",
+  "image": "https://dotbots.app/items/img/112.png",
+  "attributes": [
+    {
+      "trait_type": "Category",
+      "value": "Legend Skill Use"
+    },
+    {
+      "trait_type": "Skill",
+      "value": "EMP"
+    },
+    {
+      "trait_type": "Grade",
+      "value": "Rare"
+    }
+  ]
+}

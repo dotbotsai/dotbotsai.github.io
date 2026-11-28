@@ -1,0 +1,19 @@
+{
+  "name": "Rare Drone Swarm · 1 use",
+  "description": "One counted match with the Rare Drone Swarm Legend Skill in the dotBots game. Uses only, can't be sold.",
+  "image": "https://dotbots.app/items/img/122.png",
+  "attributes": [
+    {
+      "trait_type": "Category",
+      "value": "Legend Skill Use"
+    },
+    {
+      "trait_type": "Skill",
+      "value": "Drone Swarm"
+    },
+    {
+      "trait_type": "Grade",
+      "value": "Rare"
+    }
+  ]
+}

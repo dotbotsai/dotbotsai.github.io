@@ -1,0 +1,19 @@
+{
+  "name": "Rare Gun Repair",
+  "description": "Restores a broken Rare gun to full in the dotBots game. Uses only, can't be sold.",
+  "image": "https://dotbots.app/items/img/42.png",
+  "attributes": [
+    {
+      "trait_type": "Category",
+      "value": "Weapon Repair"
+    },
+    {
+      "trait_type": "Type",
+      "value": "Gun"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Rare"
+    }
+  ]
+}

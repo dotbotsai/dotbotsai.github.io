@@ -1,0 +1,19 @@
+{
+  "name": "Normal Drone Swarm",
+  "description": "A Normal Drone Swarm Legend Skill for dotBots.",
+  "image": "https://dotbots.app/items/img/121.png",
+  "attributes": [
+    {
+      "trait_type": "Category",
+      "value": "Legend Skill"
+    },
+    {
+      "trait_type": "Skill",
+      "value": "Drone Swarm"
+    },
+    {
+      "trait_type": "Grade",
+      "value": "Normal"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "name": "Lava Core Skin",
+  "description": "Lava Core skin for dotBots. Cosmetic only: it changes the look, not the power.",
+  "image": "https://dotbots.app/items/img/61.png",
+  "attributes": [
+    {
+      "trait_type": "Category",
+      "value": "Skin"
+    },
+    {
+      "trait_type": "Skin",
+      "value": "Lava Core"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "name": "Crystal Ice Day Pass",
+  "description": "Wear the Crystal Ice skin for one day without owning it. Cosmetic only. Uses only, can't be sold.",
+  "image": "https://dotbots.app/items/img/65.png",
+  "attributes": [
+    {
+      "trait_type": "Category",
+      "value": "Day Pass"
+    },
+    {
+      "trait_type": "Skin",
+      "value": "Crystal Ice"
+    }
+  ]
+}

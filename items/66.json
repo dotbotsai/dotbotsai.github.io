@@ -1,0 +1,15 @@
+{
+  "name": "Golden Dragon Skin",
+  "description": "Golden Dragon skin for dotBots. Cosmetic only: it changes the look, not the power.",
+  "image": "https://dotbots.app/items/img/66.png",
+  "attributes": [
+    {
+      "trait_type": "Category",
+      "value": "Skin"
+    },
+    {
+      "trait_type": "Skin",
+      "value": "Golden Dragon"
+    }
+  ]
+}

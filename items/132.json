@@ -1,0 +1,19 @@
+{
+  "name": "Rare Thunder",
+  "description": "A Rare Thunder Legend Skill for dotBots.",
+  "image": "https://dotbots.app/items/img/132.png",
+  "attributes": [
+    {
+      "trait_type": "Category",
+      "value": "Legend Skill"
+    },
+    {
+      "trait_type": "Skill",
+      "value": "Thunder"
+    },
+    {
+      "trait_type": "Grade",
+      "value": "Rare"
+    }
+  ]
+}

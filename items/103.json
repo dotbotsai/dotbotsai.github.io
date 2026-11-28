@@ -1,0 +1,19 @@
+{
+  "name": "Super Rare Railgun",
+  "description": "A Super Rare Railgun Legend Skill for dotBots.",
+  "image": "https://dotbots.app/items/img/103.png",
+  "attributes": [
+    {
+      "trait_type": "Category",
+      "value": "Legend Skill"
+    },
+    {
+      "trait_type": "Skill",
+      "value": "Railgun"
+    },
+    {
+      "trait_type": "Grade",
+      "value": "Super Rare"
+    }
+  ]
+}

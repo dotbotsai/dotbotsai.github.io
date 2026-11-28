@@ -1,0 +1,19 @@
+{
+  "name": "Common Knife · 1 use",
+  "description": "One use of a Common knife in a counted dotBots match. Uses only, can't be sold.",
+  "image": "https://dotbots.app/items/img/11.png",
+  "attributes": [
+    {
+      "trait_type": "Category",
+      "value": "Weapon Use"
+    },
+    {
+      "trait_type": "Type",
+      "value": "Knife"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Common"
+    }
+  ]
+}

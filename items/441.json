@@ -1,0 +1,19 @@
+{
+  "name": "Common Gun · 1 use",
+  "description": "One use of a Common gun in a counted dotBots match. Uses only, can't be sold.",
+  "image": "https://dotbots.app/items/img/41.png",
+  "attributes": [
+    {
+      "trait_type": "Category",
+      "value": "Weapon Use"
+    },
+    {
+      "trait_type": "Type",
+      "value": "Gun"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Common"
+    }
+  ]
+}
