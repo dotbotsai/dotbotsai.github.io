@@ -3,246 +3,58 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src https://gift.dotbots.app; base-uri 'none'; form-action 'none'; object-src 'none'"/>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'"/>
 <meta name="referrer" content="no-referrer"/>
-<title>Request a gift · dotBots</title>
-<meta name="description" content="Follow @dotBots_ai, have a .ai Agent ID with no dotBot yet, and request one of 40 dotBot gifts. First come, first served."/>
+<title>dotBot gift · dotBots</title>
+<meta name="description" content="dotBot gift requests are not open."/>
 <style>
-:root{--bg:#0b0d12;--card:#141821;--line:#262c3a;--text:#e9edf5;--dim:#9aa4b8;--acc:#FFD84D;--ok:#22c27a;--bad:#ff6b6b}
-*{box-sizing:border-box}[hidden]{display:none!important}html,body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif}
-a{color:var(--acc)}main{max-width:620px;margin:0 auto;padding:28px 18px 60px}
-header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:22px}
+:root{--bg:#07090f;--card:rgba(20,24,33,.72);--line:#262c3a;--text:#e9edf5;--dim:#9aa4b8;--acc:#FFD84D}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;color:var(--text);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif}
+body{min-height:100vh;background:
+ radial-gradient(60% 45% at 50% 38%,rgba(255,216,77,.16),rgba(255,216,77,0) 70%),
+ radial-gradient(40% 35% at 85% 90%,rgba(90,120,255,.14),rgba(90,120,255,0) 70%),
+ radial-gradient(35% 30% at 10% 10%,rgba(60,200,255,.10),rgba(60,200,255,0) 70%),
+ radial-gradient(circle,rgba(255,255,255,.09) 1.2px,transparent 1.6px) 0 0/22px 22px,
+ var(--bg);background-attachment:fixed;display:flex;flex-direction:column}
+a{color:var(--acc)}
+header{width:100%;max-width:720px;margin:0 auto;padding:22px 18px;display:flex;justify-content:space-between;align-items:center}
 .brand{font-weight:800;letter-spacing:.3px;color:var(--text);text-decoration:none;font-size:18px}
-.lang{display:flex;gap:6px}.lang button{background:none;border:1px solid var(--line);color:var(--dim);border-radius:8px;padding:5px 10px;cursor:pointer;font:inherit;font-size:14px}
+.lang{display:flex;gap:6px}.lang button{background:rgba(11,13,18,.6);border:1px solid var(--line);color:var(--dim);border-radius:8px;padding:5px 10px;cursor:pointer;font:inherit;font-size:14px}
 .lang button[aria-pressed=true]{color:var(--text);border-color:var(--acc)}
-h1{font-size:28px;line-height:1.2;margin:0 0 8px}.lead{color:var(--dim);margin:0 0 20px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:16px}
-.count{display:flex;align-items:baseline;gap:10px}.count b{font-size:34px;color:var(--acc);font-variant-numeric:tabular-nums}
-.count span{color:var(--dim)}.count span:empty{display:none}.bar{height:8px;background:#0e1117;border-radius:6px;overflow:hidden;margin-top:10px}.bar i{display:block;height:100%;background:var(--acc);width:0}
-ol{margin:0;padding-left:20px}ol li{margin:6px 0}
-.btn{display:inline-block;background:var(--acc);color:#111;border:0;border-radius:10px;padding:12px 18px;font:inherit;font-weight:700;cursor:pointer;width:100%}
-.btn[disabled]{opacity:.45;cursor:not-allowed}.btn.ghost{background:none;color:var(--text);border:1px solid var(--line)}
-label{display:block;font-weight:600;margin:14px 0 6px}input{width:100%;background:#0e1117;border:1px solid var(--line);color:var(--text);border-radius:10px;padding:11px 12px;font:inherit}
-input:focus{outline:2px solid var(--acc);border-color:transparent}
-.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:14px;word-break:break-all}
-.msg{margin:12px 0 0;padding:10px 12px;border-radius:10px;background:#0e1117;border:1px solid var(--line)}.msg.ok{border-color:var(--ok)}.msg.bad{border-color:var(--bad)}
-.small{color:var(--dim);font-size:14px}.closed{color:var(--bad);font-weight:700}
-.nw{border-color:var(--acc)}.nw h2{font-size:17px;margin:0 0 8px}.nw ol{margin-bottom:12px}.nw .mono{display:block;margin:0 0 12px;padding:9px 12px;background:#0e1117;border:1px solid var(--line);border-radius:10px;user-select:all}.msg+.btn{margin-top:12px}.agent{margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}.agent h2{font-size:17px;margin:0 0 6px}.agent .dl{display:flex;gap:10px}.agent .dl .btn{text-align:center;text-decoration:none;font-size:14px}.agent .btn+.small{margin-top:14px}.agent .small{overflow-wrap:anywhere}
-pre{white-space:pre-wrap;word-break:break-word;background:#0e1117;border:1px solid var(--line);border-radius:10px;padding:12px;font:13px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;margin:10px 0;max-height:360px;overflow:auto}footer{margin-top:28px;color:var(--dim);font-size:14px;display:flex;gap:14px;flex-wrap:wrap}
+main{flex:1;display:flex;align-items:center;justify-content:center;padding:10px 18px 40px}
+.card{width:100%;max-width:460px;text-align:center;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:40px 26px 34px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);box-shadow:0 20px 60px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.05)}
+.bot{width:96px;height:96px;margin:0 auto 22px;border-radius:24px;background:linear-gradient(160deg,#1c2230,#11151d);border:2px solid var(--acc);position:relative;box-shadow:0 0 34px rgba(255,216,77,.25)}
+.bot:before{content:"";position:absolute;left:50%;top:-16px;width:4px;height:14px;margin-left:-2px;background:var(--acc);border-radius:2px}
+.bot:after{content:"";position:absolute;left:50%;top:-24px;width:12px;height:12px;margin-left:-6px;background:var(--acc);border-radius:50%;box-shadow:0 0 12px var(--acc)}
+.eyes{position:absolute;top:34px;left:22px;right:22px;display:flex;justify-content:space-between}
+.eyes i{width:14px;height:14px;border-radius:50%;background:var(--acc);box-shadow:0 0 10px rgba(255,216,77,.8)}
+.mouth{position:absolute;left:30px;right:30px;bottom:22px;height:4px;border-radius:2px;background:rgba(255,216,77,.55)}
+h1{font-size:30px;line-height:1.2;margin:0 0 16px}
+.pill{display:inline-flex;align-items:center;gap:9px;padding:9px 16px;border-radius:999px;border:1px solid rgba(255,216,77,.45);background:rgba(255,216,77,.08);font-weight:700;color:var(--text)}
+.pill i{width:9px;height:9px;border-radius:50%;background:var(--acc);box-shadow:0 0 8px var(--acc)}
+footer{width:100%;max-width:720px;margin:0 auto;padding:18px;color:var(--dim);font-size:14px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+@media (max-width:420px){.card{padding:34px 20px 28px}h1{font-size:26px}}
 </style>
 </head>
 <body>
-<main>
 <header><a class="brand" href="/">dotBots</a><div class="lang" role="group" aria-label="Language"><button type="button" data-l="en" aria-pressed="true">EN</button><button type="button" data-l="zh" aria-pressed="false">中文</button></div></header>
-
-<h1 data-t="h1">Request a gift</h1>
-<p class="lead" data-t="lead" hidden>40 dotBots are waiting for new owners. One gift per .ai Agent ID that has no dotBot yet. First come, first served.</p>
-
+<main>
 <section class="card" aria-live="polite">
-  <p class="small" id="stateLine" data-t="closedOff">Gift requests are closed.</p>
+  <div class="bot" aria-hidden="true"><div class="eyes"><i></i><i></i></div><div class="mouth"></div></div>
+  <h1 data-t="h1">dotBot gift</h1>
+  <p class="pill"><i aria-hidden="true"></i><span data-t="state">Gift requests not open</span></p>
 </section>
-
-<section class="card nw" id="noWal" hidden>
-  <h2 data-t="nwH">No wallet found in this browser</h2>
-  <ol>
-    <li data-t="nw1">Open Binance Wallet in the Binance app on your phone.</li>
-    <li data-t="nw2">Tap Discover.</li>
-    <li data-t="nw3">Paste the link below into the search bar and open it.</li>
-  </ol>
-  <span class="mono" id="nwLink">dotbots.app/start/</span>
-  <button class="btn ghost" type="button" id="nwCopy" data-t="nwCopy">Copy link</button>
-</section>
-
-<section class="card" hidden>
-  <ol>
-    <li data-t="r1">Follow @dotBots_ai on X.</li>
-    <li data-t="r2">Use a wallet that holds a .ai Agent ID with no dotBot yet.</li>
-    <li data-t="r3">Request below. First come, first served.</li>
-    <li data-t="r4">Gifts are assigned in daily batches, in request order. Come back here to claim yours in your own wallet (you pay only network gas).</li>
-    <li data-t="r4b">Once your bot is assigned, claim it within 72 hours or it passes to the next request.</li>
-    <li data-t="r5">The campaign closes when all 40 gifts are gone.</li>
-  </ol>
-</section>
-
-<section class="card agent" id="agentCard" hidden>
-  <h2 id="agentH"></h2>
-  <p class="small" id="agentP"></p>
-  <pre id="agentPrompt"></pre>
-  <button class="btn ghost" type="button" id="agentCopy"></button><span class="small" id="agentOk" hidden style="margin-left:10px"></span>
-  <p class="small" id="agentS"></p>
-  <div class="dl"><a class="btn ghost" href="claim.mjs" download>claim.mjs</a><a class="btn ghost" href="package.json" download>package.json</a></div>
-</section>
-
-<section class="card" id="formCard" hidden>
-  <button class="btn" type="button" id="connect" data-t="connect">Connect your Agent ID wallet</button>
-  <p class="small" data-t="noSign">You sign one free message to prove this Agent ID wallet is yours. No transaction, no gas, no approval. We will never ask for your seed phrase or private key.</p>
-  <div id="form" hidden>
-    <p class="small" id="addrLine" hidden><span data-t="wallet">Agent ID wallet</span>: <span class="mono" id="addr"></span></p>
-    <div id="meBox"></div>
-    <div id="reqBox" hidden>
-      <label for="x" data-t="xLabel">Your X handle</label>
-      <input id="x" type="text" inputmode="text" autocomplete="off" maxlength="16" placeholder="@yourhandle"/>
-      <p class="small" data-t="xHint">We check that this X account follows @dotBots_ai before the gift is assigned.</p>
-      <button class="btn" type="button" id="send" data-t="send">Request my gift</button>
-    </div>
-    <p class="msg" id="msg" hidden></p>
-  </div>
-</section>
-
-<p class="small" data-t="note">A gift is a team dotBot assigned to your wallet on BNB Chain. It is not an investment and has no promised value.</p>
-<footer><a href="/" data-t="home">Home</a><a href="/terms/" data-t="terms">Terms</a><a href="/privacy/" data-t="privacy">Privacy</a></footer>
 </main>
+<footer><a href="/" data-t="home">Home</a><a href="/terms/" data-t="terms">Terms</a><a href="/privacy/" data-t="privacy">Privacy</a></footer>
 <script>
-(function () {
-  "use strict";
-  var CLOSED = true;
-  var API = "https://gift.dotbots.app", COLLECTION = "0x4123F0f5ca048780C0c91aBC0c7ac12c77a0bF69", CLAIM = "0x78cbf86c", BSC = "0x38";
-  var T = {
-    en: {},
-    zh: {
-      h1: "领取礼物", lead: "40 个 dotBot 等待新主人。每个还没有 dotBot 的 .ai Agent ID 可领取一份礼物。先到先得。",
-      reqPre: "已申请", ofTotal: "/ 40", opens: "申请开放时间：11月20日 00:00（GMT+7）。", openNow: "正在接受申请。先到先得。",
-      closedNow: "已结束：40 份礼物已全部送出。",
-      closedOff: "礼物申请已关闭。",
-      r1: "在 X 上关注 @dotBots_ai。", r2: "使用持有 .ai Agent ID 且还没有 dotBot 的钱包。",
-      r3: "在下方申请。先到先得。",
-      r4: "礼物按申请顺序每日分批分配。分配后回到此页，用你自己的钱包领取（只需支付网络 Gas）。",
-      r4b: "机器人分配给你后，请在 72 小时内领取，否则将转给下一位申请者。",
-      r5: "40 份礼物全部送出后，活动自动结束。",
-      connect: "连接你的 Agent ID 钱包", noSign: "你只需签署一条免费消息，证明这个 Agent ID 钱包归你所有。无交易、无 Gas、无授权。我们绝不会索要你的助记词或私钥。",
-      wallet: "Agent ID 钱包", xLabel: "你的 X 账号", xHint: "分配礼物前，我们会确认该 X 账号已关注 @dotBots_ai。", send: "申请我的礼物",
-      note: "礼物是分配到你在 BNB Chain 上钱包的一个团队 dotBot。它不是投资，也不承诺任何价值。",
-      home: "首页", terms: "条款", privacy: "隐私",
-      nwH: "此浏览器未检测到钱包", nw1: "在手机上打开 Binance App 中的 Binance Wallet。", nw2: "点击「发现」。", nw3: "把下方链接粘贴到搜索栏并打开。", nwCopy: "复制链接"
-    }
-  };
-  var M = {
-    noWallet: ["No wallet found in this browser. Follow the 3 steps above.", "此浏览器未检测到钱包。请按上方 3 个步骤操作。"],
-    rejected: ["Connection cancelled.", "已取消连接。"],
-    reqCancelled: ["Request cancelled. Nothing was sent.", "已取消申请，未提交任何内容。"],
-    claimCancelled: ["Claim cancelled. No transaction was sent.", "已取消领取，未发送任何交易。"],
-    linkCopied: ["Link copied", "链接已复制"],
-    signing: ["Sign the free message in your wallet (no gas)…", "请在钱包中签署免费消息（无 Gas）…"],
-    sending: ["Sending your request…", "正在提交申请…"],
-    sig_expired: ["The signature expired. Request again.", "签名已过期，请重新申请。"],
-    bad_signature: ["The signature doesn't match this wallet. Request again.", "签名与此钱包不匹配，请重新申请。"],
-    ok: ["Request saved. You are #{p} in line. Come back after the next daily batch to claim.", "申请已提交。你排在第 {p} 位。下一批分配后回到此页领取。"],
-    queued: ["You already requested. You are #{p} in line. Come back after the next daily batch.", "你已申请。你排在第 {p} 位。下一批分配后再回来。"],
-    ready: ["Your gift is ready: dotBot #{id}. Claim it in your wallet within 72 hours of assignment (network gas only).", "你的礼物已准备好：dotBot #{id}。请在分配后 72 小时内用钱包领取（只需网络 Gas）。"],
-    claimBtn: ["Claim my gift", "领取我的礼物"],
-    agentH: ["Or claim with your AI agent", "或让你的 AI Agent 领取"],
-    agentP: ["Give this prompt to your own agent. It prepares the transaction; you confirm it in your Agent ID wallet. It never needs your private key or seed phrase.", "把这段提示词交给你自己的 Agent。它会准备交易，由你在 Agent ID 钱包中确认。它不需要你的私钥或助记词。"],
-    agentS: ["Then give it the script. Put both files in one folder, run npm install (Node.js 18+), then node claim.mjs {a}. It only checks and prints the transaction; it sends nothing.", "然后把脚本交给它。把两个文件放在同一个文件夹，运行 npm install（Node.js 18+），然后运行 node claim.mjs {a}。它只检查并输出交易，不会发送任何交易。"],
-    copyBtn: ["Copy prompt", "复制提示词"], copied: ["Copied", "已复制"],
-    agentPrompt: ["You can help your owner claim a dotBot gift on BNB Chain.\nWhat it is: dotBots is a set of 2,222 robot NFTs, one per .ai Agent ID, drawn fully on-chain. The dotBots team assigns some team bots as gifts. An assigned bot is claimed with claimGift(tokenId) from the wallet it was assigned to, and then carries that wallet's Agent ID name.\nRules:\n1. Tell your owner what you are about to do. Claim only after your owner says yes.\n2. Use the owner's wallet that holds the .ai Agent ID the gift was assigned to. That Agent ID must not have a dotBot yet (one bot per Agent ID).\n3. Official contract: 0x4123F0f5ca048780C0c91aBC0c7ac12c77a0bF69 (BNB Chain). The claim sends 0 BNB; only gas is paid. Never send BNB or tokens anywhere for a claim, and never approve anything.\n4. Run: node claim.mjs <wallet>. It finds the bot assigned to this wallet, checks the Agent ID, simulates claimGift and prints the exact tx. Stop if it prints STOP.\n5. Your owner sends that tx from their own wallet app and confirms it there. Never ask for, paste or store a private key or seed phrase. No QR codes, no pairing, no third-party session.\n6. A gift not claimed within 72 hours of being assigned may be cancelled and passed to the next person.\n7. Run: node claim.mjs --result <txHash> and tell your owner the bot's name, tier and link.", "你可以帮主人在 BNB Chain 上领取 dotBot 礼物。\n简介：dotBots 共 2,222 个机器人 NFT，每个 .ai Agent ID 一个，完全链上绘制。dotBots 团队会把部分团队机器人指定为礼物。被指定的机器人需要用被指定的钱包调用 claimGift(tokenId) 领取，之后会带上该钱包的 Agent ID 名字。\n规则：\n1. 先告诉主人你要做什么。主人同意后再领取。\n2. 使用持有该礼物所指定 .ai Agent ID 的主人钱包。该 Agent ID 还不能拥有 dotBot（每个 Agent ID 只能一个）。\n3. 官方合约：0x4123F0f5ca048780C0c91aBC0c7ac12c77a0bF69（BNB Chain）。领取发送 0 BNB，只需支付 gas。领取时不要向任何地址发送 BNB 或代币，也不要授权任何东西。\n4. 运行：node claim.mjs <钱包地址>。它会找到指定给该钱包的机器人、检查 Agent ID、模拟 claimGift 并输出交易。出现 STOP 就停止。\n5. 由主人在自己的钱包应用中发送并确认该交易。不要索取、粘贴或保存私钥或助记词。不用二维码、不配对、不使用第三方会话。\n6. 指定后 72 小时内未领取的礼物可能会被取消并转给下一位。\n7. 运行：node claim.mjs --result <交易哈希>，把机器人的名字、稀有度和链接告诉主人。"],
-    claiming: ["Confirm the transaction in your wallet…", "请在钱包中确认交易…"],
-    claimed: ["Claimed. dotBot #{id} is in your wallet.", "已领取。dotBot #{id} 已在你的钱包中。"],
-    sent: ["Transaction sent: {h}. It may take a minute to confirm.", "交易已发送：{h}。确认可能需要一分钟。"],
-    skipped: ["This request was not eligible at assignment time.", "该申请在分配时不符合条件。"],
-    switchNet: ["Switch your wallet to BNB Smart Chain and try again.", "请将钱包切换到 BNB Smart Chain 后重试。"],
-    badX: ["Enter your X handle (letters, numbers, _ up to 15).", "请输入你的 X 账号（字母、数字、下划线，最多 15 位）。"],
-    not_open: ["Requests open Nov 20, 00:00 (GMT+7).", "申请从 11月20日 00:00（GMT+7）开始。"],
-    closed: ["Closed: all 40 gifts are gone.", "已结束：40 份礼物已全部送出。"],
-    no_agent_id: ["This wallet has no .ai Agent ID.", "此钱包没有 .ai Agent ID。"],
-    handle_used: ["This Agent ID already has a dotBot. One gift per Agent ID with no dotBot.", "此 Agent ID 已拥有 dotBot。每个没有 dotBot 的 Agent ID 限领一份。"],
-    already_requested: ["This wallet or Agent ID already requested.", "此钱包或 Agent ID 已申请。"],
-    x_taken: ["This X handle already requested.", "此 X 账号已申请。"],
-    not_eligible: ["This wallet can't request a gift.", "此钱包无法申请礼物。"],
-    rate_limited: ["Too many tries. Wait a bit and try again.", "尝试次数过多，请稍后再试。"],
-    chain_error: ["Couldn't read the chain right now. Try again in a minute.", "暂时无法读取链上数据，请一分钟后重试。"],
-    bad_input: ["Check your X handle and try again.", "请检查 X 账号后重试。"],
-    fail: ["Something went wrong. Try again in a minute.", "出错了，请一分钟后重试。"]
-  };
-  var lang = "en", st = null, me = null, addr = null;
-  var $ = function (id) { return document.getElementById(id); };
-  function wal() { var b = window.binancew3w; return (b && b.ethereum) || window.ethereum || null; }
-  function showNoWal() { $("noWal").hidden = false; }
-  var EN = {}; document.querySelectorAll("[data-t]").forEach(function (el) { EN[el.dataset.t] = el.textContent; });
-  function t(k) { if (k === "reqPre") return lang === "zh" ? T.zh.reqPre : ""; return lang === "zh" && T.zh[k] ? T.zh[k] : EN[k] || (k === "openNow" ? "Requests are open now. First come, first served." : k === "closedNow" ? "Closed: all 40 gifts are gone." : k); }
-  function m(k, v) { var s = (M[k] || M.fail)[lang === "zh" ? 1 : 0]; for (var x in v || {}) s = s.split("{" + x + "}").join(String(v[x])); return s; }
-  function say(k, v, cls) { var p = $("msg"); p.hidden = false; p.className = "msg" + (cls ? " " + cls : ""); p.textContent = m(k, v); }
-  function setLang(l) {
-    lang = l; document.documentElement.lang = l === "zh" ? "zh-CN" : "en";
-    document.querySelectorAll(".lang button").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.l === l)); });
-    document.querySelectorAll("[data-t]").forEach(function (el) { el.textContent = t(el.dataset.t); });
-    renderStatus(); renderMe(); renderAgent();
-  }
-  document.querySelectorAll(".lang button").forEach(function (b) { b.addEventListener("click", function () { setLang(b.dataset.l); }); });
-
-  function api(path, opt) { return fetch(API + path, Object.assign({ cache: "no-store", credentials: "omit" }, opt || {})).then(function (r) { return r.json(); }); }
-  function renderStatus() {
-    if (!st) return;
-    var taken = st.total - st.left;
-    $("left").textContent = String(taken);
-    $("bar").style.width = Math.round((taken / st.total) * 100) + "%";
-    $("countRow").hidden = false;
-    var line = $("stateLine");
-    if (st.closed) { line.textContent = t("closedNow"); line.className = "closed"; }
-    else if (st.open) { line.textContent = t("openNow"); line.className = "small"; }
-    else { line.textContent = t("opens"); line.className = "small"; }
-    $("send").disabled = !st.open;
-  }
-  function loadStatus() { return api("/gift/status").then(function (j) { if (typeof j.left === "number" && typeof j.total === "number") { st = j; renderStatus(); } else if (!st) setTimeout(loadStatus, 5000); }).catch(function () { if (!st) setTimeout(loadStatus, 5000); }); }
-
-  function renderMe() {
-    var box = $("meBox"); if (!addr) return;
-    box.innerHTML = ""; $("reqBox").hidden = true;
-    if (!me) return;
-    if (me.claimed) { box.innerHTML = '<p class="msg ok"></p>'; box.firstChild.textContent = m("claimed", { id: me.tokenId }); return; }
-    if (me.ready) {
-      box.innerHTML = '<p class="msg ok"></p><button class="btn" type="button" id="claim"></button>';
-      box.firstChild.textContent = m("ready", { id: me.tokenId }); $("claim").textContent = m("claimBtn"); $("claim").onclick = claim; return;
-    }
-    if (me.requested) { box.innerHTML = '<p class="msg"></p>'; box.firstChild.textContent = me.status === "skipped" ? m("skipped") : m("queued", { p: me.position }); return; }
-    if (st && st.closed) { box.innerHTML = '<p class="msg bad"></p>'; box.firstChild.textContent = m("closed"); return; }
-    $("reqBox").hidden = false;
-  }
-  function renderAgent() {
-    $("agentH").textContent = m("agentH"); $("agentP").textContent = m("agentP"); $("agentPrompt").textContent = m("agentPrompt");
-    $("agentCopy").textContent = m("copyBtn"); $("agentOk").hidden = true; $("agentS").textContent = m("agentS", { a: addr || "<wallet>" });
-  }
-  $("agentCopy").addEventListener("click", function () { var ok = $("agentOk"); if (navigator.clipboard) navigator.clipboard.writeText($("agentPrompt").textContent).then(function () { ok.hidden = false; ok.textContent = m("copied"); }, function () {}); });
-  function loadMe() { return api("/gift/me?wallet=" + addr).then(function (j) { me = j; renderMe(); }).catch(function () { say("fail", null, "bad"); }); }
-
-  $("connect").addEventListener("click", function () {
-    var eth = wal(); if (!eth) { showNoWal(); say("noWallet", null, "bad"); $("form").hidden = false; return; }
-    eth.request({ method: "eth_requestAccounts" }).then(function (a) {
-      addr = String(a && a[0] || "").toLowerCase(); if (!/^0x[0-9a-f]{40}$/.test(addr)) throw 0;
-      $("addr").textContent = addr; $("addrLine").hidden = false; renderAgent(); $("form").hidden = false; $("connect").hidden = true; $("msg").hidden = true; return loadMe();
-    }).catch(function () { $("form").hidden = false; say("rejected", null, "bad"); });
-  });
-  $("send").addEventListener("click", function () {
-    var x = $("x").value.trim().replace(/^@/, "");
-    if (!/^[A-Za-z0-9_]{1,15}$/.test(x)) { say("badX", null, "bad"); return; }
-    $("send").disabled = true; say("signing");
-    var xl = x.toLowerCase(), d = new Date(), p2 = function (n) { return String(n).padStart(2, "0"); };
-    var issued = d.getUTCFullYear() + "-" + p2(d.getUTCMonth() + 1) + "-" + p2(d.getUTCDate()) + "T" + p2(d.getUTCHours()) + ":" + p2(d.getUTCMinutes()) + ":" + p2(d.getUTCSeconds()) + "Z";
-    var msg = "dotBots gift request\nWallet: " + addr + "\nX: @" + xl + "\nIssued: " + issued + "\nNo gas. No approval. This only proves you own this wallet.";
-    wal().request({ method: "personal_sign", params: [msg, addr] })
-      .catch(function () { throw { cancelled: true }; })
-      .then(function (sig) { say("sending"); return api("/gift/request", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ wallet: addr, x: xl, issued: issued, sig: sig }) }); })
-      .then(function (j) {
-        if (j.ok) { say("ok", { p: j.position }, "ok"); me = { requested: true, position: j.position, status: "queued" }; st = Object.assign(st || {}, { left: j.left, total: j.total, closed: j.left === 0, open: j.left > 0 }); renderStatus(); $("reqBox").hidden = true; return; }
-        say(j.error, null, "bad"); if (j.error === "closed") loadStatus(); $("send").disabled = !(st && st.open);
-      }).catch(function (e) { say(e && e.cancelled ? "reqCancelled" : "fail", null, "bad"); $("send").disabled = false; });
-  });
-  function claim() {
-    var eth = wal(), id = Number(me.tokenId);
-    var data = CLAIM + id.toString(16).padStart(64, "0");
-    eth.request({ method: "eth_chainId" }).then(function (c) {
-      if (String(c).toLowerCase() !== BSC) { say("switchNet", null, "bad"); return; }
-      say("claiming");
-      return eth.request({ method: "eth_sendTransaction", params: [{ from: addr, to: COLLECTION, data: data, value: "0x0" }] }).then(function (h) { say("sent", { h: h }, "ok"); setTimeout(loadMe, 15000); });
-    }).catch(function () { say("claimCancelled", null, "bad"); });
-  }
-  $("nwCopy").addEventListener("click", function () {
-    var u = "https://dotbots.app/start/", b = $("nwCopy");
-    var done = function () { b.textContent = m("linkCopied"); setTimeout(function () { b.textContent = t("nwCopy"); }, 2000); };
-    var fb = function () { var r = document.createRange(); r.selectNodeContents($("nwLink")); var s2 = getSelection(); s2.removeAllRanges(); s2.addRange(r); try { if (document.execCommand("copy")) done(); } catch (e) {} };
-    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(u).then(done, fb); else fb();
-  });
-  if (!CLOSED) window.addEventListener("load", function () { setTimeout(function () { if (!wal()) showNoWal(); }, 800); });
-  renderAgent(); if (!CLOSED) { loadStatus(); setInterval(loadStatus, 30000); }
+(function(){
+  var T={en:{h1:"dotBot gift",state:"Gift requests not open",home:"Home",terms:"Terms",privacy:"Privacy",title:"dotBot gift · dotBots"},
+         zh:{h1:"dotBot 礼物",state:"礼物申请尚未开放",home:"首页",terms:"条款",privacy:"隐私",title:"dotBot 礼物 · dotBots"}};
+  function setLang(l){document.documentElement.lang=l==="zh"?"zh-CN":"en";
+    document.querySelectorAll("[data-t]").forEach(function(e){e.textContent=T[l][e.dataset.t];});
+    document.title=T[l].title;
+    document.querySelectorAll(".lang button").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.l===l));});}
+  document.querySelectorAll(".lang button").forEach(function(b){b.addEventListener("click",function(){setLang(b.dataset.l);});});
 })();
 </script>
 </body>
